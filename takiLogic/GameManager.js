@@ -6,6 +6,61 @@ var cardValues = ["1", "3", "4", "5", "6", "7", "8", "9", "stop", "taki"];
 var colors = ["red", "green", "blue", "yellow"];
 
 // ==================================================================================================================================
+// ====================================================     Game Management      ====================================================
+// ==================================================================================================================================
+var GameManager = (function () {
+    var Games = [];
+    return {
+        CreateNewGame: function (numPlayers, gameID) {
+            var gameCreated = null;
+            if (Games.findIndex(game => gameID === game.ID()) === -1) {
+                gameCreated = Game(numPlayers, gameID);
+                Games.push(gameCreated);
+                console.log("GameID (" + gameID + "): " + " Game successfully created");
+            } else {
+                console.log("Game was not created, GameID '" + gameID + "' already exists");
+            }
+            return gameCreated;
+        }
+    }
+})();
+
+var Game = function (i_numPlayersToStartGame, i_GameID) {
+    var gameIsActive = false;
+    var gameID = i_GameID;
+    var players = []
+    var numPlayersToStartGame = i_numPlayersToStartGame;
+    var StartGame = function () {
+        gameIsActive = true;
+        console.log("GameID (" + gameID + "): The game has started")
+        //    TODO do stuff
+    };
+    return {
+        Deck: Deck(),
+        CardsOnTable: CardsOnTable(),
+        ID: function () {
+            return gameID;
+        },
+        /**
+         * @return {boolean}
+         */
+        IsActive: function () {
+            return gameIsActive;
+        },
+        AddPlayerToGame: function (playerToAdd) {
+            if (gameIsActive || players.length >= numPlayersToStartGame) {
+                console.log("Cannot add another player, game is full or has already started")
+            } else {
+                players.push(playerToAdd);
+                console.log("GameID (" + gameID + "): " + playerToAdd + " has joined the game")
+                if (players.length === numPlayersToStartGame) {
+                    StartGame();
+                }
+            }
+        },
+    }
+};
+// ==================================================================================================================================
 // ==================================================== Deck and Card Management ====================================================
 // ==================================================================================================================================
 
@@ -25,7 +80,7 @@ var Card = function (i_Color, i_Value) {
     }
 };
 
-var Deck = (function () {
+var Deck = function () {
     var cards = [];
 
     // init deck
@@ -65,9 +120,9 @@ var Deck = (function () {
             }
         }
     }
-})();
+};
 
-var CardsOnTable = (function () {
+var CardsOnTable = function () {
     var cards = [];
     return {
         PutCardOnTable: function (card) {
@@ -101,7 +156,7 @@ var CardsOnTable = (function () {
             return cards.length;
         }
     }
-})();
+};
 
 // ==================================================================================================================================
 // ====================================================          Testing         ====================================================
@@ -109,22 +164,27 @@ var CardsOnTable = (function () {
 
 var tests = function () {
     console.log("Running tests:");
-    console.log("Current Deck size: " + Deck.GetSize());
-    console.log("Current cardsOnTable size: " + CardsOnTable.GetSize());
+    var game = GameManager.CreateNewGame(2, "test game");
+    var game2 = GameManager.CreateNewGame(2, "test game");
+    game.AddPlayerToGame("p1");
+    game.AddPlayerToGame("p2");
+    game.AddPlayerToGame("p3");
+    console.log("Current Deck size: " + game.Deck.GetSize());
+    console.log("Current cardsOnTable size: " + game.CardsOnTable.GetSize());
     console.log("Pulling cards from deck:");
     for (var i = 0; i < 4; i++) {
-        var cardDrawn = Deck.DrawCard();
+        var cardDrawn = game.Deck.DrawCard();
         cardDrawn.PrintCardToConsole();
         console.log("Putting card on table:");
-        CardsOnTable.PutCardOnTable(cardDrawn);
-        console.log("Current Deck size: " + Deck.GetSize());
-        console.log("Current cardsOnTable size: " + CardsOnTable.GetSize());
+        game.CardsOnTable.PutCardOnTable(cardDrawn);
+        console.log("Current Deck size: " + game.Deck.GetSize());
+        console.log("Current cardsOnTable size: " + game.CardsOnTable.GetSize());
     }
     console.log("Picking up cards from table");
-    var pickedUpCards = CardsOnTable.TakeAllButTopCard();
-    Deck.AddCardsToDeck(pickedUpCards);
-    console.log("Current Deck size: " + Deck.GetSize());
-    console.log("Current cardsOnTable size: " + CardsOnTable.GetSize());
+    var pickedUpCards = game.CardsOnTable.TakeAllButTopCard();
+    game.Deck.AddCardsToDeck(pickedUpCards);
+    console.log("Current Deck size: " + game.Deck.GetSize());
+    console.log("Current cardsOnTable size: " + game.CardsOnTable.GetSize());
 };
 
 tests();
