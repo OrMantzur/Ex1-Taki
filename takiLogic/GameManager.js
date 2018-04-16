@@ -103,7 +103,7 @@ function Deck() {
          * @return {Card}
          */
         drawCard: function () {
-            var randIndex = Math.floor(Math.random() * cards.length);
+            var randIndex = Math.floor(Math.random() % cards.length);
             return cards.splice(randIndex, 1)[0];
         },
 
