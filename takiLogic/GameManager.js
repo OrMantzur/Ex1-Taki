@@ -4,6 +4,7 @@
 
 const CARD_VALUES = ["1", "3", "4", "5", "6", "7", "8", "9", "stop", "taki"];
 const COLORS = ["red", "green", "blue", "yellow"];
+const NUM_STARTING_CARDS = 8;
 
 // ==================================================================================================================================
 // ====================================================     Game Management      ====================================================
@@ -12,11 +13,11 @@ var GameManager = (function () {
     var games = [];
     var allPlayers = [];
     return {
-        createNewGame: function (numPlayers, gameID) {
+        createNewGame: function (numPlayers, gameID, gameCreator) {
             var gameCreated = null;
             // if game doesn't exist
             if (games.findIndex(game => gameID === game.getGameId()) === -1) {
-                gameCreated = Game(numPlayers, gameID);
+                gameCreated = Game(numPlayers, gameID, gameCreator);
                 games.push(gameCreated);
                 console.log("GameID (" + gameID + "): " + " Game successfully created");
             } else {
@@ -24,24 +25,35 @@ var GameManager = (function () {
             }
             return gameCreated;
         },
-        addNewPlayer: function (i_PlayerName) {
-            if (allPlayers.findIndex(player => player.getName() === i_PlayerName) === -1){
-                allPlayers.push(Player(i_PlayerName));
-                console.log("Player '" + i_PlayerName+ "' was added to all players list");
+        deleteGame: function (i_GameId, i_PlayerTryingToDelete) {
+            var gameToDeleteIndex = games.findIndex(game => game.getGameId() === i_GameId);
+            if (gameToDeleteIndex !== -1) {
+                console.log("GameManager: The game '" + i_GameId + "' was not found so it has not been deleted")
+            } else if (games[gameToDeleteIndex].getGameCreator() === i_PlayerTryingToDelete) {
+                console.log("GameManager: The game '" + i_GameId + "' was not created by " + i_PlayerTryingToDelete + " so it has not been deleted")
             } else {
-                console.log("Player '" + i_PlayerName+ "' already exists");
+                games.splice(gameToDeleteIndex, 1);
+                console.log("GameManager: The game '" + i_GameId + "' has been deleted")
             }
         },
-        removePlayer: function (i_PlayerName) {
-            var playerIndex = allPlayers.findIndex(player => player.getName() === i_PlayerName)
-            if (playerIndex !== -1){
+        addNewPlayer: function (i_Player) {
+            if (allPlayers.findIndex(player => player === i_Player) === -1) {
+                allPlayers.push(i_Player);
+                console.log("Player '" + i_Player.getName() + "' was added to all players list");
+            } else {
+                console.log("Player '" + i_Player.getName() + "' already exists");
+            }
+        },
+        removePlayer: function (i_Player) {
+            var playerIndex = allPlayers.findIndex(player => player === i_Player)
+            if (playerIndex !== -1) {
                 allPlayers.splice(playerIndex, 1);
-                console.log("Player '" + i_PlayerName+ "' was removed from all players list");
+                console.log("Player '" + i_Player.getName() + "' was removed from all players list");
             } else {
-                console.log("Player '" + i_PlayerName+ "' does not exist");
+                console.log("Player '" + i_Player.getName() + "' does not exist");
             }
         },
-        getPlayerByName: function(i_PlayerName){
+        getPlayerByName: function (i_PlayerName) {
             return allPlayers.find(player => player.getName() === i_PlayerName);
         },
         printAllPlayers: function () {
@@ -50,21 +62,27 @@ var GameManager = (function () {
     }
 })();
 
-function Game(i_numPlayersToStartGame, i_GameID) {
+function Game(i_numPlayersToStartGame, i_GameID, i_GameCreator) {
+    var gameCreator = i_GameCreator;
     var gameIsActive = false;
     var gameID = i_GameID;
     var playersInGame = [];
     var numPlayersToStartGame = i_numPlayersToStartGame;
+    var m_Deck = Deck();
+    var m_CardsOnTable = CardsOnTable();
     var startGame = function () {
         gameIsActive = true;
         console.log("GameID (" + gameID + "): The game has started")
         //    TODO do stuff
     };
     return {
-        deck: Deck(),
-        cardsOnTable: CardsOnTable(),
+        deck: m_Deck,
+        cardsOnTable: m_CardsOnTable,
         getGameId: function () {
             return gameID;
+        },
+        getGameCreator: function () {
+            return gameCreator;
         },
         /**
          * @return {boolean}
@@ -72,10 +90,12 @@ function Game(i_numPlayersToStartGame, i_GameID) {
         isActive: function () {
             return gameIsActive;
         },
-        addPlayerToGame: function (playerToAdd) {
+        addPlayerToGame: function (i_playerNameToAdd) {
+            var playerAdded = false;
+            var playerToAdd;
             if (gameIsActive || playersInGame.length >= numPlayersToStartGame) {
                 console.log("Cannot add another player, game is full or has already started")
-            } else if (GameManager.getPlayerByName(playerToAdd) === undefined){
+            } else if ((playerToAdd = GameManager.getPlayerByName(i_playerNameToAdd)) === undefined) {
                 console.log("Player '" + playerToAdd + "' does not exist and was not added to the game")
             } else {
                 playersInGame.push(playerToAdd);
@@ -83,8 +103,14 @@ function Game(i_numPlayersToStartGame, i_GameID) {
                 if (playersInGame.length === numPlayersToStartGame) {
                     startGame();
                 }
+                playerAdded = true;
             }
+            return playerAdded;
         },
+        moveCardsFromTableToDeck: function () {
+            var pickedUpCards = m_CardsOnTable.takeAllButTopCard();
+            m_Deck.addCardsToDeck(pickedUpCards);
+        }
     }
 };
 // ==================================================================================================================================
@@ -199,11 +225,48 @@ function CardsOnTable() {
 
 function Player(i_PlayerName) {
     var playerName = i_PlayerName;
+    var cards = [];
+    var gameBeingPlayed = null;
+    var isActive = false;
+    var isWinner = false;
+
+    function privateTakeCardsFromDeck(numCards) {
+        // TODO how to check this?!
+        // if (gameBeingPlayed instanceof Game) {
+            for (var i = 0; i < numCards; i++) {
+                cards.push(gameBeingPlayed.deck.drawCard());
+            }
+        // }
+    };
     return {
         getName: function () {
             return playerName;
         },
-
+        createNewGame: function (i_NumPlayers, i_GameId) {
+            GameManager.createNewGame(i_NumPlayers, i_GameId, playerName);
+        },
+        deleteGame: function (i_GameId) {
+            GameManager.deleteGame(i_GameId, playerName);
+        },
+        joinGame: function (game) {
+            if (gameBeingPlayed !== null) {
+                console.log("Player " + playerName + ": cannot join game, already playing in '" + gameBeingPlayed.getGameId() + "'")
+            }
+            // TODO how to check this?!
+            // if (game instanceof Game) {
+                gameBeingPlayed = game;
+                if (game.addPlayerToGame(playerName) === true) {
+                    privateTakeCardsFromDeck(NUM_STARTING_CARDS);
+                } else {
+                    console.log("Player " + playerName + ": cannot join game '" + game.getGameId() + "'")
+                }
+            // }
+        },
+        takeCardsFromDeck: function(numCards){
+          return privateTakeCardsFromDeck(numCards);
+        },
+        // TODO add put card on table
+        // TODO add canPutOnTable
     }
 }
 
@@ -214,31 +277,18 @@ function Player(i_PlayerName) {
 var tests = function () {
     console.log("Running tests:");
     var game = GameManager.createNewGame(2, "test game");
-    var game2 = GameManager.createNewGame(2, "test game");
-    GameManager.addNewPlayer("p1");
-    GameManager.addNewPlayer("p1");
-    GameManager.printAllPlayers();
-    GameManager.addNewPlayer("p2");
-    GameManager.printAllPlayers();
-    GameManager.removePlayer("p1");
-    GameManager.printAllPlayers();
-    game.addPlayerToGame("p1");
-    game.addPlayerToGame("p2");
-    game.addPlayerToGame("p3");
+    var player1 = Player("p1");
+    var player2 = Player("p2");
+    GameManager.addNewPlayer(player1);
+    GameManager.addNewPlayer(player2);
+    player1.joinGame(game);
     console.log("Current deck size: " + game.deck.getSize());
     console.log("Current cardsOnTable size: " + game.cardsOnTable.getSize());
-    console.log("Pulling cards from deck:");
-    for (var i = 0; i < 4; i++) {
-        var cardDrawn = game.deck.drawCard();
-        cardDrawn.printCardToConsole();
-        console.log("Putting card on table:");
-        game.cardsOnTable.putCardOnTable(cardDrawn);
-        console.log("Current deck size: " + game.deck.getSize());
-        console.log("Current cardsOnTable size: " + game.cardsOnTable.getSize());
-    }
+    player2.joinGame(game);
     console.log("Picking up cards from table");
-    var pickedUpCards = game.cardsOnTable.takeAllButTopCard();
-    game.deck.addCardsToDeck(pickedUpCards);
+
+    game.moveCardsFromTableToDeck();
+
     console.log("Current deck size: " + game.deck.getSize());
     console.log("Current cardsOnTable size: " + game.cardsOnTable.getSize());
 };
