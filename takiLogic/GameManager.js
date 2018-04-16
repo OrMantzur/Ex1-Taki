@@ -10,6 +10,7 @@ const COLORS = ["red", "green", "blue", "yellow"];
 // ==================================================================================================================================
 var GameManager = (function () {
     var games = [];
+    var allPlayers = [];
     return {
         createNewGame: function (numPlayers, gameID) {
             var gameCreated = null;
@@ -22,6 +23,29 @@ var GameManager = (function () {
                 console.log("Game was not created, GameID '" + gameID + "' already exists");
             }
             return gameCreated;
+        },
+        addNewPlayer: function (i_PlayerName) {
+            if (allPlayers.findIndex(player => player.getName() === i_PlayerName) === -1){
+                allPlayers.push(Player(i_PlayerName));
+                console.log("Player '" + i_PlayerName+ "' was added to all players list");
+            } else {
+                console.log("Player '" + i_PlayerName+ "' already exists");
+            }
+        },
+        removePlayer: function (i_PlayerName) {
+            var playerIndex = allPlayers.findIndex(player => player.getName() === i_PlayerName)
+            if (playerIndex !== -1){
+                allPlayers.splice(playerIndex, 1);
+                console.log("Player '" + i_PlayerName+ "' was removed from all players list");
+            } else {
+                console.log("Player '" + i_PlayerName+ "' does not exist");
+            }
+        },
+        getPlayerByName: function(i_PlayerName){
+            return allPlayers.find(player => player.getName() === i_PlayerName);
+        },
+        printAllPlayers: function () {
+            allPlayers.forEach(player => console.log(player.getName() + ", "))
         }
     }
 })();
@@ -29,7 +53,7 @@ var GameManager = (function () {
 function Game(i_numPlayersToStartGame, i_GameID) {
     var gameIsActive = false;
     var gameID = i_GameID;
-    var players = [];
+    var playersInGame = [];
     var numPlayersToStartGame = i_numPlayersToStartGame;
     var startGame = function () {
         gameIsActive = true;
@@ -49,12 +73,14 @@ function Game(i_numPlayersToStartGame, i_GameID) {
             return gameIsActive;
         },
         addPlayerToGame: function (playerToAdd) {
-            if (gameIsActive || players.length >= numPlayersToStartGame) {
+            if (gameIsActive || playersInGame.length >= numPlayersToStartGame) {
                 console.log("Cannot add another player, game is full or has already started")
+            } else if (GameManager.getPlayerByName(playerToAdd) === undefined){
+                console.log("Player '" + playerToAdd + "' does not exist and was not added to the game")
             } else {
-                players.push(playerToAdd);
+                playersInGame.push(playerToAdd);
                 console.log("GameID (" + gameID + "): " + playerToAdd + " has joined the game")
-                if (players.length === numPlayersToStartGame) {
+                if (playersInGame.length === numPlayersToStartGame) {
                     startGame();
                 }
             }
@@ -168,6 +194,20 @@ function CardsOnTable() {
 }
 
 // ==================================================================================================================================
+// ====================================================     Player Management    ====================================================
+// ==================================================================================================================================
+
+function Player(i_PlayerName) {
+    var playerName = i_PlayerName;
+    return {
+        getName: function () {
+            return playerName;
+        },
+
+    }
+}
+
+// ==================================================================================================================================
 // ====================================================          Testing         ====================================================
 // ==================================================================================================================================
 
@@ -175,6 +215,13 @@ var tests = function () {
     console.log("Running tests:");
     var game = GameManager.createNewGame(2, "test game");
     var game2 = GameManager.createNewGame(2, "test game");
+    GameManager.addNewPlayer("p1");
+    GameManager.addNewPlayer("p1");
+    GameManager.printAllPlayers();
+    GameManager.addNewPlayer("p2");
+    GameManager.printAllPlayers();
+    GameManager.removePlayer("p1");
+    GameManager.printAllPlayers();
     game.addPlayerToGame("p1");
     game.addPlayerToGame("p2");
     game.addPlayerToGame("p3");
