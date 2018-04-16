@@ -65,7 +65,6 @@ function Game(i_numPlayersToStartGame, i_GameID) {
 // ==================================================== deck and Card Management ====================================================
 // ==================================================================================================================================
 
-// TODO its the same like: var Card = function (i_Color, i_Value) {
 function Card(color, value) {
     const cardColor = color;
     const cardValue = value;
@@ -82,7 +81,6 @@ function Card(color, value) {
     }
 }
 
-// TODO its the same like: var Deck = function () {
 function Deck() {
     var cards = [];
 
