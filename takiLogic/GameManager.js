@@ -2,20 +2,21 @@
 // ====================================================     global variables     ====================================================
 // ==================================================================================================================================
 
-var cardValues = ["1", "3", "4", "5", "6", "7", "8", "9", "stop", "taki"];
-var colors = ["red", "green", "blue", "yellow"];
+var CARD_VALUES = ["1", "3", "4", "5", "6", "7", "8", "9", "stop", "taki"];
+var COLORS = ["red", "green", "blue", "yellow"];
 
 // ==================================================================================================================================
 // ====================================================     Game Management      ====================================================
 // ==================================================================================================================================
-var GameManager = (function () {
-    var Games = [];
+var gameManager = (function () {
+    var games = [];
     return {
-        CreateNewGame: function (numPlayers, gameID) {
+        createNewGame: function (numPlayers, gameID) {
             var gameCreated = null;
-            if (Games.findIndex(game => gameID === game.ID()) === -1) {
+            // if game doesn't exist
+            if (games.findIndex(game => gameID === game.getGameId()) === -1) {
                 gameCreated = Game(numPlayers, gameID);
-                Games.push(gameCreated);
+                games.push(gameCreated);
                 console.log("GameID (" + gameID + "): " + " Game successfully created");
             } else {
                 console.log("Game was not created, GameID '" + gameID + "' already exists");
@@ -25,56 +26,59 @@ var GameManager = (function () {
     }
 })();
 
-var Game = function (i_numPlayersToStartGame, i_GameID) {
+// TODO delete: alternative: function Game(i_numPlayersToStartGame, i_GameID)
+// TODO Gay Ronen :(
+var Game = function(i_numPlayersToStartGame, i_GameID) {
     var gameIsActive = false;
     var gameID = i_GameID;
-    var players = []
+    var players = [];
     var numPlayersToStartGame = i_numPlayersToStartGame;
-    var StartGame = function () {
+    var startGame = function () {
         gameIsActive = true;
         console.log("GameID (" + gameID + "): The game has started")
         //    TODO do stuff
     };
     return {
-        Deck: Deck(),
-        CardsOnTable: CardsOnTable(),
-        ID: function () {
+        deck: Deck(),
+        cardsOnTable: CardsOnTable(),
+        getGameId: function () {
             return gameID;
         },
         /**
          * @return {boolean}
          */
-        IsActive: function () {
+        isActive: function () {
             return gameIsActive;
         },
-        AddPlayerToGame: function (playerToAdd) {
+        addPlayerToGame: function (playerToAdd) {
             if (gameIsActive || players.length >= numPlayersToStartGame) {
                 console.log("Cannot add another player, game is full or has already started")
             } else {
                 players.push(playerToAdd);
                 console.log("GameID (" + gameID + "): " + playerToAdd + " has joined the game")
                 if (players.length === numPlayersToStartGame) {
-                    StartGame();
+                    startGame();
                 }
             }
         },
     }
 };
 // ==================================================================================================================================
-// ==================================================== Deck and Card Management ====================================================
+// ==================================================== deck and Card Management ====================================================
 // ==================================================================================================================================
 
-var Card = function (i_Color, i_Value) {
-    var cardColor = i_Color;
-    var cardValue = i_Value;
+// TODO its the same like: var Card = function Card(i_Color, i_Value) {
+function Card(color, value) {
+    var cardColor = color;
+    var cardValue = value;
     return {
-        GetColor: function () {
+        getColor: function () {
             return cardColor;
         },
-        GetValue: function () {
+        getValue: function () {
             return cardValue;
         },
-        PrintCardToConsole: function () {
+        printCardToConsole: function () {
             console.log("Color: " + cardColor + ", Value: " + cardValue);
         }
     }
@@ -84,12 +88,13 @@ var Deck = function () {
     var cards = [];
 
     // init deck
-    colors.forEach(function (color) {
-        cardValues.forEach(function (val) {
+    COLORS.forEach(function (color) {
+        CARD_VALUES.forEach(function (val) {
             cards.push(Card(color, val));
             cards.push(Card(color, val));
         });
     });
+    // TODO ? documentation
     for (var i = 0; i < 4; i++) {
         cards.push(new Card("no color", "change color"));
     }
@@ -99,7 +104,7 @@ var Deck = function () {
          * draw and remove a random card from the deck
          * @return {Card}
          */
-        DrawCard: function () {
+        drawCard: function () {
             var randIndex = Math.floor(Math.random() * cards.length);
             return cards.splice(randIndex, 1)[0];
         },
@@ -107,10 +112,14 @@ var Deck = function () {
          * returns the number of cards currently in the deck
          * @return {number}
          */
-        GetSize: function () {
+        getSize: function () {
             return cards.length;
         },
-        AddCardsToDeck: function (cardsToAdd) {
+        /**
+         * assume cardsToAdd is an array of cards
+         * @param cardsToAdd
+         */
+        addCardsToDeck: function (cardsToAdd) {
             if (cardsToAdd instanceof Array && cardsToAdd.length > 0) {
                 cardsToAdd.forEach(function (card) {
                     cards.push(card);
@@ -125,24 +134,24 @@ var Deck = function () {
 var CardsOnTable = function () {
     var cards = [];
     return {
-        PutCardOnTable: function (card) {
+        putCardOnTable: function (card) {
             cards.push(card);
         },
-        TakeAllButTopCard: function () {
+        takeAllButTopCard: function () {
             var pickedUpCards = null;
             if (cards.length > 0) {
                 pickedUpCards = cards.splice(1, cards.length - 1);
             }
             return pickedUpCards;
         },
-        ViewTopCard: function () {
+        viewTopCard: function () {
             var topCard = null;
             if (cards.length > 0) {
                 topCard = cards[cards.length - 1];
             }
             return topCard;
         },
-        PickUpTopCard: function () {
+        pickUpTopCard: function () {
             var topCard = null;
             if (cards.length > 0) {
                 topCard = cards.pop();
@@ -152,7 +161,7 @@ var CardsOnTable = function () {
         /**
          * @return {number}
          */
-        GetSize: function () {
+        getSize: function () {
             return cards.length;
         }
     }
@@ -164,27 +173,27 @@ var CardsOnTable = function () {
 
 var tests = function () {
     console.log("Running tests:");
-    var game = GameManager.CreateNewGame(2, "test game");
-    var game2 = GameManager.CreateNewGame(2, "test game");
-    game.AddPlayerToGame("p1");
-    game.AddPlayerToGame("p2");
-    game.AddPlayerToGame("p3");
-    console.log("Current Deck size: " + game.Deck.GetSize());
-    console.log("Current cardsOnTable size: " + game.CardsOnTable.GetSize());
+    var game = GameManager.createNewGame(2, "test game");
+    var game2 = GameManager.createNewGame(2, "test game");
+    game.addPlayerToGame("p1");
+    game.addPlayerToGame("p2");
+    game.addPlayerToGame("p3");
+    console.log("Current deck size: " + game.deck.getSize());
+    console.log("Current cardsOnTable size: " + game.cardsOnTable.getSize());
     console.log("Pulling cards from deck:");
     for (var i = 0; i < 4; i++) {
-        var cardDrawn = game.Deck.DrawCard();
-        cardDrawn.PrintCardToConsole();
+        var cardDrawn = game.deck.drawCard();
+        cardDrawn.printCardToConsole();
         console.log("Putting card on table:");
-        game.CardsOnTable.PutCardOnTable(cardDrawn);
-        console.log("Current Deck size: " + game.Deck.GetSize());
-        console.log("Current cardsOnTable size: " + game.CardsOnTable.GetSize());
+        game.cardsOnTable.putCardOnTable(cardDrawn);
+        console.log("Current deck size: " + game.deck.getSize());
+        console.log("Current cardsOnTable size: " + game.cardsOnTable.getSize());
     }
     console.log("Picking up cards from table");
-    var pickedUpCards = game.CardsOnTable.TakeAllButTopCard();
-    game.Deck.AddCardsToDeck(pickedUpCards);
-    console.log("Current Deck size: " + game.Deck.GetSize());
-    console.log("Current cardsOnTable size: " + game.CardsOnTable.GetSize());
+    var pickedUpCards = game.cardsOnTable.takeAllButTopCard();
+    game.deck.addCardsToDeck(pickedUpCards);
+    console.log("Current deck size: " + game.deck.getSize());
+    console.log("Current cardsOnTable size: " + game.cardsOnTable.getSize());
 };
 
 tests();
