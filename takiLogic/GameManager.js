@@ -26,9 +26,7 @@ var GameManager = (function () {
     }
 })();
 
-// TODO delete: alternative: function Game(i_numPlayersToStartGame, i_GameID)
-// TODO Gay Ronen :(
-var Game = function(i_numPlayersToStartGame, i_GameID) {
+function Game(i_numPlayersToStartGame, i_GameID) {
     var gameIsActive = false;
     var gameID = i_GameID;
     var players = [];
@@ -69,8 +67,8 @@ var Game = function(i_numPlayersToStartGame, i_GameID) {
 
 // TODO its the same like: var Card = function Card(i_Color, i_Value) {
 function Card(color, value) {
-    var cardColor = color;
-    var cardValue = value;
+    const cardColor = color;
+    const cardValue = value;
     return {
         getColor: function () {
             return cardColor;
@@ -82,9 +80,10 @@ function Card(color, value) {
             console.log("Color: " + cardColor + ", Value: " + cardValue);
         }
     }
-};
+}
 
-var Deck = function () {
+// TODO its the same like: var Deck = function () {
+function Deck() {
     var cards = [];
 
     // init deck
@@ -108,6 +107,7 @@ var Deck = function () {
             var randIndex = Math.floor(Math.random() * cards.length);
             return cards.splice(randIndex, 1)[0];
         },
+
         /**
          * returns the number of cards currently in the deck
          * @return {number}
@@ -115,6 +115,7 @@ var Deck = function () {
         getSize: function () {
             return cards.length;
         },
+
         /**
          * assume cardsToAdd is an array of cards
          * @param cardsToAdd
@@ -129,9 +130,9 @@ var Deck = function () {
             }
         }
     }
-};
+}
 
-var CardsOnTable = function () {
+function CardsOnTable() {
     var cards = [];
     return {
         putCardOnTable: function (card) {
@@ -165,7 +166,7 @@ var CardsOnTable = function () {
             return cards.length;
         }
     }
-};
+}
 
 // ==================================================================================================================================
 // ====================================================          Testing         ====================================================
