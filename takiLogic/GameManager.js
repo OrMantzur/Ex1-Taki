@@ -25,11 +25,18 @@ var GameManager = (function () {
             }
             return gameCreated;
         },
+        /**
+         * only who create the game can delete it
+         * @param i_GameId
+         * @param i_PlayerTryingToDelete
+         */
         deleteGame: function (i_GameId, i_PlayerTryingToDelete) {
             var gameToDeleteIndex = games.findIndex(game => game.getGameId() === i_GameId);
             if (gameToDeleteIndex !== -1) {
                 console.log("GameManager: The game '" + i_GameId + "' was not found so it has not been deleted")
-            } else if (games[gameToDeleteIndex].getGameCreator() === i_PlayerTryingToDelete) {
+            }
+            // TODO you mean !== ??
+            else if (games[gameToDeleteIndex].getGameCreator() === i_PlayerTryingToDelete) {
                 console.log("GameManager: The game '" + i_GameId + "' was not created by " + i_PlayerTryingToDelete + " so it has not been deleted")
             } else {
                 games.splice(gameToDeleteIndex, 1);
@@ -231,7 +238,7 @@ function Player(i_PlayerName) {
     var isWinner = false;
 
     function privateTakeCardsFromDeck(numCards) {
-        // TODO how to check this?!
+        // TODO how to check this?! maybe check the name of the function in meta data(that is Game)
         // if (gameBeingPlayed instanceof Game) {
             for (var i = 0; i < numCards; i++) {
                 cards.push(gameBeingPlayed.deck.drawCard());
