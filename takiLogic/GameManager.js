@@ -265,6 +265,9 @@ function Player(i_PlayerName) {
         takeCardsFromDeck: function(numCards){
           return privateTakeCardsFromDeck(numCards);
         },
+        startTurn: function (topCardOnTable, turnLimitations) {
+
+        }
         // TODO add put card on table
         // TODO add canPutOnTable
     }
