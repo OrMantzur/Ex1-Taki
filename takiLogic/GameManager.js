@@ -2,14 +2,14 @@
 // ====================================================     global variables     ====================================================
 // ==================================================================================================================================
 
-const CARD_VALUES = ["1", "3", "4", "5", "6", "7", "8", "9", "stop", "taki"];
+const CARD_VALUES = ["1", "3", "4", "5", "6", "7", "8", "9", "stop", "taki"]; // "change color" is added manually in the "Deck" function
 const COLORS = ["red", "green", "blue", "yellow"];
 const NUM_STARTING_CARDS = 8;
 
 // ==================================================================================================================================
 // ====================================================     Game Management      ====================================================
 // ==================================================================================================================================
-var GameManager = (function () {
+/*var GameManager = (function () {
     var games = [];
     var allPlayers = [];
     return {
@@ -25,11 +25,11 @@ var GameManager = (function () {
             }
             return gameCreated;
         },
-        /**
+        /!**
          * only who create the game can delete it
          * @param i_GameId
          * @param i_PlayerTryingToDelete
-         */
+         *!/
         deleteGame: function (i_GameId, i_PlayerTryingToDelete) {
             var gameToDeleteIndex = games.findIndex(game => game.getGameId() === i_GameId);
             if (gameToDeleteIndex !== -1) {
@@ -67,9 +67,9 @@ var GameManager = (function () {
             allPlayers.forEach(player => console.log(player.getName() + ", "))
         }
     }
-})();
+})();*/
 
-function Game(i_numPlayersToStartGame, i_GameID, i_GameCreator) {
+var Game = (function (i_numPlayersToStartGame, i_GameID, i_GameCreator) {
     var gameCreator = i_GameCreator;
     var gameIsActive = false;
     var gameID = i_GameID;
@@ -77,11 +77,45 @@ function Game(i_numPlayersToStartGame, i_GameID, i_GameCreator) {
     var numPlayersToStartGame = i_numPlayersToStartGame;
     var m_Deck = Deck();
     var m_CardsOnTable = CardsOnTable();
+    var activePlayerIndex = 0;
+    var gameState = {
+        currColor: null,
+        gameState: null,
+        additionalInfo: null // TODO will be used for counter on +2
+    };
     var startGame = function () {
         gameIsActive = true;
         console.log("GameID (" + gameID + "): The game has started")
+        playersInGame[activePlayerIndex].startTurn();
         //    TODO do stuff
     };
+
+    function isValidMove(cardPlaced) {
+        var isValid = true;
+        var topCardOnTable = m_CardsOnTable.viewTopCard().getColor();
+        if (gameState.gameState === "takiOpen") {
+            isValid = topCardOnTable.getColor() === cardPlaced.getColor();
+        }
+        if (gameState.gameState === "superTaki") {
+            // TODO advanced game
+        } else if (gameState.gameState === "change color") {
+            isValid = true; //TODO can i put anything on change color?
+        } else if (gameState.gameState === "+2_open") {
+            isValid = cardPlaced.getValue() === "+2";
+        } else {
+            isValid =
+                (topCardOnTable.getColor() === cardPlaced.getColor()) ||
+                (topCardOnTable.getValue() === cardPlaced.getValue());
+        }
+
+        return isValid;
+    }
+
+    function moveCardsFromTableToDeck() {
+        var pickedUpCards = m_CardsOnTable.takeAllButTopCard();
+        m_Deck.addCardsToDeck(pickedUpCards);
+    }
+
     return {
         deck: m_Deck,
         cardsOnTable: m_CardsOnTable,
@@ -114,12 +148,63 @@ function Game(i_numPlayersToStartGame, i_GameID, i_GameCreator) {
             }
             return playerAdded;
         },
-        moveCardsFromTableToDeck: function () {
-            var pickedUpCards = m_CardsOnTable.takeAllButTopCard();
-            m_Deck.addCardsToDeck(pickedUpCards);
+        takeCardsFromDeck() {
+            // if there is only one card left add the cards from the table to the deck so the deck won't remain empty
+            if (m_CardsOnTable.getSize() <= 1) {
+                moveCardsFromTableToDeck();
+            }
+
+            if (gameState.gameState === "+2_Open") {
+                // check that there are enough cards in the deck
+                if (m_CardsOnTable.getSize() <= gameState.additionalInfo + 1) {
+                    moveCardsFromTableToDeck();
+                }
+                var cardsTaken = [];
+                for (var i = 0; i < gameState.additionalInfo; i++) {
+                    cardsTaken.push(Deck().drawCard())
+                }
+                playersInGame[activePlayerIndex].addCardsToHand(cardsTaken);
+                gameState.gameState = null;
+                gameState.additionalInfo = null;
+            }
+        },
+        makeMove(cardPlaced, activePlayer) {
+            if (!isValidMove(cardPlaced)) {
+                throw new Error("Invalid move!");
+            }
+            if (activePlayer.getCardsRemaining() === 0) {
+                activePlayer.setIsWinner(true);
+                gameState.gameState = "Game ended - Player won";
+                // TODO game ended - show statistics
+            }
+            else {
+                var cardValue = cardPlaced.getValue();
+                if (cardValue === "stop") {
+                    activePlayerIndex = (activePlayerIndex + 2) % playersInGame.length;
+                } else if (cardValue === "taki") {
+                    gameState.gameState = "takiOpen";
+                } else if (cardValue === "change color") {
+                    // TODO get color from user
+                } else if (cardValue === "+2") {
+                    // TODO implement
+                } else {
+                    if (
+                        (gameState.gameState === "takiOpen" && playersInGame[activePlayerIndex].hasCardOfColor(color)) ||
+                        (gameState.gameState === "+")
+                    ) {
+                        // player gets another turn;
+                    } else {
+                        if (gameState.gameState === "takiOpen" && !playersInGame[activePlayerIndex].hasCardOfColor(color)) {
+                            gameState.gameState = "takiClosed";
+                        }
+                        activePlayerIndex = (activePlayerIndex + 1) % playersInGame.length;
+                    }
+                }
+            }
         }
     }
-};
+})(2, "Ex01", "Taki Man");
+
 // ==================================================================================================================================
 // ==================================================== deck and Card Management ====================================================
 // ==================================================================================================================================
@@ -160,6 +245,9 @@ function Deck() {
          * @return {Card}
          */
         drawCard: function () {
+            if (cards.length === 0) {
+                throw new Error("DeckEmpty");
+            }
             var randIndex = Math.floor(Math.random() % cards.length);
             return cards.splice(randIndex, 1)[0];
         },
@@ -228,50 +316,68 @@ function CardsOnTable() {
 // ====================================================     Player Management    ====================================================
 // ==================================================================================================================================
 
-function Player(i_PlayerName) {
+function Player(i_PlayerName, i_IsComputer) {
     var playerName = i_PlayerName;
+    var isComputer = i_IsComputer;
     var cards = [];
-    var gameBeingPlayed = null;
+    // var gameBeingPlayed = null;
     var isActive = false;
     var isWinner = false;
 
-    function privateTakeCardsFromDeck(numCards) {
-        // TODO how to check this?! maybe check the name of the function in meta data(that is Game)
-        // if (gameBeingPlayed instanceof Game) {
+    /*    function privateTakeCardsFromDeck(numCards) {
+            // TODO how to check this?! maybe check the name of the function in meta data(that is Game)
+            // if (gameBeingPlayed instanceof Game) {
             for (var i = 0; i < numCards; i++) {
                 cards.push(gameBeingPlayed.deck.drawCard());
             }
-        // }
-    };
+            // }
+        };*/
     return {
         getName: function () {
             return playerName;
         },
-        createNewGame: function (i_NumPlayers, i_GameId) {
-            GameManager.createNewGame(i_NumPlayers, i_GameId, playerName);
-        },
-        deleteGame: function (i_GameId) {
-            GameManager.deleteGame(i_GameId, playerName);
-        },
-        joinGame: function (game) {
-            if (gameBeingPlayed !== null) {
-                console.log("Player " + playerName + ": cannot join game, already playing in '" + gameBeingPlayed.getGameId() + "'")
+        /*        createNewGame: function (i_NumPlayers, i_GameId) {
+                    GameManager.createNewGame(i_NumPlayers, i_GameId, playerName);
+                },
+                deleteGame: function (i_GameId) {
+                    GameManager.deleteGame(i_GameId, playerName);
+                },*/
+        /*        joinGame: function (game) {
+                    if (gameBeingPlayed !== null) {
+                        console.log("Player " + playerName + ": cannot join game, already playing in '" + gameBeingPlayed.getGameId() + "'")
+                    }
+                    // TODO how to check this?!
+                    // if (game instanceof Game) {
+                    gameBeingPlayed = game;
+                    if (game.addPlayerToGame(playerName) === true) {
+                        privateTakeCardsFromDeck(NUM_STARTING_CARDS);
+                    } else {
+                        console.log("Player " + playerName + ": cannot join game '" + game.getGameId() + "'")
+                    }
+                    // }
+                },*/
+        /*        takeCardsFromDeck: function (numCards) {
+                    return privateTakeCardsFromDeck(numCards);
+                },*/
+        addCardsToHand: function (cardsToAdd) {
+            if (cardsToAdd instanceof Array && cardsToAdd.length > 0) {
+                cards = cards.concat(cardsToAdd);
             }
-            // TODO how to check this?!
-            // if (game instanceof Game) {
-                gameBeingPlayed = game;
-                if (game.addPlayerToGame(playerName) === true) {
-                    privateTakeCardsFromDeck(NUM_STARTING_CARDS);
-                } else {
-                    console.log("Player " + playerName + ": cannot join game '" + game.getGameId() + "'")
-                }
-            // }
         },
-        takeCardsFromDeck: function(numCards){
-          return privateTakeCardsFromDeck(numCards);
+        startTurn: function () {
+            isActive = true;
         },
-        startTurn: function (topCardOnTable, turnLimitations) {
+        getCardsRemaining: function () {
+            return cards.length;
+        },
+        setIsWinner: function (i_IsWinner) {
+            isWinner = i_IsWinner;
+        },
+        getPossibleMove(topCard, gameState){
+            var cardThatCanBePlaced = null;
+            for (var i = 0 ; i < cards.length ; i++){
 
+            }
         }
         // TODO add put card on table
         // TODO add canPutOnTable
