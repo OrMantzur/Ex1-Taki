@@ -16,6 +16,21 @@ const SpecialCard = {
     STOP: "stop",
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function Card(color, value) {
     // TODO auto
     const cardId = 1;
