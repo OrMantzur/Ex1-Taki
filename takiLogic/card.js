@@ -5,7 +5,6 @@
 
 const CARD_VALUES = ["1", "3", "4", "5", "6", "7", "8", "9", "stop", "taki"]; // "change color" is added manually in the "Deck" function
 const COLORS = ["red", "green", "blue", "yellow"];
-
 const SpecialCard = {
     SUPER_TAKI: "superTaki",
     TAKI: "taki",
@@ -15,10 +14,10 @@ const SpecialCard = {
     PLUS_2: "+2",
     STOP: "stop",
 };
+Card.nextFreeCardId = 0;
 
 function Card(color, value) {
-    // TODO auto
-    const cardId = 1;
+    const cardId = Card.nextFreeCardId++;
     const cardColor = color;
     const cardValue = value;
 

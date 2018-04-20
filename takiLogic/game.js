@@ -4,7 +4,6 @@
  */
 
 const NUM_STARTING_CARDS = 8;
-
 const GameState = {
     SUPER_TAKI: "superTaki",
     OPEN_TAKI: "takiOpen",
@@ -16,12 +15,15 @@ const GameState = {
     CHANGE_COLOR: "changeColor",
     GAME_ENDED: "game ended - Player won",
 };
+Game.nextFreeGameId = 0;
 
-var game = (function (i_numPlayersToStartGame, i_GameCreator, i_GameID) {
+
+function Game(i_numPlayersToStartGame, i_GameCreator, i_GameName) {
     // TODO Validate in gameManager when there is more than one game
     var numPlayersToStartGame = i_numPlayersToStartGame;
     var gameCreator = i_GameCreator;
-    var gameID = i_GameID;
+    var gameID = Game.nextFreeGameId++;
+    var gameName= i_GameName;
     var players = [];
     var activePlayerIndex = 0;
     var gameIsActive = false;
@@ -203,4 +205,4 @@ var game = (function (i_numPlayersToStartGame, i_GameCreator, i_GameID) {
             }
         },
     }
-})(2, "Taki Man", "Ex1");
+}

@@ -47,7 +47,7 @@ function Deck() {
             if (cardsToAdd instanceof Array && cardsToAdd.length > 0) {
                 cardsToAdd.forEach(function (card) {
                     cards.push(card);
-                })
+                });
             } else {
                 console.log("Error in 'TakeCardsFromTableToDeck', parameter must be an array");
             }

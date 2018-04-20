@@ -1,7 +1,8 @@
 
 // TODO delete that file
 
-// var game = Game(2, "test", "orm");
+var game = Game(2, "Taki Man", "Ex1");
+
 function test() {
     console.log("Running tests:");
     var player1 = Player("p1", false);

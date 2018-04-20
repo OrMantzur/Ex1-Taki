@@ -5,6 +5,7 @@
 
 function CardsOnTable() {
     var cards = [];
+
     return {
         getSize: function () {
             return cards.length;
@@ -22,6 +23,10 @@ function CardsOnTable() {
             return topCard;
         },
 
+        /**
+         * use for example if the deck over
+         * @returns {*}
+         */
         takeAllButTopCard: function () {
             var pickedUpCards = null;
             if (cards.length > 0) {

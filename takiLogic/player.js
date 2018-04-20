@@ -3,8 +3,18 @@
  * Or Mantzur - 204311997
  */
 
+Player.nextFreePlayerId = 0;
+
+/**
+ * can be human/computer player
+ *
+ * @param i_PlayerName
+ * @param i_IsComputer
+ * @returns {*}
+ * @constructor
+ */
 function Player(i_PlayerName, i_IsComputer) {
-    var playerId;
+    var playerId = Player.nextFreePlayerId++;
     var playerName = i_PlayerName;
     var isComputer = i_IsComputer;
     var cards = [];
