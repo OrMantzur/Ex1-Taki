@@ -7,11 +7,26 @@ const COLORS = ["red", "green", "blue", "yellow"];
 const NUM_STARTING_CARDS = 8;
 //TODO con
 const GameState = {
-    SUPER_TAKI: "superTaki"
+    SUPER_TAKI: "superTaki",
+    OPEN_TAKI:"takiOpen",
+    CLOSE_TAKI:"takiClose",
+    OPEN_PLUS:"+Open",
+    CLOSE_PLUS:"+Close",
+    OPEN_PLUS_2:"+2Open",
+    CLOSE_PLUS_2:"+2Close",
+    CHANGE_COLOR:"changeColor",
+    GAME_ENDED:"game ended - Player won",
 };
+
 //TODO con
 const SpecialCard = {
-    STOP: "stop"
+    SUPER_TAKI: "superTaki",
+    TAKI: "taki",
+    CHANGE_COLOR: "changeColor",
+    CHANGE_DIRECTION: "changeDirection",
+    PLUS: "plus",
+    PLUS_2: "+2",
+    STOP: "stop",
 };
 
 var game = (function (i_numPlayersToStartGame, i_GameCreator) {
@@ -53,14 +68,14 @@ var game = (function (i_numPlayersToStartGame, i_GameCreator) {
         var isValid = true;
         var topCardOnTable = m_CardsOnTable.viewTopCard();
         // redundent
-        if (gameState.gameState === "takiOpen") {
+        if (gameState.gameState === GameState.OPEN_TAKI) {
             isValid = topCardOnTable.getColor() === cardPlaced.getColor();
         }
         if (gameState.gameState === GameState.SUPER_TAKI) {
             // TODO advanced game
-        } else if (gameState.gameState === "change color") {
+        } else if (gameState.gameState === GameState.CHANGE_COLOR) {
             isValid = true; //TODO can i put anything on change color?
-        } else if (gameState.gameState === "+2_open") {
+        } else if (gameState.gameState === GameState.OPEN_PLUS_2) {
             isValid = cardPlaced.getValue() === "+2";
         } else {
             isValid =
@@ -126,13 +141,13 @@ var game = (function (i_numPlayersToStartGame, i_GameCreator) {
 
             // check that there are enough cards in the deck
             if ((m_Deck.getSize() <= 1) ||
-                (gameState.gameState === "+2_Open" && m_CardsOnTable.getSize() <= gameState.additionalInfo + 1)) {
+                (gameState.gameState === GameState.OPEN_PLUS_2 && m_CardsOnTable.getSize() <= gameState.additionalInfo + 1)) {
                 moveCardsFromTableToDeck();
             }
 
             var cardsTaken = [];
             try {
-                if (gameState.gameState === "+2_Open") {
+                if (gameState.gameState === GameState.OPEN_PLUS_2) {
                     cardsTaken = m_Deck.drawCards(gameState.additionalInfo);
                     gameState.gameState = null;
                     gameState.additionalInfo = null;
@@ -169,22 +184,22 @@ var game = (function (i_numPlayersToStartGame, i_GameCreator) {
             m_CardsOnTable.putCardOnTable(cardPlaced);
             if (cardValue === SpecialCard.STOP) {
                 activePlayerIndex = (activePlayerIndex + 2) % players.length;
-            } else if (cardValue === "taki") {
-                gameState.gameState = "takiOpen";
+            } else if (cardValue === SpecialCard.TAKI) {
+                gameState.gameState = GameState.OPEN_TAKI;
                 gameState.additionalInfo = cardPlaced.getColor();
-            } else if (cardValue === "change color") {
+            } else if (cardValue === SpecialCard.CHANGE_COLOR) {
                 // TODO get color from user
-            } else if (cardValue === "+2") {
+            } else if (cardValue === SpecialCard.PLUS_2) {
                 // TODO implement
             } else {
                 if (
-                    (gameState.gameState === "takiOpen" && players[activePlayerIndex].hasCardOfColor(gameState.additionalInfo)) ||
-                    (gameState.gameState === "+")
+                    (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].hasCardOfColor(gameState.additionalInfo)) ||
+                    (gameState.gameState === GameState.OPEN_PLUS)
                 ) {
                     // player gets another turn;
                 } else {
-                    if (gameState.gameState === "takiOpen" && !players[activePlayerIndex].hasCardOfColor(color)) {
-                        gameState.gameState = "takiClosed";
+                    if (gameState.gameState === GameState.OPEN_TAKI && !players[activePlayerIndex].hasCardOfColor(color)) {
+                        gameState.gameState = GameState.CLOSE_TAKI;
                     }
                     activePlayerIndex = (activePlayerIndex + 1) % players.length;
                 }
@@ -192,7 +207,7 @@ var game = (function (i_numPlayersToStartGame, i_GameCreator) {
 
             if (activePlayer.getCardsRemainingNum() === 0) {
                 activePlayer.setIsWinner(true);
-                gameState.gameState = "game ended - Player won";
+                gameState.gameState = GameState.GAME_ENDED;
                 // TODO game ended - show statistics
             }
         },
