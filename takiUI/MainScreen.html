@@ -1,17 +1,31 @@
-
-<!-- TODO delete. test only -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TEST</title>
-    <script src="../TakiLogic/GameManager.js"></script>
+    <script type="text/javascript" src="../takiLogic/taki.js"></script>
+    <title>Taki</title>
 </head>
-<body>
-<button onclick="run()">
-    run
-</button>
-</br>
-</body>
-</html>
 
+<body>
+
+<h1>Taki</h1>
+
+<b>regular player:</b>
+<table id="player1CardsTable">
+    <script>
+        drawCardOnScreen("player1CardsTable", 0);
+    </script>
+</table>
+<br/>
+
+<b>computer player:</b>
+<table id="player2CardsTable">
+    <script>
+        drawCardOnScreen("player2CardsTable", 1);
+    </script>
+</table>
+<br/>
+
+</body>
+
+</html>
