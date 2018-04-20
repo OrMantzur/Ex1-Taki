@@ -22,14 +22,6 @@ function CardsOnTable() {
             return topCard;
         },
 
-        pickUpTopCard: function () {
-            var topCard = null;
-            if (cards.length > 0) {
-                topCard = cards.pop();
-            }
-            return topCard;
-        },
-
         takeAllButTopCard: function () {
             var pickedUpCards = null;
             if (cards.length > 0) {

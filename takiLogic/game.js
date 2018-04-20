@@ -7,32 +7,33 @@ const NUM_STARTING_CARDS = 8;
 
 const GameState = {
     SUPER_TAKI: "superTaki",
-    OPEN_TAKI:"takiOpen",
-    CLOSE_TAKI:"takiClose",
-    OPEN_PLUS:"+Open",
-    CLOSE_PLUS:"+Close",
-    OPEN_PLUS_2:"+2Open",
-    CLOSE_PLUS_2:"+2Close",
-    CHANGE_COLOR:"changeColor",
-    GAME_ENDED:"game ended - Player won",
+    OPEN_TAKI: "takiOpen",
+    CLOSE_TAKI: "takiClose",
+    OPEN_PLUS: "+Open",
+    CLOSE_PLUS: "+Close",
+    OPEN_PLUS_2: "+2Open",
+    CLOSE_PLUS_2: "+2Close",
+    CHANGE_COLOR: "changeColor",
+    GAME_ENDED: "game ended - Player won",
 };
 
-var game = (function (i_numPlayersToStartGame, i_GameCreator) {
-    // TODO auto generate
-    var gameID = 1;
+var game = (function (i_numPlayersToStartGame, i_GameCreator, i_GameID) {
+    // TODO Validate in gameManager when there is more than one game
+    var numPlayersToStartGame = i_numPlayersToStartGame;
+    var gameCreator = i_GameCreator;
+    var gameID = i_GameID;
     var players = [];
     var activePlayerIndex = 0;
-    var numPlayersToStartGame = i_numPlayersToStartGame;
+    var gameIsActive = false;
     var m_Deck = Deck();
     var m_CardsOnTable = CardsOnTable();
-    var gameIsActive = false;
-    var gameCreator = i_GameCreator;
     var gameState = {
         currColor: null,
         gameState: null,
         additionalInfo: null // TODO will be used for counter on +2
     };
-    var startGame = function () {
+
+    function startGame() {
         gameIsActive = true;
         console.log("GameID (" + gameID + "): The game has started");
         players[activePlayerIndex].startTurn();
@@ -42,9 +43,9 @@ var game = (function (i_numPlayersToStartGame, i_GameCreator) {
             // TODO handle error
         }
         //    TODO do stuff
-    };
+    }
 
-
+    // TODO delete
     var x = 0;
 
     function moveCardsFromTableToDeck() {
@@ -55,20 +56,20 @@ var game = (function (i_numPlayersToStartGame, i_GameCreator) {
     function isValidMove(cardPlaced) {
         var isValid = true;
         var topCardOnTable = m_CardsOnTable.viewTopCard();
-        // redundent
         if (gameState.gameState === GameState.OPEN_TAKI) {
             isValid = topCardOnTable.getColor() === cardPlaced.getColor();
-        }
-        if (gameState.gameState === GameState.SUPER_TAKI) {
+        } else if (gameState.gameState === GameState.SUPER_TAKI) {
             // TODO advanced game
-        } else if (gameState.gameState === GameState.CHANGE_COLOR) {
+        }/* else if (gameState.gameState === GameState.CHANGE_COLOR) {
             isValid = true; //TODO can i put anything on change color?
-        } else if (gameState.gameState === GameState.OPEN_PLUS_2) {
-            isValid = cardPlaced.getValue() === "+2";
+        }*/ else if (gameState.gameState === GameState.OPEN_PLUS_2) {
+            isValid = cardPlaced.getValue() === SpecialCard.PLUS_2;
         } else {
             isValid =
                 (topCardOnTable.getColor() === cardPlaced.getColor()) ||
-                (topCardOnTable.getValue() === cardPlaced.getValue());
+                (topCardOnTable.getValue() === cardPlaced.getValue()) ||
+                (cardPlaced.getValue() === SpecialCard.CHANGE_COLOR);
+            // TODO add any relevant special card
         }
 
         return isValid;
@@ -97,7 +98,7 @@ var game = (function (i_numPlayersToStartGame, i_GameCreator) {
         },
 
         getPlayer: function (playerId) {
-            // TODO by now we dont have unique id so we treat to it like index
+            // TODO we don't have unique id yet so we treat to it like index
             return players[playerId];
         },
 
@@ -135,6 +136,7 @@ var game = (function (i_numPlayersToStartGame, i_GameCreator) {
 
             var cardsTaken = [];
             try {
+                //TODO add documentation
                 if (gameState.gameState === GameState.OPEN_PLUS_2) {
                     cardsTaken = m_Deck.drawCards(gameState.additionalInfo);
                     gameState.gameState = null;
@@ -200,4 +202,4 @@ var game = (function (i_numPlayersToStartGame, i_GameCreator) {
             }
         },
     }
-})(2, "Taki Man");
+})(2, "Taki Man", "Ex1");

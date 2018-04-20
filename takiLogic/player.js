@@ -8,18 +8,9 @@ function Player(i_PlayerName, i_IsComputer) {
     var playerName = i_PlayerName;
     var isComputer = i_IsComputer;
     var cards = [];
-    // var gameBeingPlayed = null;
     var isActive = false;
     var isWinner = false;
 
-    /*    function privateTakeCardsFromDeck(numCards) {
-            // TODO how to check this?! maybe check the name of the function in meta data(that is game)
-            // if (gameBeingPlayed instanceof game) {
-            for (var i = 0; i < numCards; i++) {
-                cards.push(gameBeingPlayed.deck.drawCards());
-            }
-            // }
-        };*/
     return {
         setIsWinner: function (i_IsWinner) {
             isWinner = i_IsWinner;

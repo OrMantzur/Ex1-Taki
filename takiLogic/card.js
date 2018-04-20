@@ -21,8 +21,8 @@ function Card(color, value) {
     const cardId = 1;
     const cardColor = color;
     const cardValue = value;
+
     return {
-        // getter
         getId: function () {
             return cardId;
         },

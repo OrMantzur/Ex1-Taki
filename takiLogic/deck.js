@@ -4,24 +4,28 @@
  */
 
 function Deck() {
+    const NUMBER_OF_CHANGE_COLOR_CARD = 4;
     var cards = [];
 
     // init deck
-    COLORS.forEach(function (color) {
-        CARD_VALUES.forEach(function (val) {
+    COLORS.forEach(color => {
+        CARD_VALUES.forEach(val => {
             cards.push(Card(color, val));
             cards.push(Card(color, val));
         });
     });
-    const NUMBER_OF_CHANGE_COLOR_CARD = 4;
+
     for (var i = 0; i < NUMBER_OF_CHANGE_COLOR_CARD; i++) {
         cards.push(new Card("no color", "change color"));
     }
+
+    // TODO init other special cards
 
     function drawCard() {
         if (cards.length === 0) {
             throw new Error("DeckEmpty");
         }
+
         var randIndex = Math.floor((Math.random() * 100) % cards.length);
         return cards.splice(randIndex, 1)[0];
     }
