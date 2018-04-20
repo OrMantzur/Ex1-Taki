@@ -165,7 +165,8 @@ var game = (function (i_numPlayersToStartGame, i_GameCreator, i_GameID) {
             x++;
 
             if (!isValidMove(cardPlaced)) {
-                throw new Error("Invalid move!");
+                // TODO uncomment
+                // throw new Error("Invalid move!");
             }
             var cardValue = cardPlaced.getValue();
             var activePlayer = players[activePlayerIndex];

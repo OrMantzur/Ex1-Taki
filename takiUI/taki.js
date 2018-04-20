@@ -1,4 +1,3 @@
-
 function drawCardOnScreen(parentId, playerId) {
     var playerCards = game.getPlayer(playerId).getCards();
     // one player cards row at the caller table
@@ -9,7 +8,9 @@ function drawCardOnScreen(parentId, playerId) {
         var cardElement = document.createElement("td");
         cardElement.setAttribute("id", cardIndex.toString());
         cardIndex++;
-        cardElement.setAttribute("onclick", "game.makeMove()");
+        cardElement.addEventListener("click", function () {
+            game.makeMove(card);
+        });
         cardElement.textContent = card.getValue();
         cardsRowElement.appendChild(cardElement);
     });
