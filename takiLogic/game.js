@@ -43,17 +43,15 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
     function startGame() {
         gameIsActive = true;
         console.log("GameID (" + gameID + "): The game has started");
-        players[activePlayerIndex].startTurn();
         try {
+            // open start card
             m_CardsOnTable.putCardOnTable(m_Deck.drawCards(1)[0]);
         } catch (e) {
             // TODO handle error
         }
+        players[activePlayerIndex].startTurn();
         //    TODO do stuff
     }
-
-    // TODO delete
-    var x = 0;
 
     function moveCardsFromTableToDeck() {
         var pickedUpCards = m_CardsOnTable.takeAllButTopCard();
@@ -67,9 +65,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             isValid = topCardOnTable.getColor() === cardPlaced.getColor();
         } else if (gameState.gameState === GameState.SUPER_TAKI) {
             // TODO advanced game
-        }/* else if (gameState.gameState === GameState.CHANGE_COLOR) {
-            isValid = true; //TODO can i put anything on change color?
-        }*/ else if (gameState.gameState === GameState.OPEN_PLUS_2) {
+        } else if (gameState.gameState === GameState.OPEN_PLUS_2) {
             isValid = cardPlaced.getValue() === SpecialCard.PLUS_2;
         } else {
             isValid =
@@ -194,7 +190,8 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             // check if there is a possible move that the player can make
             var card = players[activePlayerIndex].getPossibleMove(isValidMove);
             if (card !== null) {
-                throw new Error("Cannot take card from deck when there is a possible move. \nThe card that can be places is: " + card.getColor() + ", " + card.getValue());
+                // throw new Error("Cannot take card from deck when there is a possible move. \nThe card that can be places is: " + card.getColor() + ", " + card.getValue());
+                console.log("Cannot take card from deck when there is a possible move. \nThe card that can be places is: " + card.getColor() + ", " + card.getValue());
             }
 
             // check that there are enough cards in the deck
@@ -207,7 +204,8 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             try {
                 //TODO add documentation
                 if (gameState.gameState === GameState.OPEN_PLUS_2) {
-                    cardsTaken = m_Deck.drawCards(gameState.additionalInfo);
+                    var numCardsToTake = gameState.additionalInfo;
+                    cardsTaken = m_Deck.drawCards(numCardsToTake);
                     gameState.gameState = null;
                     gameState.additionalInfo = null;
                 } else {
@@ -232,56 +230,58 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         },
 
         makeMove: function (cardPlaced, additionalData) {
-            // var testMessage = "################################################\n" +
-            //     " player.makeMove() will run ! counter:" + x +
-            //     "\n################################################\n";
-            // console.log(testMessage);
-            x++;
-
             if (!isValidMove(cardPlaced)) {
-                throw new Error("Invalid move!");
+                // throw new Error("Invalid move!");
+                console.log("Invalid move!");
             }
             var cardValue = cardPlaced.getValue();
             var activePlayer = players[activePlayerIndex];
             activePlayer.removeCardFromHand(cardPlaced);
 
             m_CardsOnTable.putCardOnTable(cardPlaced);
-            if (cardValue === SpecialCard.STOP) {
-                activePlayerIndex = (activePlayerIndex + 2) % players.length;
-            } else if (cardValue === SpecialCard.TAKI) {
-                gameState.gameState = GameState.OPEN_TAKI;
-                gameState.additionalInfo = cardPlaced.getColor();
-            } else if (cardValue === SpecialCard.CHANGE_COLOR) {
-                // TODO get color from user and not random!
-                if (additionalData === undefined) {
-                    var randColorIndex = Math.floor((Math.random() * 10) % Color.length);
-                    additionalData = Color[randColorIndex];
-                }
-                cardPlaced.setColor(additionalData);
-            } else if (cardValue === SpecialCard.PLUS_2) {
-                if (gameState.gameState === GameState.OPEN_PLUS_2)
-                    gameState.additionalInfo += 2;
-                else {
-                    gameState.gameState = GameState.OPEN_PLUS_2;
-                    gameState.additionalInfo = 2;
-                }
-            } else if (cardValue === SpecialCard.SUPER_TAKI) {
-                cardPlaced.setColor(additionalData);
-                gameState.gameState = GameState.OPEN_TAKI;
-            } else {
-                if (
-                    (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) !== undefined) ||
-                    (gameState.gameState === GameState.OPEN_PLUS)
-                ) {
-                    // player gets another turn;
-                } else {
-                    if (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) === undefined) {
-                        // gameState.gameState = GameState.CLOSE_TAKI;
-                        gameState.gameState = null;
-                        gameState.additionalInfo = null;
+            switch(cardValue){
+                case SpecialCard.STOP:
+                    activePlayerIndex = (activePlayerIndex + 2) % players.length;
+                    break;
+                case SpecialCard.TAKI:
+                    gameState.gameState = GameState.OPEN_TAKI;
+                    gameState.additionalInfo = cardPlaced.getColor();
+                    break;
+                case SpecialCard.CHANGE_COLOR:
+                    // TODO get color from user and not random!
+                    if (additionalData === undefined) {
+                        var randColorIndex = Math.floor((Math.random() * 10) % Color.length);
+                        additionalData = Color[randColorIndex];
                     }
-                    activePlayerIndex = (activePlayerIndex + 1) % players.length;
-                }
+                    cardPlaced.setColor(additionalData);
+                    break;
+                case SpecialCard.PLUS_2:
+                    if (gameState.gameState === GameState.OPEN_PLUS_2)
+                        gameState.additionalInfo += 2;
+                    else {
+                        gameState.gameState = GameState.OPEN_PLUS_2;
+                        gameState.additionalInfo = 2;
+                    }
+                    break;
+                case SpecialCard.SUPER_TAKI:
+                    cardPlaced.setColor(additionalData);
+                    gameState.gameState = GameState.OPEN_TAKI;
+                    break;
+                default:
+                    if (
+                        (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) !== undefined) ||
+                        (gameState.gameState === GameState.OPEN_PLUS)
+                    ) {
+                        // player gets another turn;
+                    } else {
+                        if (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) === undefined) {
+                            // gameState.gameState = GameState.CLOSE_TAKI;
+                            gameState.gameState = null;
+                            gameState.additionalInfo = null;
+                        }
+                        activePlayerIndex = (activePlayerIndex + 1) % players.length;
+                    }
+                    break;
             }
 
             console.log("Player \"" + activePlayer.getName() + "\" placed the following card on the table:");
@@ -299,6 +299,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             }
 
         },
+
         //TODO delete
         MakeComputerMove: function () {
             makeComputerPlayerMove();
