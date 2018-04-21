@@ -154,12 +154,13 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         } else if (players[activePlayerIndex].isComputerPlayer()) {
             makeComputerPlayerMove();
         } else if (activePlayer.getPossibleMoves(isValidMove) === null) {
+            if ()
             // active player doesn't has more move to do
-            moveToNextPlayer();
+                moveToNextPlayer();
         }
     }
 
-    function makeMoveOfSpecialCard(card, additionalData) {
+    function afterMoveOfSpecialCard(card, additionalData) {
         var cardValue = card.getValue();
         switch (cardValue) {
             case SpecialCard.STOP:
@@ -308,22 +309,18 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             m_CardsOnTable.putCardOnTable(cardPlaced);
 
             // change after the move
-            // TODO handle case of special cards during open taki
-            // var isLastCardOfTakiOpen = (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(gameState.additionalInfo) === undefined)
-            if (Card.isSpecialCard(cardValue)) {
-                makeMoveOfSpecialCard(cardPlaced, additionalData);
+            // there is more valid moves
+            if (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(gameState.additionalInfo) !== undefined) {
+                // player gets another turn;
             } else {
-                if ((gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(gameState.additionalInfo) !== undefined) ||
-                    (gameState.gameState === GameState.OPEN_PLUS)) {
-                    // player gets another turn;
-                } else {
-                    if (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(gameState.additionalInfo) === undefined) {
-                        // gameState.gameState = GameState.CLOSE_TAKI;
-                        gameState.gameState = null;
-                        gameState.additionalInfo = null;
-                    }
-                    moveToNextPlayer();
+                // that turn was the last card of the open taki
+                if (Card.isSpecialCard(cardValue)) {
+                    afterMoveOfSpecialCard(cardPlaced, additionalData);
+                }else{
+                    gameState.gameState = null;
+                    gameState.additionalInfo = null;
                 }
+                moveToNextPlayer();
             }
 
             checkIfActivePlayerWin(activePlayer);
