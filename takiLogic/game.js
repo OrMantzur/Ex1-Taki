@@ -353,8 +353,9 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 cardPlaced.printCardToConsole();
             }
 
-            checkIfActivePlayerWon();
-            if (players[activePlayerIndex].isComputerPlayer()) {
+            if (checkIfActivePlayerWon()) {
+                gameEnded();
+            } else if (players[activePlayerIndex].isComputerPlayer()) {
                 makeComputerPlayerMove();
             }
         },
