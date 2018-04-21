@@ -5,7 +5,7 @@
 
 const NUM_STARTING_CARDS = 8;
 const GameType = {
-    BASIC:"basic",
+    BASIC: "basic",
     ADVANCE: "advance"
 };
 const GameState = {
