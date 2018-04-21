@@ -48,11 +48,15 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
     var statistics = function () {
         var totalTurnsPlayed = 0;
         players.forEach(player => totalTurnsPlayed += player.statistics.totalTurnsPlayed());
-        var gameDuration =  gameEndTime - gameStartTime;
+        var gameDuration = gameEndTime - gameStartTime;
+        var minutesPlayed = Math.floor(gameDuration / (1000 * 60));
+        var secondsPlayed = Math.floor(gameDuration / 1000) % 60;
         return {
             totalTurnsPlayed: totalTurnsPlayed,
-            gameDuration: Math.floor(gameDuration/(1000*60)) + ":" + Math.floor(gameDuration/1000)%60
-        }
+            gameDuration:
+                (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" +
+                secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed
+    }
     };
 
     function startGame() {
@@ -247,6 +251,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
     function moveToNextPlayer() {
         players[activePlayerIndex].endTurn();
         activePlayerIndex = (activePlayerIndex + 1) % players.length;
+        players[activePlayerIndex].startTurn();
     }
 
     function gameEnded() {
