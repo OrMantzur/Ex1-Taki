@@ -23,25 +23,29 @@ function Deck(i_GameType) {
     var cards = [];
     var gameType = i_GameType;
 
+    // TODO remove NOT color from color
     // init number cards
     Color.forEach(color => {
         NUMBER_CARD.forEach(cardValue => {
-            cards.concat(createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR))
+            cards = cards.concat(createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR))
         });
     });
 
     // init special cards
     SpecialCard.forEach(cardValue => {
         // skip only when it basic game with PLUS_2 or SUPER_TAKI cards
-        if (!(gameType === GameType.BASIC && (cardValue !== SpecialCard.PLUS_2 || cardValue !== SpecialCard.SUPER_TAKI))) {
+        if (!(gameType === GameType.BASIC &&
+            (cardValue !== SpecialCard.PLUS_2 || cardValue !== SpecialCard.SUPER_TAKI))) {
             var cardsToAdd;
-            if (cardValue === SpecialCard.CHANGE_COLOR || cardValue === SpecialCard.SUPER_TAKI) {
-                cardsToAdd = createCards(cardValue, Color.NONE, CHANGE_COLOR_AMOUNT);
-                cards.concat(cardsToAdd);
+            if (cardValue === SpecialCard.CHANGE_COLOR) {
+                cardsToAdd = createCards(cardValue, null, CHANGE_COLOR_AMOUNT);
+            } else if (cardValue === SpecialCard.SUPER_TAKI) {
+                cardsToAdd = createCards(cardValue, null, SUPER_TAKI_AMOUNT);
+                cards = cards.concat(cardsToAdd);
             } else {
                 Color.forEach(color => {
                     cardsToAdd = createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR);
-                    cards.concat(cardsToAdd);
+                    cards = cards.concat(cardsToAdd);
                 });
             }
         }
@@ -49,7 +53,6 @@ function Deck(i_GameType) {
 
     function createCards(value, color, amount) {
         var newCards = [];
-        amount = color !== Color.NONE ? amount * CARD_NUMBER_OF_EACH_COLOR : amount;
         for (var i = 0; i < amount; i++) {
             newCards.push(Card(value, color));
         }
@@ -80,17 +83,16 @@ function Deck(i_GameType) {
          */
         addCardsToDeck: function (cardsToAdd) {
             if (cardsToAdd instanceof Array && cardsToAdd.length > 0) {
-                cardsToAdd.forEach(function (card) {
-                    cards.push(card);
-                });
+                cards = cards.concat(cardsToAdd);
             } else {
-                console.log("Error in 'TakeCardsFromTableToDeck', parameter must be an array");
+                console.log("Error in 'addCardsToDeck', parameter must be an array");
             }
         },
 
         /**
-         * draw and remove a random card from the deck
-         * @return {Card}
+         *  draw and remove a random card from the deck
+         * @param i_numCards
+         * @returns {Array}
          */
         drawCards: function (i_numCards) {
             var cardsDrawn = [];

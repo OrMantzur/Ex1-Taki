@@ -24,8 +24,8 @@ Card.nextFreeCardId = 0;
 
 function Card(color, value) {
     const cardId = Card.nextFreeCardId++;
-    const cardColor = color;
     const cardValue = value;
+    var cardColor = color;
 
     return {
         getId: function () {
@@ -38,6 +38,13 @@ function Card(color, value) {
 
         getValue: function () {
             return cardValue;
+        },
+
+        setColor: function(color){
+            if (cardValue !== SpecialCard.CHANGE_COLOR){
+                throw new Error("color can only be changed for \"change color\" cards");
+            }
+            cardColor = color;
         },
 
         printCardToConsole: function () {
