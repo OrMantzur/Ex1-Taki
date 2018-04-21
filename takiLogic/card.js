@@ -3,7 +3,7 @@
  * Or Mantzur - 204311997
  */
 
-const NUMBER_CARD = ["1", "3", "4", "5", "6", "7", "8", "9", "taki", "stop"];
+const NUMBER_CARD = ["1", "3", "4", "5", "6", "7", "8", "9"];
 const SpecialCard = {
     TAKI: "taki",
     STOP: "stop",
