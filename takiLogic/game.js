@@ -44,8 +44,14 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         gameIsActive = true;
         console.log("GameID (" + gameID + "): The game has started");
         try {
-            // open start card
-            m_CardsOnTable.putCardOnTable(m_Deck.drawCards(1)[0]);
+            // open start card (can't start with changeColor card)
+            var cardDrawnFromDeck;
+            do {
+                cardDrawnFromDeck = m_Deck.drawCards(1)[0];
+            } while (cardDrawnFromDeck.getValue() === SpecialCard.CHANGE_COLOR);
+
+            m_CardsOnTable.putCardOnTable(cardDrawnFromDeck);
+
         } catch (e) {
             // TODO handle error
         }
@@ -143,18 +149,19 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         cardToPlace === undefined ? game.takeCardsFromDeck() : game.makeMove(cardToPlace, additionalData);
     }
 
-    function checkIfActivePlayerWin(activePlayer) {
+    function checkIfActivePlayerWon() {
+        var activePlayer = players[activePlayerIndex];
         // check if the active player win
         if (activePlayer.getCardsRemainingNum() === 0) {
             activePlayer.setIsWinner(true);
             console.log("Player \"" + activePlayer.getName() + "\" has won!");
             gameState.gameState = GameState.GAME_ENDED;
             // TODO game ended - show statistics
-        } else if (players[activePlayerIndex].isComputerPlayer()) {
-            makeComputerPlayerMove();
-        } else if (activePlayer.getPossibleMoves(isValidMove) === null) {
-            // active player doesn't has more move to do
-                moveToNextPlayer();
+            // } else if (players[activePlayerIndex].isComputerPlayer()) {
+            //     makeComputerPlayerMove();
+            // } else if (activePlayer.getPossibleMoves(isValidMove) === null) {
+            //     // active player doesn't has more move to do
+            //     moveToNextPlayer();
         }
     }
 
@@ -162,6 +169,8 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         var cardValue = card.getValue();
         switch (cardValue) {
             case SpecialCard.STOP:
+                // two calls to skip the next player
+                moveToNextPlayer();
                 moveToNextPlayer();
                 break;
             case SpecialCard.TAKI:
@@ -184,6 +193,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 }
                 card.setColor(additionalData);
                 console.log("change color to " + additionalData);
+                moveToNextPlayer();
                 break;
             case SpecialCard.PLUS_2:
                 if (gameState.gameState === GameState.OPEN_PLUS_2)
@@ -192,12 +202,14 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                     gameState.gameState = GameState.OPEN_PLUS_2;
                     gameState.additionalInfo = 2;
                 }
+                moveToNextPlayer();
                 break;
             case SpecialCard.PLUS:
                 // do nothing, the player gets another turn
                 break;
             default:
-                console.log("don't match to any special card")
+                // TODO change to error
+                console.log("no match to any special card")
         }
     }
 
@@ -231,9 +243,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         addPlayerToGame: function (i_playerToAdd) {
             var playerAdded = false;
             if (gameIsActive || players.length >= numPlayersToStartGame) {
-                console.log("Cannot add another player, game is full or has already started")
-                /*            } else if ((playerToAdd = GameManager.getPlayerByName(i_playerNameToAdd)) === undefined) {
-                                console.log("Player '" + playerToAdd + "' does not exist and was not added to the game")*/
+                console.log("Cannot add another player, game is full or has already started");
             } else {
                 players.push(i_playerToAdd);
                 i_playerToAdd.addCardsToHand(m_Deck.drawCards(NUM_STARTING_CARDS));
@@ -282,9 +292,8 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 console.log("player: " + activePlayer.getName() + " took a card from the deck");
                 activePlayer.addCardsToHand(cardsTaken);
                 moveToNextPlayer();
-                if (activePlayer.isComputerPlayer()) {
+                if (players[activePlayerIndex].isComputerPlayer())
                     makeComputerPlayerMove();
-                }
             } catch (e) {
                 // TODO handle error
                 console.log(e.message);
@@ -295,6 +304,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         makeMove: function (cardPlaced, additionalData) {
             // first, check move validation
             if (!isValidMove(cardPlaced)) {
+                // TODO change back to error
                 // throw new Error("Invalid move!");
                 console.log("Invalid move!");
                 return;
@@ -307,29 +317,34 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             m_CardsOnTable.putCardOnTable(cardPlaced);
 
             // change after the move
-            // there is more valid moves
+            // there are more valid moves
             if (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(gameState.additionalInfo) !== undefined) {
                 // player gets another turn;
             } else {
                 // that turn was the last card of the open taki
                 if (Card.isSpecialCard(cardValue)) {
                     afterMoveOfSpecialCard(cardPlaced, additionalData);
-                }else{
+                } else {
                     gameState.gameState = null;
                     gameState.additionalInfo = null;
+                    moveToNextPlayer();
                 }
-                moveToNextPlayer();
             }
 
-            checkIfActivePlayerWin(activePlayer);
-
             // for debug
-            console.log("Player \"" + activePlayer.getName() + "\" placed the following card on the table:");
-            cardPlaced.printCardToConsole();
+            {
+                console.log("Player \"" + activePlayer.getName() + "\" placed the following card on the table:");
+                cardPlaced.printCardToConsole();
+            }
+
+            checkIfActivePlayerWon();
+            if (players[activePlayerIndex].isComputerPlayer())
+                makeComputerPlayerMove();
         },
 
         //TODO delete
         MakeComputerMove: function () {
+            // setTimeout(makeComputerPlayerMove, 1000);
             makeComputerPlayerMove();
         }
     }
