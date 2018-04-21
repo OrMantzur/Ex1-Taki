@@ -45,8 +45,8 @@ function Deck(i_GameType) {
                 cardsToAdd = createCards(specialCardValue, null, SUPER_TAKI_AMOUNT);
                 cards = cards.concat(cardsToAdd);
             } else {
-                for (const color in Color) {
-                    cardsToAdd = createCards(specialCardValue, color.getValue, CARD_NUMBER_OF_EACH_COLOR);
+                for (const colorKey in Color) {
+                    cardsToAdd = createCards(specialCardValue, Color[colorKey], CARD_NUMBER_OF_EACH_COLOR);
                     cards = cards.concat(cardsToAdd);
                 }
             }
