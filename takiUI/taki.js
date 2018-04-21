@@ -4,6 +4,11 @@ function drawCardOnScreen(parentId, playerId) {
     var cardsRowElement = document.createElement("tr");
     var cardIndex = 0;
 
+    //clear all children
+    while (cardsRowElement.firstChild) {
+        cardsRowElement.removeChild(cardsRowElement.firstChild);
+    }
+    document.getElementById(parentId).innerHTML = '';
     playerCards.forEach(card => {
         var cardElement = document.createElement("td");
         cardElement.setAttribute("id", cardIndex.toString());
@@ -18,8 +23,15 @@ function drawCardOnScreen(parentId, playerId) {
     document.getElementById(parentId).appendChild(cardsRowElement);
 }
 
-// function drawTopCard(parentId) {
-//     var card = game.viewTopCardOnTable();
-//     parentId.textContent = card.getValue();
-//     // parentId.style = "color: red";
-// }
+function refreshCards() {
+    drawCardOnScreen("player1CardsTable", 0);
+    drawCardOnScreen("player2CardsTable", 1);
+}
+
+function drawTopCard(parentId) {
+    var card = game.viewTopCardOnTable();
+    var cardElement = document.getElementById(parentId);
+    cardElement.innerHTML = card.getValue();
+    cardElement.style = "color: " + card.getColor();
+    // parentId.style = "color: red";
+}

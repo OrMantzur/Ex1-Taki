@@ -92,7 +92,7 @@ function Player(i_PlayerName, i_IsComputer) {
         removeCardFromHand: function (cardToRemove) {
             var cardRemoved = null;
             var indexToRemove = cards.findIndex(card => card === cardToRemove);
-            if (indexToRemove > 0) {
+            if (indexToRemove >= 0 && indexToRemove < cards.length) {
                 cardRemoved = cards.splice(indexToRemove, 1);
             }
 
