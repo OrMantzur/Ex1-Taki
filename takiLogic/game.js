@@ -99,8 +99,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 // changeColorCard
                 //4.3. במידה ולשחקן הממוחשב יש קלף שנה צבע – יניח אותו בערימה המרכזית ויבחר צבע בצורה אקראית
                 cardToPlace = activePlayer.getCardOfValue(SpecialCard.CHANGE_COLOR);
-                var randColorIndex = Math.floor((Math.random() * 10) % Color.length);
-                additionalData = Color[randColorIndex];
+                additionalData = Color.getRandomColor();
             },
             function () {
                 // sameColorStopCard
@@ -181,10 +180,10 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             case SpecialCard.CHANGE_COLOR:
                 // TODO get color from user and not random!
                 if (additionalData === undefined) {
-                    var randColorIndex = Math.floor((Math.random() * 10) % Color.length);
-                    additionalData = Color[randColorIndex];
+                    additionalData = Color.getRandomColor();
                 }
                 card.setColor(additionalData);
+                console.log("change color to " + additionalData);
                 break;
             case SpecialCard.PLUS_2:
                 if (gameState.gameState === GameState.OPEN_PLUS_2)

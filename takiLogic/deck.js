@@ -5,13 +5,21 @@
 
 
 /**
- * deck in basic game contains:
+ * deck in BASIC game contains:
  * number card(8): 2 of each color
  * taki: 2 of each color
  * stop: 2 of each color
+ * plus: 2 of each color
  * change color: 4 cards
  * there are 4 color
- * total 84 card (8*4*2 + 4*2 + 4*2 + 4)
+ * total 92 cards (8*4*2 + 4*2 + 4*2 + 4*2 + 4)
+ *
+ * deck in ADVANCE game contains:
+ * all the basic cards and in addition:
+ * plus 2: 2 of each color
+ * super taki: 2 cards
+ * there are 4 color
+ * total 102 cards (92 + 4*2 + 2)
  *
  * @returns {{getSize: (function(): number), addCardsToDeck: addCardsToDeck, drawCards: (function(*): Array)}}
  * @constructor
@@ -24,11 +32,11 @@ function Deck(i_GameType) {
     var gameType = i_GameType;
 
     // init number cards
-    for (const colorKey in Color) {
+    Color.allColor.forEach(color => {
         NUMBER_CARD.forEach(cardValue => {
-            cards = cards.concat(createCards(cardValue, Color[colorKey], CARD_NUMBER_OF_EACH_COLOR))
+            cards = cards.concat(createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR))
         });
-    }
+    });
 
     // init special cards
     var specialCardValue;
@@ -36,8 +44,7 @@ function Deck(i_GameType) {
         specialCardValue = SpecialCard[specialCardKey];
         // skip only when it basic game with PLUS_2 or SUPER_TAKI cards
         if (!(gameType === GameType.BASIC &&
-            (specialCardValue === SpecialCard.PLUS_2 ||
-                specialCardValue === SpecialCard.SUPER_TAKI))) {
+            (specialCardValue === SpecialCard.PLUS_2 || specialCardValue === SpecialCard.SUPER_TAKI))) {
             var cardsToAdd;
             if (specialCardValue === SpecialCard.CHANGE_COLOR) {
                 cardsToAdd = createCards(specialCardValue, null, CHANGE_COLOR_AMOUNT);
@@ -46,10 +53,10 @@ function Deck(i_GameType) {
                 cardsToAdd = createCards(specialCardValue, null, SUPER_TAKI_AMOUNT);
                 cards = cards.concat(cardsToAdd);
             } else {
-                for (const colorKey in Color) {
-                    cardsToAdd = createCards(specialCardValue, Color[colorKey], CARD_NUMBER_OF_EACH_COLOR);
+                Color.allColor.forEach(color =>  {
+                    cardsToAdd = createCards(specialCardValue, color, CARD_NUMBER_OF_EACH_COLOR);
                     cards = cards.concat(cardsToAdd);
-                }
+                });
             }
         }
     }

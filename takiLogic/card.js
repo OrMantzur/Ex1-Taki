@@ -14,11 +14,12 @@ const SpecialCard = {
     SUPER_TAKI: "superTaki"
 };
 const Color = {
-    RED: "red",
-    GREEN: "green",
-    BLUE: "blue",
-    // TODO change to yellow
-    YELLOW: "orange"
+    allColor:["red","green","blue","orange"],
+
+    getRandomColor: function(){
+        var randomIndex =Math.floor((Math.random() * 10) %  Object.keys(Color.allColor).length);
+        return Color.allColor[randomIndex];
+    }
 };
 Card.nextFreeCardId = 0;
 
