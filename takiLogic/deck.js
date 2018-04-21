@@ -16,7 +16,7 @@ function Deck() {
     });
 
     for (var i = 0; i < NUMBER_OF_CHANGE_COLOR_CARD; i++) {
-        cards.push(new Card("no color", "change color"));
+        cards.push(new Card(null, SpecialCard.CHANGE_COLOR));
     }
 
     // TODO init other special cards
@@ -49,7 +49,7 @@ function Deck() {
                     cards.push(card);
                 });
             } else {
-                console.log("Error in 'TakeCardsFromTableToDeck', parameter must be an array");
+                console.log("Error in 'addCardsToDeck', parameter must be an array");
             }
         },
 

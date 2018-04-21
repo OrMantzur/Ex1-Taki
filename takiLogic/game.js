@@ -23,7 +23,7 @@ function Game(i_numPlayersToStartGame, i_GameCreator, i_GameName) {
     var numPlayersToStartGame = i_numPlayersToStartGame;
     var gameCreator = i_GameCreator;
     var gameID = Game.nextFreeGameId++;
-    var gameName= i_GameName;
+    var gameName = i_GameName;
     var players = [];
     var activePlayerIndex = 0;
     var gameIsActive = false;
@@ -78,7 +78,69 @@ function Game(i_numPlayersToStartGame, i_GameCreator, i_GameName) {
     }
 
     function makeComputerPlayerMove() {
+        // TODO should we check if this is really a computer player?
+        var activePlayer = game.getActivePlayer();
+        var topCard = game.viewTopCardOnTable();
+        var cardToPlace;
+        var additionalData;
+        var chooseCardToPlaceFunc = [
+            function () {
+                // anyColorPlus2card
+                //4.1. ישנו קלף 2+ פעיל (כפי שהוסבר בפרטי המשחק המתקדם) ולשחקן הממוחשב יש קלף 2+ - הוא יניח קלף זה בערימה המרכזית. אחרת ימשוך מהקופה את מספר הקלפים הנדרש.
+                cardToPlace = gameState.gameState === GameState.OPEN_PLUS_2 ? activePlayer.getCardOfValue(SpecialCard.PLUS_2) : undefined;
+            },
+            function () {
+                // sameColorPlus2card
+                //4.2.  במידה ולשחקן הממוחשב יש קלף 2+ שצבעו זהה לקלף העליון בערימה המרכזית יניח קלף זה בערימה המרכזית
+                cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), SpecialCard.PLUS_2);
+            },
+            function () {
+                // changeColorCard
+                //4.3. במידה ולשחקן הממוחשב יש קלף שנה צבע – יניח אותו בערימה המרכזית ויבחר צבע בצורה אקראית
+                cardToPlace = activePlayer.getCardOfValue(SpecialCard.CHANGE_COLOR);
+                var randColorIndex = Math.floor((Math.random() * 10) % COLORS.length);
+                additionalData = COLORS[randColorIndex];
+            },
+            function () {
+                // sameColorStopCard
+                //4.4. במידה ולשחקן הממוחשב יש קלף עצור שצבעו זהה לקלף העליון בערימה המרכזית – יניח קלף זה בערימה המרכזית
+                cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), SpecialCard.STOP);
+            },
+            function () {
+                // sameColorPlusCard
+                //4.5. במידה ולשחקן הממוחשב יש קלף פלוס (+) שצבעו זהה לקלף העליון בערימה המרכזית – יניח קלף זה בערימה המרכזית
+                cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), SpecialCard.PLUS);
+            },
+            function () {
+                // superTakiCard
+                //4.6. במידה ולשחקן הממוחשב יש קלף סופר טאקי– יניח קלף זה בערימה המרכזית ולאחר מכן את כל הקלפים בצבע הטאקי בצורה כלשהי (אקראית, לפי הסדר שהקלפים מסודרים במבנה נתונים – לשיקולכם)
+                cardToPlace = activePlayer.getCardOfValue(SpecialCard.SUPER_TAKI);
+                additionalData = topCard.getColor();
+            },
+            function () {
+                // sameColorTakiCard
+                //4.7. במידה ולשחקן הממוחשב יש קלף טאקי (+) שצבעו זהה לקלף העליון בערימה המרכזית – יניח קלף זה בערימה המרכזית ו לאחר מכן את כל הקלפים בצבע הטאקי בצורה כלשהי (אקראית, לפי הסדר שהקלפים מסודרים במבנה נתונים – לשיקולכם)
+                cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), SpecialCard.TAKI);
+            },
+            function () {
+                //4.8. במידה ולשחקן הממוחשב יש קלף שצבעו זהה לקלף העליון בערימה המרכזית – יניח קלף זה בערימה המרכזית
+                cardToPlace = activePlayer.getCardOfColor(topCard.getColor());
+            },
+            function () {
+                //4.9. במידה ולשחקן הממוחשב יש קלף שמספרו זהה לקלף העליון בערימה המרכזית – יניח קלף זה בערימה המרכזית
+                if (gameState.gameState !== GameState.OPEN_TAKI) {
+                    cardToPlace = activePlayer.getCardOfValue(topCard.getValue());
+                }
+            }
+        ];
 
+        //4.10. ימשוך קלף מהקופה
+        //itterate through all function until a card is found, if not then draw a card from th deck
+        for (var i = 0; i < chooseCardToPlaceFunc.length && cardToPlace === undefined; i++) {
+            chooseCardToPlaceFunc[i]();
+        }
+
+        cardToPlace === undefined ? game.takeCardsFromDeck() : game.makeMove(cardToPlace, additionalData);
     }
 
     return {
@@ -148,6 +210,7 @@ function Game(i_numPlayersToStartGame, i_GameCreator, i_GameName) {
                 }
 
                 players[activePlayerIndex].addCardsToHand(cardsTaken);
+                activePlayerIndex = (activePlayerIndex + 1) % numPlayersToStartGame;
             } catch (e) {
                 // TODO handle error
                 console.log(e.message);
@@ -159,16 +222,15 @@ function Game(i_numPlayersToStartGame, i_GameCreator, i_GameName) {
             return m_CardsOnTable.viewTopCard();
         },
 
-        makeMove: function (cardPlaced) {
-            var testMessage = "################################################\n" +
-                " player.makeMove() will run ! counter:" + x +
-                "\n################################################\n";
-            console.log(testMessage);
+        makeMove: function (cardPlaced, additionalData) {
+            // var testMessage = "################################################\n" +
+            //     " player.makeMove() will run ! counter:" + x +
+            //     "\n################################################\n";
+            // console.log(testMessage);
             x++;
 
             if (!isValidMove(cardPlaced)) {
-                // TODO uncomment
-                // throw new Error("Invalid move!");
+                throw new Error("Invalid move!");
             }
             var cardValue = cardPlaced.getValue();
             var activePlayer = players[activePlayerIndex];
@@ -181,28 +243,56 @@ function Game(i_numPlayersToStartGame, i_GameCreator, i_GameName) {
                 gameState.gameState = GameState.OPEN_TAKI;
                 gameState.additionalInfo = cardPlaced.getColor();
             } else if (cardValue === SpecialCard.CHANGE_COLOR) {
-                // TODO get color from user
+                // TODO get color from user and not random!
+                if (additionalData === undefined) {
+                    var randColorIndex = Math.floor((Math.random() * 10) % COLORS.length);
+                    additionalData = COLORS[randColorIndex];
+                }
+                cardPlaced.setColor(additionalData);
             } else if (cardValue === SpecialCard.PLUS_2) {
-                // TODO implement
+                if (gameState.gameState === GameState.OPEN_PLUS_2)
+                    gameState.additionalInfo += 2;
+                else {
+                    gameState.gameState = GameState.OPEN_PLUS_2;
+                    gameState.additionalInfo = 2;
+                }
+            } else if (cardValue === SpecialCard.SUPER_TAKI) {
+                cardPlaced.setColor(additionalData);
+                gameState.gameState = GameState.OPEN_TAKI;
             } else {
                 if (
-                    (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].hasCardOfColor(gameState.additionalInfo)) ||
+                    (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) !== undefined) ||
                     (gameState.gameState === GameState.OPEN_PLUS)
                 ) {
                     // player gets another turn;
                 } else {
-                    if (gameState.gameState === GameState.OPEN_TAKI && !players[activePlayerIndex].hasCardOfColor(color)) {
-                        gameState.gameState = GameState.CLOSE_TAKI;
+                    if (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) === undefined) {
+                        // gameState.gameState = GameState.CLOSE_TAKI;
+                        gameState.gameState = null;
+                        gameState.additionalInfo = null;
                     }
                     activePlayerIndex = (activePlayerIndex + 1) % players.length;
                 }
             }
 
+            console.log("Player \"" + activePlayer.getName() + "\" placed the following card on the table:");
+            cardPlaced.printCardToConsole();
+
             if (activePlayer.getCardsRemainingNum() === 0) {
                 activePlayer.setIsWinner(true);
+                console.log("Player \"" + activePlayer.getName() + "\" has won!");
                 gameState.gameState = GameState.GAME_ENDED;
                 // TODO game ended - show statistics
+            } else {
+                if (game.getActivePlayer().isComputerPlayer()) {
+                    makeComputerPlayerMove();
+                }
             }
+
         },
+        //TODO delete
+        MakeComputerMove: function () {
+            makeComputerPlayerMove();
+        }
     }
 }

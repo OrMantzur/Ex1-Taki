@@ -12,7 +12,14 @@ function drawCardOnScreen(parentId, playerId) {
             game.makeMove(card);
         });
         cardElement.textContent = card.getValue();
+        cardElement.style = "color: " + card.getColor();
         cardsRowElement.appendChild(cardElement);
     });
     document.getElementById(parentId).appendChild(cardsRowElement);
 }
+
+// function drawTopCard(parentId) {
+//     var card = game.viewTopCardOnTable();
+//     parentId.textContent = card.getValue();
+//     // parentId.style = "color: red";
+// }

@@ -11,6 +11,7 @@ function test() {
     game.addPlayerToGame(player2);
     console.log("Top card is: ");
     game.viewTopCardOnTable().printCardToConsole();
+
 }
 
 test();

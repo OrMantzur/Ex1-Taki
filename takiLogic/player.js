@@ -34,13 +34,34 @@ function Player(i_PlayerName, i_IsComputer) {
             return playerName;
         },
 
-        hasCardOfColor: function (color) {
-            return cards.findIndex(card => card.getColor() === color) > 0;
+        isComputerPlayer: function(){
+            return isComputer;
         },
 
+        // returns a ptr to a card in the player's hand that has the given color
+        getCardOfColor: function (color) {
+            return cards.find(card => card.getColor() === color);
+        },
+
+        // returns a ptr to a card in the player's hand that has the given value
+        getCardOfValue: function (value) {
+            return cards.find(card => card.getValue() === value);
+        },
+
+        getCardOfColorAndValue: function(color, value){
+            return cards.find(card => card.getValue() === value && card.getColor() === color);
+        },
+
+        // TODO delete (we don't want access to all cards from outside
         getCards: function () {
             return cards;
         },
+
+        // getCardsStrArr: function () {
+        //     var cardsToReturn = [];
+        //     cards.forEach(card => cardsToReturn.push(card.getColor() + " " + card.getValue()));
+        //     return cardsToReturn.join(", ");
+        // },
 
         getCardsRemainingNum: function () {
             return cards.length;
@@ -67,13 +88,14 @@ function Player(i_PlayerName, i_IsComputer) {
             }
         },
 
+        // finds the given card in the player's hand removes it from the hand and returns the card, null if the card is not found
         removeCardFromHand: function (cardToRemove) {
-            var cardRemoved = false;
+            var cardRemoved = null;
             var indexToRemove = cards.findIndex(card => card === cardToRemove);
             if (indexToRemove > 0) {
-                cards.splice(indexToRemove, 1);
-                cardRemoved = true;
+                cardRemoved = cards.splice(indexToRemove, 1);
             }
+
             return cardRemoved;
         },
 
