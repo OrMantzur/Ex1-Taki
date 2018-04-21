@@ -14,10 +14,10 @@ const SpecialCard = {
     SUPER_TAKI: "superTaki"
 };
 const Color = {
-    allColor:["red","green","blue","orange"],
+    allColor: ["red", "green", "blue","orange"],
 
-    getRandomColor: function(){
-        var randomIndex =Math.floor((Math.random() * 10) %  Object.keys(Color.allColor).length);
+    getRandomColor: function () {
+        var randomIndex = Math.floor((Math.random() * 10) % Object.keys(Color.allColor).length);
         return Color.allColor[randomIndex];
     }
 };
@@ -41,8 +41,8 @@ function Card(color, value) {
             return cardValue;
         },
 
-        setColor: function(color){
-            if (cardValue !== SpecialCard.CHANGE_COLOR){
+        setColor: function (color) {
+            if (cardValue !== SpecialCard.CHANGE_COLOR) {
                 throw new Error("color can only be changed for \"change color\" cards");
             }
             cardColor = color;
@@ -54,9 +54,9 @@ function Card(color, value) {
     }
 }
 
-Card.isSpecialCard = function(card){
+Card.isSpecialCard = function (card) {
     for (const specialCardKey in SpecialCard) {
-        if(card === SpecialCard[specialCardKey]){
+        if (card === SpecialCard[specialCardKey]) {
             return true;
         }
     }

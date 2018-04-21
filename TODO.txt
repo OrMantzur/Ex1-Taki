@@ -1,2 +1,5 @@
 
-// TODO count steps and statistic
+// count steps and statistic
+
+
+// end game in the middle
