@@ -154,7 +154,6 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         } else if (players[activePlayerIndex].isComputerPlayer()) {
             makeComputerPlayerMove();
         } else if (activePlayer.getPossibleMoves(isValidMove) === null) {
-            if ()
             // active player doesn't has more move to do
                 moveToNextPlayer();
         }
