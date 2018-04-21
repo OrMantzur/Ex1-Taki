@@ -214,7 +214,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                     cardsTaken = m_Deck.drawCards(1);
                 }
 
-                console.log("player: " + getActivePlayer().getName() + " took a card from the deck");
+                console.log("player: " + this.getActivePlayer().getName() + " took a card from the deck");
                 players[activePlayerIndex].addCardsToHand(cardsTaken);
                 activePlayerIndex = (activePlayerIndex + 1) % numPlayersToStartGame;
             } catch (e) {
