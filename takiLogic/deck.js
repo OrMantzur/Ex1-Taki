@@ -54,7 +54,7 @@ function Deck(i_GameType) {
     function createCards(value, color, amount) {
         var newCards = [];
         for (var i = 0; i < amount; i++) {
-            newCards.push(Card(value, color));
+            newCards.push(Card(color, value));
         }
         return newCards;
     }
