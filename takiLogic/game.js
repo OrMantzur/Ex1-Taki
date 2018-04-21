@@ -52,9 +52,6 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         //    TODO do stuff
     }
 
-    // TODO delete
-    var x = 0;
-
     function moveCardsFromTableToDeck() {
         var pickedUpCards = m_CardsOnTable.takeAllButTopCard();
         m_Deck.addCardsToDeck(pickedUpCards);
@@ -232,19 +229,11 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         },
 
         makeMove: function (cardPlaced, additionalData) {
-            // var testMessage = "################################################\n" +
-            //     " player.makeMove() will run ! counter:" + x +
-            //     "\n################################################\n";
-            // console.log(testMessage);
-            x++;
-
-            if (!isValidMove(cardPlaced)) {
+            if (!isValidMove(cardPlaced))
                 throw new Error("Invalid move!");
-            }
             var cardValue = cardPlaced.getValue();
             var activePlayer = players[activePlayerIndex];
             activePlayer.removeCardFromHand(cardPlaced);
-
             m_CardsOnTable.putCardOnTable(cardPlaced);
             if (cardValue === SpecialCard.STOP) {
                 activePlayerIndex = (activePlayerIndex + 2) % players.length;
@@ -256,6 +245,9 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                     // the player doesn't have more cards to place, so no need to change state to "openTaki"
                     activePlayerIndex = (activePlayerIndex + 1) % players.length;
                 }
+            } else if (cardValue === SpecialCard.SUPER_TAKI) {
+                cardPlaced.setColor(additionalData);
+                gameState.gameState = GameState.OPEN_TAKI;
             } else if (cardValue === SpecialCard.CHANGE_COLOR) {
                 // TODO get color from user and not random!
                 if (additionalData === undefined) {
@@ -270,9 +262,8 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                     gameState.gameState = GameState.OPEN_PLUS_2;
                     gameState.additionalInfo = 2;
                 }
-            } else if (cardValue === SpecialCard.SUPER_TAKI) {
-                cardPlaced.setColor(additionalData);
-                gameState.gameState = GameState.OPEN_TAKI;
+            } else if (cardValue === SpecialCard.PLUS) {
+                // do nothing, the player gets another turn
             } else {
                 if (
                     (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) !== undefined) ||
@@ -307,6 +298,11 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         //TODO delete
         MakeComputerMove: function () {
             makeComputerPlayerMove();
+        },
+
+        // TODO delete - for testing
+        getDeck: function () {
+            return m_Deck;
         }
     }
 }
