@@ -5,7 +5,7 @@
 
 
 /**
- * deck contains:
+ * deck in basic game contains:
  * number card(8): 2 of each color
  * taki: 2 of each color
  * stop: 2 of each color
@@ -25,31 +25,31 @@ function Deck(i_GameType) {
 
     // TODO remove NOT color from color
     // init number cards
-    Color.forEach(color => {
+    for (const color in Color) {
         NUMBER_CARD.forEach(cardValue => {
             cards = cards.concat(createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR))
         });
-    });
+    }
 
     // init special cards
-    SpecialCard.forEach(cardValue => {
+    for (const specialCardValue in SpecialCard) {
         // skip only when it basic game with PLUS_2 or SUPER_TAKI cards
         if (!(gameType === GameType.BASIC &&
-            (cardValue !== SpecialCard.PLUS_2 || cardValue !== SpecialCard.SUPER_TAKI))) {
+            (specialCardValue !== SpecialCard.PLUS_2 || specialCardValue !== SpecialCard.SUPER_TAKI))) {
             var cardsToAdd;
-            if (cardValue === SpecialCard.CHANGE_COLOR) {
-                cardsToAdd = createCards(cardValue, null, CHANGE_COLOR_AMOUNT);
-            } else if (cardValue === SpecialCard.SUPER_TAKI) {
-                cardsToAdd = createCards(cardValue, null, SUPER_TAKI_AMOUNT);
+            if (specialCardValue === SpecialCard.CHANGE_COLOR) {
+                cardsToAdd = createCards(specialCardValue, null, CHANGE_COLOR_AMOUNT);
+            } else if (specialCardValue === SpecialCard.SUPER_TAKI) {
+                cardsToAdd = createCards(specialCardValue, null, SUPER_TAKI_AMOUNT);
                 cards = cards.concat(cardsToAdd);
             } else {
-                Color.forEach(color => {
-                    cardsToAdd = createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR);
+                for (const color in Color) {
+                    cardsToAdd = createCards(specialCardValue, color, CARD_NUMBER_OF_EACH_COLOR);
                     cards = cards.concat(cardsToAdd);
-                });
+                }
             }
         }
-    });
+    }
 
     function createCards(value, color, amount) {
         var newCards = [];

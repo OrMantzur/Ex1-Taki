@@ -1,7 +1,7 @@
 
 // TODO delete that file
 
-var game = Game(2, "Taki Man", "Ex1");
+var game = Game(GameType.BASIC, 2, "Taki Man", "ex1");
 
 function test() {
     console.log("Running tests:");
@@ -11,7 +11,6 @@ function test() {
     game.addPlayerToGame(player2);
     console.log("Top card is: ");
     game.viewTopCardOnTable().printCardToConsole();
-
 }
 
 test();
