@@ -4,30 +4,35 @@
  */
 
 const NUM_STARTING_CARDS = 8;
+const GameType = {
+    BASIC:"basic",
+    ADVANCE: "advance"
+};
 const GameState = {
-    SUPER_TAKI: "superTaki",
     OPEN_TAKI: "takiOpen",
-    CLOSE_TAKI: "takiClose",
     OPEN_PLUS: "+Open",
+    CHANGE_COLOR: "changeColor",
+    GAME_ENDED: "game ended - Player won",
+    // TODO advance game
+    SUPER_TAKI: "superTaki",
+    CLOSE_TAKI: "takiClose",
     CLOSE_PLUS: "+Close",
     OPEN_PLUS_2: "+2Open",
     CLOSE_PLUS_2: "+2Close",
-    CHANGE_COLOR: "changeColor",
-    GAME_ENDED: "game ended - Player won",
 };
 Game.nextFreeGameId = 0;
 
 
-function Game(i_numPlayersToStartGame, i_GameCreator, i_GameName) {
+function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
     // TODO Validate in gameManager when there is more than one game
-    var numPlayersToStartGame = i_numPlayersToStartGame;
+    var numPlayersToStartGame = i_PlayerNum;
     var gameCreator = i_GameCreator;
     var gameID = Game.nextFreeGameId++;
     var gameName= i_GameName;
     var players = [];
     var activePlayerIndex = 0;
     var gameIsActive = false;
-    var m_Deck = Deck();
+    var m_Deck = Deck(gameType);
     var m_CardsOnTable = CardsOnTable();
     var gameState = {
         currColor: null,

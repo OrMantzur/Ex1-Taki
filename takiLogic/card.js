@@ -3,16 +3,22 @@
  * Or Mantzur - 204311997
  */
 
-const CARD_VALUES = ["1", "3", "4", "5", "6", "7", "8", "9", "stop", "taki"]; // "change color" is added manually in the "Deck" function
-const COLORS = ["red", "green", "blue", "yellow"];
+const NUMBER_CARD = ["1", "3", "4", "5", "6", "7", "8", "9", "taki", "stop"];
 const SpecialCard = {
-    SUPER_TAKI: "superTaki",
     TAKI: "taki",
-    CHANGE_COLOR: "changeColor",
-    CHANGE_DIRECTION: "changeDirection",
-    PLUS: "plus",
-    PLUS_2: "+2",
     STOP: "stop",
+    CHANGE_COLOR: "changeColor",
+    PLUS: "plus",
+    // TODO advance game
+    PLUS_2: "+2",
+    SUPER_TAKI: "superTaki"
+};
+const Color = {
+    RED: "red",
+    GREEN: "green",
+    BLUE: "blue",
+    YELLOW: "yellow",
+    NONE:"none"
 };
 Card.nextFreeCardId = 0;
 

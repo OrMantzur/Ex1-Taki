@@ -3,23 +3,58 @@
  * Or Mantzur - 204311997
  */
 
-function Deck() {
-    const NUMBER_OF_CHANGE_COLOR_CARD = 4;
-    var cards = [];
 
-    // init deck
-    COLORS.forEach(color => {
-        CARD_VALUES.forEach(val => {
-            cards.push(Card(color, val));
-            cards.push(Card(color, val));
+/**
+ * deck contains:
+ * number card(8): 2 of each color
+ * taki: 2 of each color
+ * stop: 2 of each color
+ * change color: 4 cards
+ * there are 4 color
+ * total 84 card (8*4*2 + 4*2 + 4*2 + 4)
+ *
+ * @returns {{getSize: (function(): number), addCardsToDeck: addCardsToDeck, drawCards: (function(*): Array)}}
+ * @constructor
+ */
+function Deck(i_GameType) {
+    const CARD_NUMBER_OF_EACH_COLOR = 2;
+    const CHANGE_COLOR_AMOUNT = 4;
+    const SUPER_TAKI_AMOUNT = 2;
+    var cards = [];
+    var gameType = i_GameType;
+
+    // init number cards
+    Color.forEach(color => {
+        NUMBER_CARD.forEach(cardValue => {
+            cards.concat(createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR))
         });
     });
 
-    for (var i = 0; i < NUMBER_OF_CHANGE_COLOR_CARD; i++) {
-        cards.push(new Card("no color", "change color"));
-    }
+    // init special cards
+    SpecialCard.forEach(cardValue => {
+        // skip only when it basic game with PLUS_2 or SUPER_TAKI cards
+        if (!(gameType === GameType.BASIC && (cardValue !== SpecialCard.PLUS_2 || cardValue !== SpecialCard.SUPER_TAKI))) {
+            var cardsToAdd;
+            if (cardValue === SpecialCard.CHANGE_COLOR || cardValue === SpecialCard.SUPER_TAKI) {
+                cardsToAdd = createCards(cardValue, Color.NONE, CHANGE_COLOR_AMOUNT);
+                cards.concat(cardsToAdd);
+            } else {
+                Color.forEach(color => {
+                    cardsToAdd = createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR);
+                    cards.concat(cardsToAdd);
+                });
+            }
+        }
+    });
 
-    // TODO init other special cards
+    function createCards(value, color, amount) {
+        var newCards = [];
+        amount = color !== Color.NONE ? amount * CARD_NUMBER_OF_EACH_COLOR : amount;
+        for (var i = 0; i < amount; i++) {
+            newCards.push(Card(value, color));
+        }
+        return newCards;
+    }
 
     function drawCard() {
         if (cards.length === 0) {
