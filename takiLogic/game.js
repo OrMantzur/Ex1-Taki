@@ -12,7 +12,9 @@ const GameState = {
     OPEN_TAKI: "takiOpen",
     OPEN_PLUS: "+Open",
     CHANGE_COLOR: "changeColor",
-    GAME_ENDED: "game ended - Player won",
+    // GAME_NOT_INITIALIZE:"gameNotInitialize",
+    GAME_STARTED: "gameStarted",
+    GAME_ENDED: "gameEnded - Player won",
     // TODO advance game
     SUPER_TAKI: "superTaki",
     CLOSE_TAKI: "takiClose",
@@ -23,12 +25,13 @@ const GameState = {
 Game.nextFreeGameId = 0;
 
 
-function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
+function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
     // TODO Validate in gameManager when there is more than one game
     var numPlayersToStartGame = i_PlayerNum;
     var gameCreator = i_GameCreator;
     var gameID = Game.nextFreeGameId++;
     var gameName = i_GameName;
+    var gameType = i_GameType;
     var players = [];
     var activePlayerIndex = 0;
     var gameIsActive = false;
@@ -59,6 +62,16 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         }
         players[activePlayerIndex].startTurn();
         //    TODO do stuff
+    }
+
+    function restartGame() {
+        m_Deck = Deck(gameType);
+        m_CardsOnTable = CardsOnTable();
+        for (const player in players) {
+            player.removeAllCardsFromHand();
+            player.addCardsToHand(m_Deck.drawCards(NUM_STARTING_CARDS));
+        }
+        // TODO ..
     }
 
     function moveCardsFromTableToDeck() {
@@ -223,6 +236,10 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         activePlayerIndex = (activePlayerIndex + 1) % players.length;
     }
 
+    function gameEnded() {
+        gameIsActive = false;
+    }
+
     return {
 
         getGameId: function () {
@@ -357,6 +374,24 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 gameEnded();
             } else if (players[activePlayerIndex].isComputerPlayer()) {
                 makeComputerPlayerMove();
+            }
+        },
+
+        /**
+         * player leave before the game ended
+         */
+        leaveGame: function (playerWhoLeave) {
+            players[playerWhoLeave].setIsLeave(true);
+
+            var countPlayerThatInGame = 0;
+            for (const player in players) {
+                if (!player.isLeave()) {
+                    countPlayerThatInGame++;
+                }
+            }
+
+            if (countPlayerThatInGame < 2) {
+                gameEnded();
             }
         },
 

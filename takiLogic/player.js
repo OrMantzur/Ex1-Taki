@@ -20,6 +20,7 @@ function Player(i_PlayerName, i_IsComputer) {
     var cards = [];
     var isActive = false;
     var isWinner = false;
+    var isLeave = false;
     var currTurnStartTime;
     var turnsPlayed = 0;
     var totalTimePlayed = 0;
@@ -27,6 +28,10 @@ function Player(i_PlayerName, i_IsComputer) {
     return {
         setIsWinner: function (i_IsWinner) {
             isWinner = i_IsWinner;
+        },
+
+        setIsLeave:function(i_IsLeave){
+            isLeave=i_IsLeave;
         },
 
         getId: function () {
@@ -37,16 +42,12 @@ function Player(i_PlayerName, i_IsComputer) {
             return playerName;
         },
 
-        statistics: {
-            totalTurnsPlayed: turnsPlayed,
-            timesReachedSingleCard: 0,
-            averageTurnTime: function () {
-                return totalTimePlayed % turnsPlayed;
-            },
-        },
-
         isComputerPlayer: function () {
             return isComputer;
+        },
+
+        isLeave: function(){
+            return isLeave;
         },
 
         // returns a ptr to a card in the player's hand that has the given color
@@ -89,6 +90,15 @@ function Player(i_PlayerName, i_IsComputer) {
             return cardThatCanBePlaced;
         },
 
+        // TODO why public ?
+        statistics: {
+            totalTurnsPlayed: turnsPlayed,
+            timesReachedSingleCard: 0,
+            averageTurnTime: function () {
+                return totalTimePlayed % turnsPlayed;
+            },
+        },
+
         startTurn: function () {
             isActive = true;
             currTurnStartTime = new Date();
@@ -123,6 +133,9 @@ function Player(i_PlayerName, i_IsComputer) {
             return cardRemoved;
         },
 
+        removeAllCardsFromHand: function(){
+            cards=[];
+        },
 
         // for testing
         printCardsInHandToConsole: function () {
