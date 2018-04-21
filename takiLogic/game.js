@@ -5,7 +5,7 @@
 
 const NUM_STARTING_CARDS = 8;
 const GameType = {
-    BASIC:"basic",
+    BASIC: "basic",
     ADVANCE: "advance"
 };
 const GameState = {
@@ -249,8 +249,13 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             if (cardValue === SpecialCard.STOP) {
                 activePlayerIndex = (activePlayerIndex + 2) % players.length;
             } else if (cardValue === SpecialCard.TAKI) {
-                gameState.gameState = GameState.OPEN_TAKI;
-                gameState.additionalInfo = cardPlaced.getColor();
+                // if the player put down a "taki" card and has more cards to put then set state to "openTaki"
+                if (players[activePlayerIndex].getCardOfColor(cardPlaced.getColor()) !== undefined) {
+                    gameState.gameState = GameState.OPEN_TAKI;
+                } else {
+                    // the player doesn't have more cards to place, so no need to change state to "openTaki"
+                    activePlayerIndex = (activePlayerIndex + 1) % players.length;
+                }
             } else if (cardValue === SpecialCard.CHANGE_COLOR) {
                 // TODO get color from user and not random!
                 if (additionalData === undefined) {
