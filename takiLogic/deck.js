@@ -23,7 +23,6 @@ function Deck(i_GameType) {
     var cards = [];
     var gameType = i_GameType;
 
-    // TODO remove NOT color from color
     // init number cards
     for (const colorKey in Color) {
         NUMBER_CARD.forEach(cardValue => {

@@ -144,6 +144,61 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         cardToPlace === undefined ? game.takeCardsFromDeck() : game.makeMove(cardToPlace, additionalData);
     }
 
+    function checkIfActivePlayerWin(activePlayer) {
+        if (activePlayer.getCardsRemainingNum() === 0) {
+            activePlayer.setIsWinner(true);
+            console.log("Player \"" + activePlayer.getName() + "\" has won!");
+            gameState.gameState = GameState.GAME_ENDED;
+            // TODO game ended - show statistics
+        } else {
+            if (game.getActivePlayer().isComputerPlayer()) {
+                makeComputerPlayerMove();
+            }
+        }
+    }
+
+    function makeMoveOfSpecialCard(cardValue) {
+        switch (cardValue) {
+            case SpecialCard.STOP:
+                activePlayerIndex = (activePlayerIndex + 2) % players.length;
+                break;
+            case SpecialCard.TAKI:
+                // if the player put down a "taki" card and has more cards to put then set state to "openTaki"
+                if (players[activePlayerIndex].getCardOfColor(cardPlaced.getColor()) !== undefined) {
+                    gameState.gameState = GameState.OPEN_TAKI;
+                } else {
+                    // the player doesn't have more cards to place, so no need to change state to "openTaki"
+                    activePlayerIndex = (activePlayerIndex + 1) % players.length;
+                }
+                break;
+            case SpecialCard.SUPER_TAKI:
+                cardPlaced.setColor(additionalData);
+                gameState.gameState = GameState.OPEN_TAKI;
+                break;
+            case SpecialCard.CHANGE_COLOR:
+                // TODO get color from user and not random!
+                if (additionalData === undefined) {
+                    var randColorIndex = Math.floor((Math.random() * 10) % Color.length);
+                    additionalData = Color[randColorIndex];
+                }
+                cardPlaced.setColor(additionalData);
+                break;
+            case SpecialCard.PLUS_2:
+                if (gameState.gameState === GameState.OPEN_PLUS_2)
+                    gameState.additionalInfo += 2;
+                else {
+                    gameState.gameState = GameState.OPEN_PLUS_2;
+                    gameState.additionalInfo = 2;
+                }
+                break;
+            case SpecialCard.PLUS:
+                // do nothing, the player gets another turn
+                break;
+            default:
+                console.log("don't match to any special card")
+        }
+    }
+
     return {
 
         getGameId: function () {
@@ -230,48 +285,24 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         },
 
         makeMove: function (cardPlaced, additionalData) {
+            // first, check move validation
             if (!isValidMove(cardPlaced)) {
                 // throw new Error("Invalid move!");
                 console.log("Invalid move!");
             }
+
+            // prepare before the move
             var cardValue = cardPlaced.getValue();
             var activePlayer = players[activePlayerIndex];
             activePlayer.removeCardFromHand(cardPlaced);
             m_CardsOnTable.putCardOnTable(cardPlaced);
-            if (cardValue === SpecialCard.STOP) {
-                activePlayerIndex = (activePlayerIndex + 2) % players.length;
-            } else if (cardValue === SpecialCard.TAKI) {
-                // if the player put down a "taki" card and has more cards to put then set state to "openTaki"
-                if (players[activePlayerIndex].getCardOfColor(cardPlaced.getColor()) !== undefined) {
-                    gameState.gameState = GameState.OPEN_TAKI;
-                } else {
-                    // the player doesn't have more cards to place, so no need to change state to "openTaki"
-                    activePlayerIndex = (activePlayerIndex + 1) % players.length;
-                }
-            } else if (cardValue === SpecialCard.SUPER_TAKI) {
-                cardPlaced.setColor(additionalData);
-                gameState.gameState = GameState.OPEN_TAKI;
-            } else if (cardValue === SpecialCard.CHANGE_COLOR) {
-                // TODO get color from user and not random!
-                if (additionalData === undefined) {
-                    var randColorIndex = Math.floor((Math.random() * 10) % Color.length);
-                    additionalData = Color[randColorIndex];
-                }
-                cardPlaced.setColor(additionalData);
-            } else if (cardValue === SpecialCard.PLUS_2) {
-                if (gameState.gameState === GameState.OPEN_PLUS_2)
-                    gameState.additionalInfo += 2;
-                else {
-                    gameState.gameState = GameState.OPEN_PLUS_2;
-                    gameState.additionalInfo = 2;
-                }
-            } else if (cardValue === SpecialCard.PLUS) {
-                // do nothing, the player gets another turn
+
+            // make the move
+            if (Card.isSpecialCard(cardValue)) {
+                makeMoveOfSpecialCard();
             } else {
-                if (
-                    (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) !== undefined) ||
-                    (gameState.gameState === GameState.OPEN_PLUS)
-                ) {
+                if ((gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) !== undefined) ||
+                    (gameState.gameState === GameState.OPEN_PLUS)) {
                     // player gets another turn;
                 } else {
                     if (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) === undefined) {
@@ -283,21 +314,13 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 }
             }
 
+            checkIfActivePlayerWin(activePlayer);
+
+            // for debug
             console.log("Player \"" + activePlayer.getName() + "\" placed the following card on the table:");
             cardPlaced.printCardToConsole();
-
-            if (activePlayer.getCardsRemainingNum() === 0) {
-                activePlayer.setIsWinner(true);
-                console.log("Player \"" + activePlayer.getName() + "\" has won!");
-                gameState.gameState = GameState.GAME_ENDED;
-                // TODO game ended - show statistics
-            } else {
-                if (game.getActivePlayer().isComputerPlayer()) {
-                    makeComputerPlayerMove();
-                }
-            }
-
         },
+
         //TODO delete
         MakeComputerMove: function () {
             makeComputerPlayerMove();

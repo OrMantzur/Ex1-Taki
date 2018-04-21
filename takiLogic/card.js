@@ -52,3 +52,13 @@ function Card(color, value) {
         }
     }
 }
+
+Card.isSpecialCard = function(card){
+    for (const specialCardKey in SpecialCard) {
+        if(card === SpecialCard[specialCardKey]){
+            return true;
+        }
+    }
+    return false;
+};
+
