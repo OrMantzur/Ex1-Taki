@@ -33,12 +33,15 @@
 </table>
 <br/>
 
-<b onclick="game.takeCardsFromDeck()">Deck</b>
+<b id="deck">Deck</b>
+<script>
+    initDeck("deck");
+</script>
 <br/>
 <br/>
 
 <p id="topCard">
-<b onclick="drawTopCard('topCard')">top card on table</b>
+<!--<b onclick="drawTopCard('topCard')">top card on table</b>-->
 <script>
     drawTopCard("topCard");
 </script>
