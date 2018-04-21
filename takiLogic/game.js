@@ -308,6 +308,8 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             m_CardsOnTable.putCardOnTable(cardPlaced);
 
             // change after the move
+            // TODO handle case of special cards during open taki
+            // var isLastCardOfTakiOpen = (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(gameState.additionalInfo) === undefined)
             if (Card.isSpecialCard(cardValue)) {
                 makeMoveOfSpecialCard(cardPlaced, additionalData);
             } else {
