@@ -25,10 +25,9 @@ function Deck(i_GameType) {
 
     // TODO remove NOT color from color
     // init number cards
-    var colors = Object.values(Color);
-    for (const keyColor in Color) {
+    for (const colorKey in Color) {
         NUMBER_CARD.forEach(cardValue => {
-            cards = cards.concat(createCards(cardValue, Color[keyColor], CARD_NUMBER_OF_EACH_COLOR))
+            cards = cards.concat(createCards(cardValue, Color[colorKey], CARD_NUMBER_OF_EACH_COLOR))
         });
     }
 
