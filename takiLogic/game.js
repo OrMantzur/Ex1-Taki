@@ -338,8 +338,9 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             }
 
             checkIfActivePlayerWon();
-            if (players[activePlayerIndex].isComputerPlayer())
+            if (players[activePlayerIndex].isComputerPlayer()){
                 makeComputerPlayerMove();
+            }
         },
 
         //TODO delete

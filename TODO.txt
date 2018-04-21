@@ -1,0 +1,2 @@
+
+// TODO count steps and statistic
