@@ -37,10 +37,13 @@ function Deck(i_GameType) {
         specialCardValue = SpecialCard[specialCardKey];
         // skip only when it basic game with PLUS_2 or SUPER_TAKI cards
         if (!(gameType === GameType.BASIC &&
-            (specialCardValue === SpecialCard.PLUS_2 || specialCardValue === SpecialCard.SUPER_TAKI))) {
+            (specialCardValue === SpecialCard.PLUS_2 ||
+                specialCardValue === SpecialCard.SUPER_TAKI ||
+                specialCardValue === SpecialCard.PLUS))) {
             var cardsToAdd;
             if (specialCardValue === SpecialCard.CHANGE_COLOR) {
                 cardsToAdd = createCards(specialCardValue, null, CHANGE_COLOR_AMOUNT);
+                cards = cards.concat(cardsToAdd);
             } else if (specialCardValue === SpecialCard.SUPER_TAKI) {
                 cardsToAdd = createCards(specialCardValue, null, SUPER_TAKI_AMOUNT);
                 cards = cards.concat(cardsToAdd);
@@ -103,5 +106,12 @@ function Deck(i_GameType) {
             }
             return cardsDrawn;
         },
+
+        //for testing
+        printAllCards: function () {
+            var arr = []
+            cards.forEach(card => arr.push(card.getColor() + ", " + card.getValue()));
+            console.log(arr.join("\n"));
+        }
     }
 }

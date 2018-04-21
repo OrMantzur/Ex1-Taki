@@ -237,51 +237,50 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             var cardValue = cardPlaced.getValue();
             var activePlayer = players[activePlayerIndex];
             activePlayer.removeCardFromHand(cardPlaced);
-
             m_CardsOnTable.putCardOnTable(cardPlaced);
-            switch(cardValue){
-                case SpecialCard.STOP:
-                    activePlayerIndex = (activePlayerIndex + 2) % players.length;
-                    break;
-                case SpecialCard.TAKI:
+            if (cardValue === SpecialCard.STOP) {
+                activePlayerIndex = (activePlayerIndex + 2) % players.length;
+            } else if (cardValue === SpecialCard.TAKI) {
+                // if the player put down a "taki" card and has more cards to put then set state to "openTaki"
+                if (players[activePlayerIndex].getCardOfColor(cardPlaced.getColor()) !== undefined) {
                     gameState.gameState = GameState.OPEN_TAKI;
-                    gameState.additionalInfo = cardPlaced.getColor();
-                    break;
-                case SpecialCard.CHANGE_COLOR:
-                    // TODO get color from user and not random!
-                    if (additionalData === undefined) {
-                        var randColorIndex = Math.floor((Math.random() * 10) % Color.length);
-                        additionalData = Color[randColorIndex];
+                } else {
+                    // the player doesn't have more cards to place, so no need to change state to "openTaki"
+                    activePlayerIndex = (activePlayerIndex + 1) % players.length;
+                }
+            } else if (cardValue === SpecialCard.SUPER_TAKI) {
+                cardPlaced.setColor(additionalData);
+                gameState.gameState = GameState.OPEN_TAKI;
+            } else if (cardValue === SpecialCard.CHANGE_COLOR) {
+                // TODO get color from user and not random!
+                if (additionalData === undefined) {
+                    var randColorIndex = Math.floor((Math.random() * 10) % Color.length);
+                    additionalData = Color[randColorIndex];
+                }
+                cardPlaced.setColor(additionalData);
+            } else if (cardValue === SpecialCard.PLUS_2) {
+                if (gameState.gameState === GameState.OPEN_PLUS_2)
+                    gameState.additionalInfo += 2;
+                else {
+                    gameState.gameState = GameState.OPEN_PLUS_2;
+                    gameState.additionalInfo = 2;
+                }
+            } else if (cardValue === SpecialCard.PLUS) {
+                // do nothing, the player gets another turn
+            } else {
+                if (
+                    (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) !== undefined) ||
+                    (gameState.gameState === GameState.OPEN_PLUS)
+                ) {
+                    // player gets another turn;
+                } else {
+                    if (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) === undefined) {
+                        // gameState.gameState = GameState.CLOSE_TAKI;
+                        gameState.gameState = null;
+                        gameState.additionalInfo = null;
                     }
-                    cardPlaced.setColor(additionalData);
-                    break;
-                case SpecialCard.PLUS_2:
-                    if (gameState.gameState === GameState.OPEN_PLUS_2)
-                        gameState.additionalInfo += 2;
-                    else {
-                        gameState.gameState = GameState.OPEN_PLUS_2;
-                        gameState.additionalInfo = 2;
-                    }
-                    break;
-                case SpecialCard.SUPER_TAKI:
-                    cardPlaced.setColor(additionalData);
-                    gameState.gameState = GameState.OPEN_TAKI;
-                    break;
-                default:
-                    if (
-                        (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) !== undefined) ||
-                        (gameState.gameState === GameState.OPEN_PLUS)
-                    ) {
-                        // player gets another turn;
-                    } else {
-                        if (gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) === undefined) {
-                            // gameState.gameState = GameState.CLOSE_TAKI;
-                            gameState.gameState = null;
-                            gameState.additionalInfo = null;
-                        }
-                        activePlayerIndex = (activePlayerIndex + 1) % players.length;
-                    }
-                    break;
+                    activePlayerIndex = (activePlayerIndex + 1) % players.length;
+                }
             }
 
             console.log("Player \"" + activePlayer.getName() + "\" placed the following card on the table:");
@@ -299,7 +298,6 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             }
 
         },
-
         //TODO delete
         MakeComputerMove: function () {
             makeComputerPlayerMove();
