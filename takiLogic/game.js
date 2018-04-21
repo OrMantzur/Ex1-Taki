@@ -181,10 +181,10 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 players.push(i_playerToAdd);
                 i_playerToAdd.addCardsToHand(m_Deck.drawCards(NUM_STARTING_CARDS));
                 console.log("GameID (" + gameID + "): " + i_playerToAdd.getName() + " has joined the game");
+                playerAdded = true;
                 if (players.length === numPlayersToStartGame) {
                     startGame();
                 }
-                playerAdded = true;
             }
             return playerAdded;
         },

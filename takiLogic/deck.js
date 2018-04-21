@@ -25,14 +25,17 @@ function Deck(i_GameType) {
 
     // TODO remove NOT color from color
     // init number cards
-    for (const color in Color) {
+    var colors = Object.values(Color);
+    for (const keyColor in Color) {
         NUMBER_CARD.forEach(cardValue => {
-            cards = cards.concat(createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR))
+            cards = cards.concat(createCards(cardValue, Color[keyColor], CARD_NUMBER_OF_EACH_COLOR))
         });
     }
 
     // init special cards
-    for (const specialCardValue in SpecialCard) {
+    var specialCardValue;
+    for (const specialCardKey in SpecialCard) {
+        specialCardValue = SpecialCard[specialCardKey];
         // skip only when it basic game with PLUS_2 or SUPER_TAKI cards
         if (!(gameType === GameType.BASIC &&
             (specialCardValue !== SpecialCard.PLUS_2 || specialCardValue !== SpecialCard.SUPER_TAKI))) {
@@ -44,7 +47,7 @@ function Deck(i_GameType) {
                 cards = cards.concat(cardsToAdd);
             } else {
                 for (const color in Color) {
-                    cardsToAdd = createCards(specialCardValue, color, CARD_NUMBER_OF_EACH_COLOR);
+                    cardsToAdd = createCards(specialCardValue, color.getValue, CARD_NUMBER_OF_EACH_COLOR);
                     cards = cards.concat(cardsToAdd);
                 }
             }

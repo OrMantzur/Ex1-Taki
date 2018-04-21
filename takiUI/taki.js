@@ -15,6 +15,7 @@ function drawCardOnScreen(parentId, playerId) {
         cardIndex++;
         cardElement.addEventListener("click", function () {
             game.makeMove(card);
+            refreshCards();
         });
         cardElement.textContent = card.getValue();
         cardElement.style = "color: " + card.getColor();
@@ -26,6 +27,7 @@ function drawCardOnScreen(parentId, playerId) {
 function refreshCards() {
     drawCardOnScreen("player1CardsTable", 0);
     drawCardOnScreen("player2CardsTable", 1);
+    drawTopCard("topCard");
 }
 
 function drawTopCard(parentId) {

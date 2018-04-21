@@ -8,7 +8,7 @@
     <script type="text/javascript" src="../takiLogic/player.js"></script>
     <script type="text/javascript" src="../takiLogic/game.js"></script>
     <!--TODO delete, now its help to init game-->
-    <script type="text/javascript" src="../takiLogic/test.js"></script>
+    <script type="text/javascript" src="test.js"></script>
     <script type="text/javascript" src="taki.js"></script>
     <title>Taki</title>
 </head>
@@ -37,8 +37,12 @@
 <br/>
 <br/>
 
-<b onclick="drawTopCard('topCard')">top card on table</b>
 <p id="topCard">
+<b onclick="drawTopCard('topCard')">top card on table</b>
+<script>
+    drawTopCard("topCard");
+</script>
+
 </body>
 
 </html>

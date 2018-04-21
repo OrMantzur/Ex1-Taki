@@ -17,7 +17,8 @@ const Color = {
     RED: "red",
     GREEN: "green",
     BLUE: "blue",
-    YELLOW: "yellow"
+    // TODO change to yellow
+    YELLOW: "purple"
 };
 Card.nextFreeCardId = 0;
 
