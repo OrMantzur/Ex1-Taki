@@ -1,3 +1,8 @@
+/**
+ * Dudi Yecheskel - 200441749
+ * Or Mantzur - 204311997
+ */
+
 function drawCardOnScreen(parentId, playerId) {
     var playerCards = game.getPlayer(playerId).getCards();
     // one player cards row at the caller table
@@ -35,7 +40,6 @@ function drawTopCard(parentId) {
     var cardElement = document.getElementById(parentId);
     cardElement.innerHTML = card.getValue();
     cardElement.style = "color: " + card.getColor();
-    // parentId.style = "color: red";
 }
 
 function clickedDeck() {
