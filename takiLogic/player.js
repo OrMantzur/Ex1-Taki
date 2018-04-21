@@ -20,6 +20,9 @@ function Player(i_PlayerName, i_IsComputer) {
     var cards = [];
     var isActive = false;
     var isWinner = false;
+    var currTurnStartTime;
+    var turnsPlayed = 0;
+    var totalTimePlayed = 0;
 
     return {
         setIsWinner: function (i_IsWinner) {
@@ -34,7 +37,15 @@ function Player(i_PlayerName, i_IsComputer) {
             return playerName;
         },
 
-        isComputerPlayer: function(){
+        statistics: {
+            totalTurnsPlayed: turnsPlayed,
+            timesReachedSingleCard: 0,
+            averageTurnTime: function () {
+                return totalTimePlayed % turnsPlayed;
+            },
+        },
+
+        isComputerPlayer: function () {
             return isComputer;
         },
 
@@ -48,7 +59,7 @@ function Player(i_PlayerName, i_IsComputer) {
             return cards.find(card => card.getValue() === value);
         },
 
-        getCardOfColorAndValue: function(color, value){
+        getCardOfColorAndValue: function (color, value) {
             return cards.find(card => card.getValue() === value && card.getColor() === color);
         },
 
@@ -80,6 +91,19 @@ function Player(i_PlayerName, i_IsComputer) {
 
         startTurn: function () {
             isActive = true;
+            currTurnStartTime = new Date();
+        },
+
+        endTurn: function () {
+            if (currTurnStartTime !== null) {
+                isActive = false;
+                var endTurnTime = new Date();
+                var turnDuration = endTurnTime - currTurnStartTime;
+                totalTimePlayed += turnDuration;
+                endTurnTime = null;
+                currTurnStartTime = null;
+                turnsPlayed++;
+            }
         },
 
         addCardsToHand: function (cardsToAdd) {

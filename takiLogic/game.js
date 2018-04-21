@@ -34,6 +34,8 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
     var gameIsActive = false;
     var m_Deck = Deck(gameType);
     var m_CardsOnTable = CardsOnTable();
+    var gameStartTime = new Date();
+    var gameEndTime = null;
     var gameState = {
         currColor: null,
         gameState: null,
@@ -147,6 +149,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         }
 
         cardToPlace === undefined ? game.takeCardsFromDeck() : game.makeMove(cardToPlace, additionalData);
+        checkIfActivePlayerWon();
     }
 
     function checkIfActivePlayerWon() {
@@ -156,6 +159,8 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             activePlayer.setIsWinner(true);
             console.log("Player \"" + activePlayer.getName() + "\" has won!");
             gameState.gameState = GameState.GAME_ENDED;
+            gameEndTime = new Date();
+
             // TODO game ended - show statistics
             // } else if (players[activePlayerIndex].isComputerPlayer()) {
             //     makeComputerPlayerMove();
@@ -214,6 +219,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
     }
 
     function moveToNextPlayer() {
+        players[activePlayerIndex].endTurn();
         activePlayerIndex = (activePlayerIndex + 1) % players.length;
     }
 
@@ -238,6 +244,16 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         getPlayer: function (playerId) {
             // TODO we don't have unique id yet so we treat to it like index
             return players[playerId];
+        },
+
+        getStatistics: function () {
+            var totalTurnsPlayed = 0;
+            players.forEach(player => totalTurnsPlayed += player.statistics.totalTurnsPlayed);
+            var gameDuration = gameEndTime - gameStartTime;
+            return {
+                totalTurnsPlayed: totalTurnsPlayed,
+                gameDuration: Math.floor(gameDuration % 360) + ":" + Math.floor(gameDuration % 60) % 60
+            }
         },
 
         addPlayerToGame: function (i_playerToAdd) {
@@ -338,7 +354,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             }
 
             checkIfActivePlayerWon();
-            if (players[activePlayerIndex].isComputerPlayer()){
+            if (players[activePlayerIndex].isComputerPlayer()) {
                 makeComputerPlayerMove();
             }
         },
