@@ -38,7 +38,9 @@ function Player(i_PlayerName, i_IsComputer) {
         },
 
         statistics: {
-            totalTurnsPlayed: turnsPlayed,
+            totalTurnsPlayed: function () {
+                return turnsPlayed;
+            },
             timesReachedSingleCard: 0,
             averageTurnTime: function () {
                 return totalTimePlayed % turnsPlayed;

@@ -42,6 +42,16 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         additionalInfo: null // TODO will be used for counter on +2
     };
 
+    var statistics = function () {
+        var totalTurnsPlayed = 0;
+        players.forEach(player => totalTurnsPlayed += player.statistics.totalTurnsPlayed());
+        var gameDuration =  gameEndTime - gameStartTime;
+        return {
+            totalTurnsPlayed: totalTurnsPlayed,
+            gameDuration: Math.floor(gameDuration/(1000*60)) + ":" + Math.floor(gameDuration/1000)%60
+        }
+    };
+
     function startGame() {
         gameIsActive = true;
         console.log("GameID (" + gameID + "): The game has started");
@@ -153,14 +163,16 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
     }
 
     function checkIfActivePlayerWon() {
+        var playerWon = false;
         var activePlayer = players[activePlayerIndex];
         // check if the active player win
         if (activePlayer.getCardsRemainingNum() === 0) {
+            playerWon = true;
             activePlayer.setIsWinner(true);
             console.log("Player \"" + activePlayer.getName() + "\" has won!");
             gameState.gameState = GameState.GAME_ENDED;
             gameEndTime = new Date();
-
+            var stats = statistics();
             // TODO game ended - show statistics
             // } else if (players[activePlayerIndex].isComputerPlayer()) {
             //     makeComputerPlayerMove();
@@ -168,6 +180,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             //     // active player doesn't has more move to do
             //     moveToNextPlayer();
         }
+        return playerWon;
     }
 
     function afterMoveOfSpecialCard(card, additionalData) {
@@ -247,13 +260,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         },
 
         getStatistics: function () {
-            var totalTurnsPlayed = 0;
-            players.forEach(player => totalTurnsPlayed += player.statistics.totalTurnsPlayed);
-            var gameDuration = gameEndTime - gameStartTime;
-            return {
-                totalTurnsPlayed: totalTurnsPlayed,
-                gameDuration: Math.floor(gameDuration % 360) + ":" + Math.floor(gameDuration % 60) % 60
-            }
+            return statistics();
         },
 
         addPlayerToGame: function (i_playerToAdd) {
@@ -353,9 +360,8 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 cardPlaced.printCardToConsole();
             }
 
-            if (checkIfActivePlayerWon()) {
-                gameEnded();
-            } else if (players[activePlayerIndex].isComputerPlayer()) {
+
+            if (!checkIfActivePlayerWon() && players[activePlayerIndex].isComputerPlayer()) {
                 makeComputerPlayerMove();
             }
         },
