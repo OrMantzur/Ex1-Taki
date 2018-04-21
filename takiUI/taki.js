@@ -37,3 +37,8 @@ function drawTopCard(parentId) {
     cardElement.style = "color: " + card.getColor();
     // parentId.style = "color: red";
 }
+
+function clickedDeck() {
+    game.takeCardsFromDeck();
+    refreshCards();
+}

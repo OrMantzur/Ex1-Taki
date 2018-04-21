@@ -217,11 +217,14 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 console.log("player: " + this.getActivePlayer().getName() + " took a card from the deck");
                 players[activePlayerIndex].addCardsToHand(cardsTaken);
                 activePlayerIndex = (activePlayerIndex + 1) % numPlayersToStartGame;
+                if (players[activePlayerIndex].isComputerPlayer()) {
+                    makeComputerPlayerMove();
+                }
             } catch (e) {
                 // TODO handle error
                 console.log(e.message);
             }
-            return cardsTaken;
+
         },
 
         viewTopCardOnTable: function () {
