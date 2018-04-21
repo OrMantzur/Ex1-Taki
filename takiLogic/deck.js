@@ -107,7 +107,7 @@ function Deck(i_GameType) {
 
         //for testing
         printAllCards: function () {
-            var arr = []
+            var arr = [];
             cards.forEach(card => arr.push(card.getColor() + ", " + card.getValue()));
             console.log(arr.join("\n"));
         }

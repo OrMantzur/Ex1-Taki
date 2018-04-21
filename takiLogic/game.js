@@ -136,7 +136,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         ];
 
         //4.10. ימשוך קלף מהקופה
-        //itterate through all function until a card is found, if not then draw a card from th deck
+        // iterate through all function until a card is found, if not then draw a card from th deck
         for (var i = 0; i < chooseCardToPlaceFunc.length && cardToPlace === undefined; i++) {
             chooseCardToPlaceFunc[i]();
         }
@@ -157,14 +157,15 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
         }
     }
 
-    function makeMoveOfSpecialCard(cardValue) {
+    function makeMoveOfSpecialCard(card,additionalData) {
+        var cardValue = card.getValue();
         switch (cardValue) {
             case SpecialCard.STOP:
                 activePlayerIndex = (activePlayerIndex + 2) % players.length;
                 break;
             case SpecialCard.TAKI:
                 // if the player put down a "taki" card and has more cards to put then set state to "openTaki"
-                if (players[activePlayerIndex].getCardOfColor(cardPlaced.getColor()) !== undefined) {
+                if (players[activePlayerIndex].getCardOfColor(card.getColor()) !== undefined) {
                     gameState.gameState = GameState.OPEN_TAKI;
                 } else {
                     // the player doesn't have more cards to place, so no need to change state to "openTaki"
@@ -172,7 +173,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 }
                 break;
             case SpecialCard.SUPER_TAKI:
-                cardPlaced.setColor(additionalData);
+                card.setColor(additionalData);
                 gameState.gameState = GameState.OPEN_TAKI;
                 break;
             case SpecialCard.CHANGE_COLOR:
@@ -181,7 +182,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
                     var randColorIndex = Math.floor((Math.random() * 10) % Color.length);
                     additionalData = Color[randColorIndex];
                 }
-                cardPlaced.setColor(additionalData);
+                card.setColor(additionalData);
                 break;
             case SpecialCard.PLUS_2:
                 if (gameState.gameState === GameState.OPEN_PLUS_2)
@@ -247,6 +248,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             if (card !== null) {
                 // throw new Error("Cannot take card from deck when there is a possible move. \nThe card that can be places is: " + card.getColor() + ", " + card.getValue());
                 console.log("Cannot take card from deck when there is a possible move. \nThe card that can be places is: " + card.getColor() + ", " + card.getValue());
+                return;
             }
 
             // check that there are enough cards in the deck
@@ -289,6 +291,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
             if (!isValidMove(cardPlaced)) {
                 // throw new Error("Invalid move!");
                 console.log("Invalid move!");
+                return;
             }
 
             // prepare before the move
@@ -299,7 +302,7 @@ function Game(gameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
             // make the move
             if (Card.isSpecialCard(cardValue)) {
-                makeMoveOfSpecialCard();
+                makeMoveOfSpecialCard(cardPlaced,additionalData);
             } else {
                 if ((gameState.gameState === GameState.OPEN_TAKI && players[activePlayerIndex].getCardOfColor(gameState.additionalInfo) !== undefined) ||
                     (gameState.gameState === GameState.OPEN_PLUS)) {
