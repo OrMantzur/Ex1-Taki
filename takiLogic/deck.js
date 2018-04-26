@@ -22,12 +22,12 @@
  * total 102 cards (92 + 4*2 + 2)
  *
  * @returns {{getSize: (function(): number), addCardsToDeck: addCardsToDeck, drawCards: (function(*): Array)}}
- * @constructor
+ * @varructor
  */
 function Deck(i_GameType) {
-    const CARD_NUMBER_OF_EACH_COLOR = 2;
-    const CHANGE_COLOR_AMOUNT = 4;
-    const SUPER_TAKI_AMOUNT = 2;
+    var CARD_NUMBER_OF_EACH_COLOR = 2;
+    var CHANGE_COLOR_AMOUNT = 4;
+    var SUPER_TAKI_AMOUNT = 2;
     var cards = [];
     var gameType = i_GameType;
 
@@ -40,7 +40,7 @@ function Deck(i_GameType) {
 
     // init special cards
     var specialCardValue;
-    for (const specialCardKey in SpecialCard) {
+    for (var specialCardKey in SpecialCard) {
         specialCardValue = SpecialCard[specialCardKey];
         // skip only when it basic game with PLUS_2 or SUPER_TAKI cards
         if (!(gameType === GameType.BASIC &&

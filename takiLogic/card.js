@@ -3,8 +3,8 @@
  * Or Mantzur - 204311997
  */
 
-const NUMBER_CARD = ["1", "3", "4", "5", "6", "7", "8", "9"];
-const SpecialCard = {
+var NUMBER_CARD = ["1", "3", "4", "5", "6", "7", "8", "9"];
+var SpecialCard = {
     TAKI: "taki",
     STOP: "stop",
     CHANGE_COLOR: "changeColor",
@@ -13,7 +13,7 @@ const SpecialCard = {
     PLUS_2: "+2",
     SUPER_TAKI: "superTaki"
 };
-const Color = {
+var Color = {
     allColor: ["red", "green", "blue","orange"],
 
     getRandomColor: function () {
@@ -24,8 +24,8 @@ const Color = {
 Card.nextFreeCardId = 0;
 
 function Card(color, value) {
-    const cardId = Card.nextFreeCardId++;
-    const cardValue = value;
+    var cardId = Card.nextFreeCardId++;
+    var cardValue = value;
     var cardColor = color;
 
     return {
@@ -55,7 +55,7 @@ function Card(color, value) {
 }
 
 Card.isSpecialCard = function (card) {
-    for (const specialCardKey in SpecialCard) {
+    for (var specialCardKey in SpecialCard) {
         if (card === SpecialCard[specialCardKey]) {
             return true;
         }

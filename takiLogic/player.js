@@ -11,7 +11,7 @@ Player.nextFreePlayerId = 0;
  * @param i_PlayerName
  * @param i_IsComputer
  * @returns {*}
- * @constructor
+ * @varructor
  */
 function Player(i_PlayerName, i_IsComputer) {
     var playerId = Player.nextFreePlayerId++;

@@ -3,12 +3,12 @@
  * Or Mantzur - 204311997
  */
 
-const NUM_STARTING_CARDS = 8;
-const GameType = {
+var NUM_STARTING_CARDS = 8;
+var GameType = {
     BASIC: "basic",
     ADVANCE: "advance"
 };
-const GameState = {
+var GameState = {
     OPEN_TAKI: "takiOpen",
     OPEN_PLUS: "+Open",
     CHANGE_COLOR: "changeColor",
@@ -81,7 +81,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
     function restartGame() {
         m_Deck = Deck(gameType);
         m_CardsOnTable = CardsOnTable();
-        for (const player in players) {
+        for (var player in players) {
             player.removeAllCardsFromHand();
             player.addCardsToHand(m_Deck.drawCards(NUM_STARTING_CARDS));
         }
@@ -395,7 +395,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             players[playerWhoLeave].setIsLeave(true);
 
             var countPlayerThatInGame = 0;
-            for (const player in players) {
+            for (var player in players) {
                 if (!player.isLeave()) {
                     countPlayerThatInGame++;
                 }
