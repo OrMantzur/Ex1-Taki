@@ -47,7 +47,9 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
     var statistics = function () {
         var totalTurnsPlayed = 0;
-        players.forEach(player => totalTurnsPlayed += player.statistics.totalTurnsPlayed());
+        players.forEach(function(player){
+            totalTurnsPlayed += player.statistics.totalTurnsPlayed();
+        });
         var gameDuration = gameEndTime - gameStartTime;
         var minutesPlayed = Math.floor(gameDuration / (1000 * 60));
         var secondsPlayed = Math.floor(gameDuration / 1000) % 60;

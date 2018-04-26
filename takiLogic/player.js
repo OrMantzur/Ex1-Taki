@@ -30,8 +30,8 @@ function Player(i_PlayerName, i_IsComputer) {
             isWinner = i_IsWinner;
         },
 
-        setIsLeave:function(i_IsLeave){
-            isLeave=i_IsLeave;
+        setIsLeave: function (i_IsLeave) {
+            isLeave = i_IsLeave;
         },
 
         getId: function () {
@@ -56,22 +56,28 @@ function Player(i_PlayerName, i_IsComputer) {
             return isComputer;
         },
 
-        isLeave: function(){
+        isLeave: function () {
             return isLeave;
         },
 
         // returns a ptr to a card in the player's hand that has the given color
         getCardOfColor: function (color) {
-            return cards.find(card => card.getColor() === color);
+            return cards.find(function (card) {
+                return card.getColor() === color;
+            });
         },
 
         // returns a ptr to a card in the player's hand that has the given value
         getCardOfValue: function (value) {
-            return cards.find(card => card.getValue() === value);
+            return cards.find(function (card) {
+                return card.getValue() === value;
+            });
         },
 
         getCardOfColorAndValue: function (color, value) {
-            return cards.find(card => card.getValue() === value && card.getColor() === color);
+            return cards.find(function (card) {
+                return card.getValue() === value && card.getColor() === color;
+            });
         },
 
         // TODO delete (we don't want access to all cards from outside
@@ -81,6 +87,7 @@ function Player(i_PlayerName, i_IsComputer) {
 
         // getCardsStrArr: function () {
         //     var cardsToReturn = [];
+        // TODO if uncomment change arrow function
         //     cards.forEach(card => cardsToReturn.push(card.getColor() + " " + card.getValue()));
         //     return cardsToReturn.join(", ");
         // },
@@ -126,7 +133,9 @@ function Player(i_PlayerName, i_IsComputer) {
         // finds the given card in the player's hand removes it from the hand and returns the card, null if the card is not found
         removeCardFromHand: function (cardToRemove) {
             var cardRemoved = null;
-            var indexToRemove = cards.findIndex(card => card === cardToRemove);
+            var indexToRemove = cards.findIndex(function (card) {
+                return card === cardToRemove;
+            });
             if (indexToRemove >= 0 && indexToRemove < cards.length) {
                 cardRemoved = cards.splice(indexToRemove, 1);
             }
@@ -134,8 +143,8 @@ function Player(i_PlayerName, i_IsComputer) {
             return cardRemoved;
         },
 
-        removeAllCardsFromHand: function(){
-            cards=[];
+        removeAllCardsFromHand: function () {
+            cards = [];
         },
 
         // for testing

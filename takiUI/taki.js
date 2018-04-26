@@ -14,7 +14,7 @@ function drawCardOnScreen(parentId, playerId) {
         cardsRowElement.removeChild(cardsRowElement.firstChild);
     }
     document.getElementById(parentId).innerHTML = '';
-    playerCards.forEach(card => {
+    playerCards.forEach(function(card){
         var cardElement = document.createElement("td");
         cardElement.setAttribute("id", cardIndex.toString());
         cardIndex++;

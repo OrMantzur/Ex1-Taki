@@ -32,8 +32,8 @@ function Deck(i_GameType) {
     var gameType = i_GameType;
 
     // init number cards
-    Color.allColor.forEach(color => {
-        NUMBER_CARD.forEach(cardValue => {
+    Color.allColor.forEach(function (color) {
+        NUMBER_CARD.forEach(function (cardValue) {
             cards = cards.concat(createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR))
         });
     });
@@ -53,7 +53,7 @@ function Deck(i_GameType) {
                 cardsToAdd = createCards(specialCardValue, null, SUPER_TAKI_AMOUNT);
                 cards = cards.concat(cardsToAdd);
             } else {
-                Color.allColor.forEach(color =>  {
+                Color.allColor.forEach(function (color) {
                     cardsToAdd = createCards(specialCardValue, color, CARD_NUMBER_OF_EACH_COLOR);
                     cards = cards.concat(cardsToAdd);
                 });
@@ -115,7 +115,9 @@ function Deck(i_GameType) {
         //for testing
         printAllCards: function () {
             var arr = [];
-            cards.forEach(card => arr.push(card.getColor() + ", " + card.getValue()));
+            cards.forEach(function (card) {
+                arr.push(card.getColor() + ", " + card.getValue());
+            });
             console.log(arr.join("\n"));
         }
     }
