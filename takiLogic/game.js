@@ -45,9 +45,9 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         additionalInfo: null // TODO will be used for counter on +2
     };
 
-    var statistics = function () {
+    function statistics() {
         var totalTurnsPlayed = 0;
-        players.forEach(function(player){
+        players.forEach(function (player) {
             totalTurnsPlayed += player.statistics.totalTurnsPlayed();
         });
         var gameDuration = gameEndTime - gameStartTime;
@@ -58,8 +58,8 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             gameDuration:
                 (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" +
                 secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed
+        }
     }
-    };
 
     function startGame() {
         gameIsActive = true;
