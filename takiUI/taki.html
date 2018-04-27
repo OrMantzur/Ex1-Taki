@@ -20,29 +20,26 @@
 
 <b>regular player:</b>
 <div id="playerCardsContainer">
-    <script>drawCardOnScreenNew()</script>
+    <script>drawCardOnScreenNew(0, 'playerCardsContainer')</script>
 </div>
 
 <!--<table id="player1CardsTable">-->
-    <!--<script>-->
-        <!--drawCardOnScreen("player1CardsTable", 0);-->
-    <!--</script>-->
+<!--<script>-->
+<!--drawCardOnScreen("player1CardsTable", 0);-->
+<!--</script>-->
 <!--</table>-->
 <br/>
 
 <b>computer player:</b>
-<table id="player2CardsTable">
-    <script>
-        drawCardOnScreen("player2CardsTable", 1);
-    </script>
-</table>
-<br/>
+<div id="playerCardsContainer_computer">
+    <script>drawCardOnScreenNew(1, 'playerCardsContainer_computer')</script>
+</div>
 
 <b onclick="clickedDeck()">Deck</b>
 <br/>
 <br/>
 
-<p id="topCard">
+<div id="topCard">
     <b onclick="drawTopCard('topCard')">top card on table</b>
     <script>
         drawTopCard("topCard");

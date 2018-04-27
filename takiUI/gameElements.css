@@ -1,4 +1,4 @@
-#playerCardsContainer{
+#playerCardsContainer, #playerCardsContainer_computer{
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -22,11 +22,11 @@
     border: black groove thin;
     border-radius: 5px;
     padding: 2px 8px;
-    font-size: 150%;
+    font-size: 180%;
     font-weight: bolder;
     text-shadow: 2px 2px 3px #9c9c9c;
     text-align: center;
-    margin: 10px;
+    margin: 10px 3px;
     flex-shrink: 0;
 }
 
