@@ -1,5 +1,2 @@
 
-// count steps and statistic
-
-
-// end game in the middle
+game statistic
