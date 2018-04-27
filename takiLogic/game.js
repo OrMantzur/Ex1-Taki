@@ -275,6 +275,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         },
 
         getActivePlayer: function () {
+
             return players[activePlayerIndex];
         },
 
