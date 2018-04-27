@@ -1,3 +1,8 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 #playerCardsContainer, #playerCardsContainer_computer{
     display: flex;
     justify-content: flex-start;
@@ -5,6 +10,30 @@
     width: 100%;
     overflow-scrolling: auto;
     overflow: auto;
+}
+
+.flex-container {
+    display: flex;
+    height: 70vw;
+
+}
+
+.statistic-container {
+    width: 40vw;
+    height: 70vw;
+    background-color: blue;
+}
+
+.deck-container {
+    width: 60vw;
+    height: 70vw;
+    background-color: green;
+}
+
+.player-container {
+    width: 100vw;
+    height: 30vw;
+    background-color: red;
 }
 
 .textCard{

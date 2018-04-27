@@ -17,34 +17,31 @@
 <body>
 
 <h1 onclick="refreshCards()">Taki</h1>
+<div class="flex-container">
+
+    <div class=statistic-container>
+        <b>statistic</b>
+    </div>
+
+    <div class=deck-container>
+        <b onclick="clickedDeck()">Deck</b>
+        <p id="topCard">
+            <b onclick="drawTopCard('topCard')">top card on table</b>
+            <script>
+                drawTopCard("topCard");
+            </script>
+        </p>
+    </div>
+
+</div>
 
 <b>regular player:</b>
 <div id="playerCardsContainer">
     <script>drawCardOnScreenNew(0, 'playerCardsContainer')</script>
 </div>
-
-<!--<table id="player1CardsTable">-->
-<!--<script>-->
-<!--drawCardOnScreen("player1CardsTable", 0);-->
-<!--</script>-->
-<!--</table>-->
-<br/>
-
 <b>computer player:</b>
 <div id="playerCardsContainer_computer">
     <script>drawCardOnScreenNew(1, 'playerCardsContainer_computer')</script>
 </div>
-
-<b onclick="clickedDeck()">Deck</b>
-<br/>
-<br/>
-
-<div id="topCard">
-    <b onclick="drawTopCard('topCard')">top card on table</b>
-    <script>
-        drawTopCard("topCard");
-    </script>
-
 </body>
-
 </html>
