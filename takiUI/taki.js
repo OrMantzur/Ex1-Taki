@@ -35,8 +35,8 @@ function createCardElement(card) {
 }
 
 function refreshCards() {
-    drawCardOnScreen(0, 'playerCardsContainer')
-    drawCardOnScreen(1, 'playerCardsContainer_computer')
+    drawCardOnScreen(0, 'player-container');
+    drawCardOnScreen(1, 'player-container2');
     drawTopCard("topCard");
 }
 
