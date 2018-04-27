@@ -1,8 +1,14 @@
 #playerCardsContainer{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     width: 100%;
+    overflow-scrolling: auto;
+    overflow: auto;
+}
+
+.textCard{
+    font-size: 100% !important;
 }
 
 .card {
@@ -16,9 +22,12 @@
     border: black groove thin;
     border-radius: 5px;
     padding: 2px 8px;
-    font-size: 40px;
+    font-size: 150%;
     font-weight: bolder;
     text-shadow: 2px 2px 3px #9c9c9c;
+    text-align: center;
+    margin: 10px;
+    flex-shrink: 0;
 }
 
 .noColor{
@@ -40,7 +49,7 @@
     background-color: #c9c8f5;
 }
 
-.yellow{
+.yellow, .orange{
     color: orange;
     background-color: #f4f5c8;
 }

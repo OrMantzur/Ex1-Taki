@@ -19,11 +19,15 @@
 <h1 onclick="refreshCards()">Taki</h1>
 
 <b>regular player:</b>
-<table id="player1CardsTable">
-    <script>
-        drawCardOnScreen("player1CardsTable", 0);
-    </script>
-</table>
+<div id="playerCardsContainer">
+    <script>drawCardOnScreenNew()</script>
+</div>
+
+<!--<table id="player1CardsTable">-->
+    <!--<script>-->
+        <!--drawCardOnScreen("player1CardsTable", 0);-->
+    <!--</script>-->
+<!--</table>-->
 <br/>
 
 <b>computer player:</b>
@@ -43,24 +47,6 @@
     <script>
         drawTopCard("topCard");
     </script>
-
-
-<!--TODO test TO DELETE-->
-<table>
-    <tr>
-        <td>
-            <img src="resources/testPicture.png" onclick="onClickImgTest()"/>
-        </td>
-    </tr>
-</table>
-
-<div id="playerCardsContainer">
-
-</div>
-
-<div class="card multicolor">
-    1
-</div>
 
 </body>
 

@@ -3,25 +3,34 @@
  * Or Mantzur - 204311997
  */
 
-function drawCardOnScreenNew(){
+function drawCardOnScreenNew() {
     var playerCards = game.getPlayer(0).getCards();
     var playerCardsContainer = document.getElementById("playerCardsContainer");
     var cardIndex = 0;
+    //clear all children
+    while (playerCardsContainer.firstChild) {
+        playerCardsContainer.removeChild(playerCardsContainer.firstChild);
+    }
 
-    playerCards.forEach(function(card){
+    for (var i = 0; i < playerCards.length; i++) {
+        var card = playerCards[i];
         var cardElement = document.createElement("div");
+        var cardColor = playerCards[i].getColor() !== null ? playerCards[i].getColor() : "noColor";
         cardElement.setAttribute("id", cardIndex.toString());
-        cardElement.setAttribute("class", "card " + card.getColor());
+        cardElement.setAttribute("class", "card " + cardColor);
+        cardElement.setAttribute("cardValue", card);
+        if (playerCards[i].getValue().length > 1)
+            cardElement.className += " textCard";
         cardIndex++;
         cardElement.addEventListener("click", function () {
             game.makeMove(card);
             refreshCards();
         });
-        cardElement.textContent = card.getValue();
+        cardElement.textContent = playerCards[i].getValue();
         // cardElement.style = "color: " + card.getColor();
         playerCardsContainer.appendChild(cardElement);
-    });
-}
+    }
+};
 
 function drawCardOnScreen(parentId, playerId) {
     var playerCards = game.getPlayer(playerId).getCards();
@@ -34,7 +43,7 @@ function drawCardOnScreen(parentId, playerId) {
         cardsRowElement.removeChild(cardsRowElement.firstChild);
     }
     document.getElementById(parentId).innerHTML = '';
-    playerCards.forEach(function(card){
+    playerCards.forEach(function (card) {
         var cardElement = document.createElement("td");
         cardElement.setAttribute("id", cardIndex.toString());
         cardElement.setAttribute("class", "card " + card.getColor());
@@ -51,7 +60,8 @@ function drawCardOnScreen(parentId, playerId) {
 }
 
 function refreshCards() {
-    drawCardOnScreen("player1CardsTable", 0);
+    drawCardOnScreenNew();
+    // drawCardOnScreen("player1CardsTable", 0);
     drawCardOnScreen("player2CardsTable", 1);
     drawTopCard("topCard");
 }

@@ -7,11 +7,11 @@ var NUMBER_CARD = ["1", "3", "4", "5", "6", "7", "8", "9"];
 var SpecialCard = {
     TAKI: "taki",
     STOP: "stop",
-    CHANGE_COLOR: "changeColor",
+    CHANGE_COLOR: "change color",
     PLUS: "plus",
     // TODO advance game
     PLUS_2: "+2",
-    SUPER_TAKI: "superTaki"
+    SUPER_TAKI: "super taki"
 };
 var Color = {
     allColor: ["red", "green", "blue","orange"],
