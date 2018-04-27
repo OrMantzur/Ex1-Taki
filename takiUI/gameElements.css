@@ -9,19 +9,31 @@ html, body {
 
 }
 
-.statistic-container {
+#statistic-container {
     width: 40%;
     height: 50%;
     background-color: blue;
 }
 
-.deck-container {
+#deck-container {
     width: 60%;
     height: 50%;
     background-color: green;
 }
 
-.player-container {
+#player-container {
+    width: 100%;
+    height: 25%;
+    background-color: red;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-scrolling: auto;
+    overflow: auto;
+}
+
+/*TODO remove */
+#player-container2 {
     width: 100%;
     height: 25%;
     background-color: red;

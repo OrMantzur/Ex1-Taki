@@ -18,12 +18,12 @@
 
 <div class="flex-container">
 
-    <div class=statistic-container>
+    <div id=statistic-container>
         <h1 onclick="refreshCards()">Taki</h1>
         <b>statistic</b>
     </div>
 
-    <div class=deck-container>
+    <div id=deck-container>
         <b onclick="clickedDeck()">Deck</b>
         <p id="topCard">
             <b onclick="drawTopCard('topCard')">top card on table</b>
@@ -36,12 +36,12 @@
 </div>
 
 <b>regular player:</b>
-<div id="playerCardsContainer">
+<div id="player-container">
     <script>drawCardOnScreen(0, 'playerCardsContainer')</script>
 </div>
 
 <b>computer player:</b>
-<div id="playerCardsContainer_computer">
+<div id="player-container2">
     <script>drawCardOnScreen(1, 'playerCardsContainer_computer')</script>
 </div>
 
