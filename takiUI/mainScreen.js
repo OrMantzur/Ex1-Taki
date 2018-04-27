@@ -3,6 +3,10 @@
  * Or Mantzur - 204311997
  */
 
+function drawCardOnScreenNew(){
+    var playerCards = game.getPlayer(0).getCards();
+}
+
 function drawCardOnScreen(parentId, playerId) {
     var playerCards = game.getPlayer(playerId).getCards();
     // one player cards row at the caller table
@@ -17,13 +21,14 @@ function drawCardOnScreen(parentId, playerId) {
     playerCards.forEach(function(card){
         var cardElement = document.createElement("td");
         cardElement.setAttribute("id", cardIndex.toString());
+        cardElement.setAttribute("class", "card " + card.getColor());
         cardIndex++;
         cardElement.addEventListener("click", function () {
             game.makeMove(card);
             refreshCards();
         });
         cardElement.textContent = card.getValue();
-        cardElement.style = "color: " + card.getColor();
+        // cardElement.style = "color: " + card.getColor();
         cardsRowElement.appendChild(cardElement);
     });
     document.getElementById(parentId).appendChild(cardsRowElement);
