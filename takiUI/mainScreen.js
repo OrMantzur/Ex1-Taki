@@ -5,6 +5,22 @@
 
 function drawCardOnScreenNew(){
     var playerCards = game.getPlayer(0).getCards();
+    var playerCardsContainer = document.getElementById("playerCardsContainer");
+    var cardIndex = 0;
+
+    playerCards.forEach(function(card){
+        var cardElement = document.createElement("div");
+        cardElement.setAttribute("id", cardIndex.toString());
+        cardElement.setAttribute("class", "card " + card.getColor());
+        cardIndex++;
+        cardElement.addEventListener("click", function () {
+            game.makeMove(card);
+            refreshCards();
+        });
+        cardElement.textContent = card.getValue();
+        // cardElement.style = "color: " + card.getColor();
+        playerCardsContainer.appendChild(cardElement);
+    });
 }
 
 function drawCardOnScreen(parentId, playerId) {
