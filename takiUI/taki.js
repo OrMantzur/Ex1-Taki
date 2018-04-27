@@ -12,24 +12,41 @@ function drawCardOnScreenNew() {
         playerCardsContainer.removeChild(playerCardsContainer.firstChild);
     }
 
-    for (var i = 0; i < playerCards.length; i++) {
-        var card = playerCards[i];
+    playerCards.forEach(function (card) {
         var cardElement = document.createElement("div");
-        var cardColor = playerCards[i].getColor() !== null ? playerCards[i].getColor() : "noColor";
+        var cardColor = card.getColor() !== null ? card.getColor() : "noColor";
         cardElement.setAttribute("id", cardIndex.toString());
         cardElement.setAttribute("class", "card " + cardColor);
         cardElement.setAttribute("cardValue", card);
-        if (playerCards[i].getValue().length > 1)
+        if (card.getValue().length > 1)
             cardElement.className += " textCard";
         cardIndex++;
         cardElement.addEventListener("click", function () {
             game.makeMove(card);
             refreshCards();
         });
-        cardElement.textContent = playerCards[i].getValue();
+        cardElement.textContent = card.getValue();
         // cardElement.style = "color: " + card.getColor();
         playerCardsContainer.appendChild(cardElement);
-    }
+    });
+    // for (var i = 0; i < playerCards.length; i++) {
+    //     var card = playerCards[i];
+    //     var cardElement = document.createElement("div");
+    //     var cardColor = playerCards[i].getColor() !== null ? playerCards[i].getColor() : "noColor";
+    //     cardElement.setAttribute("id", cardIndex.toString());
+    //     cardElement.setAttribute("class", "card " + cardColor);
+    //     cardElement.setAttribute("cardValue", card);
+    //     if (playerCards[i].getValue().length > 1)
+    //         cardElement.className += " textCard";
+    //     cardIndex++;
+    //     cardElement.addEventListener("click", function () {
+    //         game.makeMove(card);
+    //         refreshCards();
+    //     });
+    //     cardElement.textContent = playerCards[i].getValue();
+    //     // cardElement.style = "color: " + card.getColor();
+    //     playerCardsContainer.appendChild(cardElement);
+    // }
 };
 
 function drawCardOnScreen(parentId, playerId) {
