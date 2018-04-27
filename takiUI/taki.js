@@ -3,7 +3,7 @@
  * Or Mantzur - 204311997
  */
 
-function drawCardOnScreenNew(playerId, containerId) {
+function drawCardOnScreen(playerId, containerId) {
     var playerCards = game.getPlayer(playerId).getCards();
     var playerCardsContainer = document.getElementById(containerId);
     // var cardIndex = 0;
@@ -35,8 +35,8 @@ function createCardElement(card) {
 }
 
 function refreshCards() {
-    drawCardOnScreenNew(0, 'playerCardsContainer')
-    drawCardOnScreenNew(1, 'playerCardsContainer_computer')
+    drawCardOnScreen(0, 'playerCardsContainer')
+    drawCardOnScreen(1, 'playerCardsContainer_computer')
     drawTopCard("topCard");
 }
 
