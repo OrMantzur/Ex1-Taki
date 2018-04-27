@@ -13,7 +13,7 @@ function drawCardOnScreen(playerId, containerId) {
     }
 
     playerCards.forEach(function (card) {
-        var cardElement = createCardElement(card);
+        var cardElement = createCardElement(card, true);
         cardElement.addEventListener("click", function () {
             game.makeMove(card);
             refreshCards();
@@ -22,11 +22,11 @@ function drawCardOnScreen(playerId, containerId) {
     });
 };
 
-function createCardElement(card) {
+function createCardElement(card, isClickable) {
     var cardElement = document.createElement("div");
     var cardColor = card.getColor() !== null ? card.getColor() : "noColor";
     // cardElement.setAttribute("id", cardIndex.toString());
-    cardElement.setAttribute("class", "card " + cardColor);
+    cardElement.setAttribute("class", "card " + cardColor + (isClickable? " clickable-card" : ""));
     cardElement.setAttribute("cardValue", card);
     if (card.getValue().length > 1)
         cardElement.className += " textCard";
@@ -43,7 +43,7 @@ function refreshCards() {
 function drawTopCard(parentId) {
     var card = game.viewTopCardOnTable();
     var deckElement = document.getElementById(parentId);
-    var cardElement = createCardElement(card);
+    var cardElement = createCardElement(card, false);
     while (deckElement.firstChild)
         deckElement.removeChild(deckElement.firstChild);
     deckElement.appendChild(cardElement);

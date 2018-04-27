@@ -94,6 +94,12 @@ html, body {
     background-color: #c8f5c8;
 }
 
-.card:hover {
+.clickable-card:hover {
+    cursor: pointer;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    transform: scale(1.15);
+}
+
+.backOfCard{
+    background: radial-gradient(circle, gray, #424242);
 }
