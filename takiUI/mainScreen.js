@@ -3,6 +3,15 @@
  * Or Mantzur - 204311997
  */
 
+
+function startGame(regularPlayerName){
+    var regularPlayer = Player(regularPlayerName, false);
+    var computerPlayer = Player("computer", true);
+    game = Game(GameType.BASIC, 2, "Taki Man", "ex1");
+    game.addPlayerToGame(regularPlayer);
+    game.addPlayerToGame(computerPlayer);
+}
+
 function drawCardOnScreen(parentId, playerId) {
     var playerCards = game.getPlayer(playerId).getCards();
     // one player cards row at the caller table
