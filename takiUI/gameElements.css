@@ -61,7 +61,7 @@ html, body {
     font-weight: bolder;
     text-shadow: 2px 2px 3px #9c9c9c;
     text-align: center;
-    margin: 10px 3px;
+    margin: 10px 5px;
     flex-shrink: 0;
 }
 
@@ -101,5 +101,7 @@ html, body {
 }
 
 .backOfCard{
-    background: radial-gradient(circle, gray, #424242);
+    /*background: radial-gradient(circle, gray, #424242);*/
+    background-image: url("../takiImages/backOfCard.jpg");
+    background-size: contain;
 }
