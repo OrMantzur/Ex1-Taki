@@ -28,8 +28,6 @@ html, body {
     align-items: center;
     overflow-scrolling: auto;
     overflow: auto;
-    z-index: 1;
-    position: absolute;
 }
 
 /*TODO remove */
@@ -42,8 +40,6 @@ html, body {
     align-items: center;
     overflow-scrolling: auto;
     overflow: auto;
-    z-index: 1;
-    position: absolute;
 }
 
 .textCard{
