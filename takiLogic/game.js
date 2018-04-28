@@ -51,14 +51,13 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         players.forEach(function (player) {
             totalTurnsPlayed += player.statistics.totalTurnsPlayed();
         });
-        var gameDuration = gameEndTime - gameStartTime;
+        var gameDuration = (gameEndTime === null ? new Date() : gameEndTime) - gameStartTime;
         var minutesPlayed = Math.floor(gameDuration / (1000 * 60));
         var secondsPlayed = Math.floor(gameDuration / 1000) % 60;
         return {
             totalTurnsPlayed: totalTurnsPlayed,
             gameDuration:
-                (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" +
-                secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed
+                (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" + (secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed)
         }
     }
 
@@ -280,6 +279,10 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             return gameCreator;
         },
 
+        getGameState: function () {
+            return gameState.gameState;
+        },
+
         isActive: function () {
             return gameIsActive;
         },
@@ -375,7 +378,9 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             var activePlayer = players[activePlayerIndex];
             activePlayer.removeCardFromHand(cardPlaced);
             m_CardsOnTable.putCardOnTable(cardPlaced);
-
+            if (activePlayer.getCardsRemainingNum() === 1){
+                activePlayer.statistics.timesReachedSingleCard++;
+            }
             // change after the move
             // there are more valid moves
             if (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(cardPlaced.getColor()) !== undefined) {
