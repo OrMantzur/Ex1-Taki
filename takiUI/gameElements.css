@@ -130,6 +130,7 @@ html, body {
     border: 1px solid black;
     white-space: nowrap;
     text-align: center;
+    font-size: small;
 }
 
 td {

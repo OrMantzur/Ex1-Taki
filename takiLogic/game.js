@@ -200,7 +200,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             // TODO game ended - show statistics
             // } else if (players[activePlayerIndex].isComputerPlayer()) {
             //     makeComputerPlayerMove();
-            // } else if (activePlayer.getPossibleMoves(isValidMove) === null) {
+            // } else if (activePlayer.getPossibleMove(isValidMove) === null) {
             //     // active player doesn't has more move to do
             //     moveToNextPlayer();
         }
@@ -318,7 +318,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         },
 
         getPossibleMoveForActivePlayer: function(){
-            return players[activePlayerIndex].getPossibleMoves(isValidMove);
+            return players[activePlayerIndex].getPossibleMove(isValidMove) !== null;
         },
 
         addPlayerToGame: function (i_playerToAdd) {
@@ -344,7 +344,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         takeCardsFromDeck: function () {
             // if there is only one card left add the cards from the table to the deck so the deck won't remain empty
             // check if there is a possible move that the player can make
-            var card = players[activePlayerIndex].getPossibleMoves(isValidMove);
+            var card = players[activePlayerIndex].getPossibleMove(isValidMove);
             if (card !== null) {
                 // throw new Error("Cannot take card from deck when there is a possible move. \nThe card that can be places is: " + card.getColor() + ", " + card.getValue());
                 console.log("Cannot take card from deck when there is a possible move. \nThe card that can be places is: " + card.getColor() + ", " + card.getValue());

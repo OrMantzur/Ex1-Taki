@@ -106,7 +106,7 @@ function Player(i_PlayerName, i_IsComputer) {
             return cards.length;
         },
 
-        getPossibleMoves(isValidFunc) {
+        getPossibleMove(isValidFunc) {
             var cardThatCanBePlaced = null;
             for (var i = 0; i < cards.length; i++) {
                 if (isValidFunc(cards[i]) === true) {
