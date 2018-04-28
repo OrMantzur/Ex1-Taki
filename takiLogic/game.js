@@ -186,7 +186,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         var playerWon = false;
         var activePlayer = players[activePlayerIndex];
         // check if the active player win
-        if (activePlayer.getCardsRemainingNum() === 0) {
+        if (activePlayer.getCardsRemainingNum() === 0 && !needToTakeCardFromDeck()) {
             playerWon = true;
             activePlayer.setIsWinner(true);
             console.log("Player \"" + activePlayer.getName() + "\" has won!");
@@ -201,6 +201,15 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             //     moveToNextPlayer();
         }
         return playerWon;
+    }
+
+    /**
+     * call only at the end of move
+     * @returns {boolean}
+     */
+    function needToTakeCardFromDeck() {
+        return m_CardsOnTable.viewTopCard().getValue() === SpecialCard.PLUS ||
+            m_CardsOnTable.viewTopCard().getValue() === SpecialCard.STOP;
     }
 
     function afterMoveOfSpecialCard(card, additionalData) {
@@ -391,7 +400,6 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
             if (!checkIfActivePlayerWon() && players[activePlayerIndex].isComputerPlayer()) {
                 // simulate time take for real player
-                // sleep(1 * 1000);
                 setTimeout(function () {
                     makeComputerPlayerMove();
                 }, COMPUTER_DELAY);
