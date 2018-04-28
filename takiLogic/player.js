@@ -24,6 +24,7 @@ function Player(i_PlayerName, i_IsComputer) {
     var currTurnStartTime;
     var turnsPlayed = 0;
     var totalTimePlayed = 0;
+    var timesReachedSingleCard=0;
 
     return {
         setIsWinner: function (i_IsWinner) {
@@ -34,6 +35,10 @@ function Player(i_PlayerName, i_IsComputer) {
             isLeave = i_IsLeave;
         },
 
+        increaseTimesReachedSingleCard:function(){
+            timesReachedSingleCard++;
+        },
+
         getId: function () {
             return playerId;
         },
@@ -42,17 +47,23 @@ function Player(i_PlayerName, i_IsComputer) {
             return playerName;
         },
 
-        statistics: {
-            totalTurnsPlayed: function () {
-                return turnsPlayed;
-            },
-            timesReachedSingleCard: 0,
-            averageTurnTime: function () {
-                var totalAvgTimeInSeconds = (totalTimePlayed/turnsPlayed) / 1000;
-                var avgTimeSeconds = Math.floor(totalAvgTimeInSeconds % 60);
-                var avgTimeMinutes = Math.floor(totalAvgTimeInSeconds / 60);
-                return (avgTimeMinutes < 10 ? "0" + avgTimeMinutes : avgTimeMinutes) + ":" + (avgTimeSeconds < 10 ? "0" + avgTimeSeconds : avgTimeSeconds);
-            },
+        getTotalTurnsPlayed: function () {
+            return turnsPlayed;
+        },
+
+        getAverageTurnTime: function () {
+            var totalAvgTimeInSeconds = (totalTimePlayed/turnsPlayed) / 1000;
+            var avgTimeSeconds = Math.floor(totalAvgTimeInSeconds % 60);
+            var avgTimeMinutes = Math.floor(totalAvgTimeInSeconds / 60);
+            if(totalAvgTimeInSeconds.toString()==="NaN" || avgTimeSeconds.toString()==="NaN" ||
+                avgTimeMinutes.toString()==="NaN"){
+                return 0;
+            }
+            return (avgTimeMinutes < 10 ? "0" + avgTimeMinutes : avgTimeMinutes) + ":" + (avgTimeSeconds < 10 ? "0" + avgTimeSeconds : avgTimeSeconds);
+        },
+
+        getTimesReachedSingleCard: function () {
+            return timesReachedSingleCard;
         },
 
         isComputerPlayer: function () {

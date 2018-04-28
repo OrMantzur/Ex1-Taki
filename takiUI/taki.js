@@ -121,7 +121,7 @@ function overlayToggle() {
             var playerStats = "";
             var player;
             for (var i = 0 ; (player = game.getPlayer(i)) !== undefined ; i++){
-                playerStats += player.getName() + ":\n    Total turns played: " + player.statistics.totalTurnsPlayed() + ":\n    AverageTurnTime: " + player.statistics.averageTurnTime() + "\n    Times reached last card: " + player.statistics.timesReachedSingleCard + "\n";
+                playerStats += player.getName() + ":\n    Total turns played: " + player.getTotalTurnsPlayed() + ":\n    AverageTurnTime: " + player.getAverageTurnTime() + "\n    Times reached last card: " + player.getTimesReachedSingleCard() + "\n";
             }
             document.getElementById('playerStatistics').innerText = playerStats;
         }

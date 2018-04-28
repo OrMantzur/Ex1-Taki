@@ -48,7 +48,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
     function statistics() {
         var totalTurnsPlayed = 0;
         players.forEach(function (player) {
-            totalTurnsPlayed += player.statistics.totalTurnsPlayed();
+            totalTurnsPlayed += player.getTotalTurnsPlayed();
         });
         var gameDuration = getGameDurationPrivate();
         var minutesPlayed = Math.floor(gameDuration / (1000 * 60));
@@ -394,7 +394,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             activePlayer.removeCardFromHand(cardPlaced);
             m_CardsOnTable.putCardOnTable(cardPlaced);
             if (activePlayer.getCardsRemainingNum() === 1) {
-                activePlayer.statistics.timesReachedSingleCard++;
+                activePlayer.increaseTimesReachedSingleCard();
             }
 
             // change after the move
