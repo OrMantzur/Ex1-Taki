@@ -193,16 +193,6 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             playerWon = true;
             activePlayer.setIsWinner(true);
             console.log("Player \"" + activePlayer.getName() + "\" has won!");
-            gameState.gameState = GameState.GAME_ENDED;
-            gameState.additionalInfo = activePlayer;
-            gameEndTime = new Date();
-            var stats = statistics();
-            // TODO game ended - show statistics
-            // } else if (players[activePlayerIndex].isComputerPlayer()) {
-            //     makeComputerPlayerMove();
-            // } else if (activePlayer.getPossibleMove(isValidMove) === null) {
-            //     // active player doesn't has more move to do
-            //     moveToNextPlayer();
         }
         return playerWon;
     }
@@ -270,8 +260,11 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         players[activePlayerIndex].startTurn();
     }
 
-    function gameEnded() {
+    function gameEnded(playerWhoWon) {
         gameIsActive = false;
+        gameState.gameState = GameState.GAME_ENDED;
+        gameState.additionalInfo = playerWhoWon;
+        gameEndTime = new Date();
         console.log("game ended");
     }
 
@@ -440,17 +433,21 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
          */
         leaveGame: function (playerIdWhoLeave) {
             var countPlayerThatInGame = 0;
+            var somePlayerInGame;
             players.forEach(function (player) {
                 if (player.getId() === playerIdWhoLeave) {
                     player.setIsLeave(true);
                     console.log("player " + player.getName() + " leave the game");
                 } else if (!player.isLeave()) {
+                    // if that player was the only player that stay in game
+                    // determine him to the winner
+                    somePlayerInGame= player;
                     countPlayerThatInGame++;
                 }
             });
 
             if (countPlayerThatInGame < 2) {
-                gameEnded();
+                gameEnded(somePlayerInGame);
             }
         },
 
