@@ -29,9 +29,9 @@ function initGame() {
     });
 }
 
-function drawPlayerCardsOnScreen(playerId, containerId) {
+function drawPlayerCardsOnScreen(playerId) {
     var playerCards = game.getPlayer(playerId).getCards();
-    var playerCardsContainer = document.getElementById(containerId);
+    var playerCardsContainer = document.getElementById('player-container');
 
     // if there is a card in the players hand that is not on the screen then add it
     playerCards.forEach(function (card) {
@@ -83,8 +83,7 @@ function clickedDeck() {
 }
 
 function refreshCards() {
-    drawPlayerCardsOnScreen(0, 'player-container');
-    // drawPlayerCardsOnScreen(1, 'player-container2');
+    drawPlayerCardsOnScreen(0);
     drawTopCardOnTable("topCard");
     updateIsCurrPlayerTurn();
     updateStatistics();
@@ -112,7 +111,7 @@ function overlayToggle() {
             currentPlayer = game.getActivePlayer();
             var screenOverlay = document.getElementById("player-overlay");
             var deck = document.getElementById("deck");
-            if (game.getActivePlayer().getName() === 'p2') {
+            if (game.getActivePlayer() === game.getPlayer(1)) {
                 screenOverlay.style.display = "block";
                 deck.classList.add("disabled-button");
             } else {
@@ -133,8 +132,8 @@ function overlayToggle() {
             document.getElementById('gameStatistics').innerHTML = "Total time played: " + stats.getGameDuration() + "</br> Total turns played: " + stats.getTotalTurnsPlayed();
             var playerStats = "";
             var player;
-            for (var i = 0; (player = game.getPlayer(i)) !== undefined; i++) {
-                playerStats += player.getName() + ":\n    Total turns played: " + player.getTotalTurnsPlayed() + ":\n    AverageTurnTime: " + player.getAverageTurnTime() + "\n    Times reached last card: " + player.getTimesReachedSingleCard() + "\n";
+            for (var i = 0 ; (player = game.getPlayer(i)) !== undefined ; i++){
+                playerStats += player.getName() + ":\n    Total turns played: " + player.getTotalTurnsPlayed() + "\n    AverageTurnTime: " + player.getAverageTurnTime() + "\n    Times reached last card: " + player.getTimesReachedSingleCard() + "\n\n";
             }
             document.getElementById('playerStatistics').innerText = playerStats;
         }
@@ -153,7 +152,7 @@ function updateStatistics() {
     var currPlayer;
     document.getElementById('cardsInDeckCount').innerText = game.getCardsRemainingInDeck();
     document.getElementById('cardsOnTableCount').innerText = game.getCardsOnTableCount();
-    document.getElementById('totalTurn').innerText = game.getStatistics().getTotalTurnsPlayed();
+    document.getElementById('totalTurnsPlayed').innerText = game.getStatistics().getTotalTurnsPlayed();
     while (currPlayer = game.getPlayer(currPlayerIndex)) {
         var tableRow = document.getElementById("cardsRemaining_" + currPlayer.getName());
         tableRow.innerText = game.getPlayer(currPlayerIndex).getCardsRemainingNum();
@@ -195,3 +194,13 @@ setInterval(function () {
         document.getElementById("needTakeCardFromDeck").innerText = "";
     }
 }, 1000);
+
+function setKeyMappings() {
+    document.onkeypress = function (keyPressed) {
+        if (keyPressed.code === "Space"){
+            clickedDeck();
+        }
+    }
+}
+
+setKeyMappings();
