@@ -1,9 +1,8 @@
 
-
-Auto take card from deck when + or change color last (like +2)
-
 bonus
 
+
+BEFORE SUBMISSION
 over all the TODO's
 
 run code investigation

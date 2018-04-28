@@ -364,6 +364,10 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
         },
 
+        isActivePlayerHasValidMove: function(){
+            return players[activePlayerIndex].getPossibleMoves(isValidMove) !== null;
+        },
+
         makeMove: function (cardPlaced, additionalData) {
             // first, check move validation
             if (!isValidMove(cardPlaced)) {
@@ -381,6 +385,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             if (activePlayer.getCardsRemainingNum() === 1) {
                 activePlayer.statistics.timesReachedSingleCard++;
             }
+
             // change after the move
             // there are more valid moves
             if (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(cardPlaced.getColor()) !== undefined) {
