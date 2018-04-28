@@ -20,35 +20,26 @@
 <div class="flex-container">
 
     <div id=statistic-container>
-        <h1 onclick="refreshCards()">Taki</h1>
         <b>statistic</b>
     </div>
 
     <div id=deck-container>
         <div id="deck" class="card backOfCard clickable-card" onclick="clickedDeck()"></div>
-        <p id="topCard">
-            <b onclick="drawTopCard('topCard')">top card on table</b>
-            <script>
-                drawTopCard("topCard");
-            </script>
-        </p>
+        <div id="topCard" onclick="drawTopCardFromDeck()">
+        </div>
     </div>
 
 </div>
 
 <!--in order to use screen-overlay change attribute display to block-->
-<div id=player-overlay class="screen-overlay"></div>
-
+<div id="player-overlay" class="screen-overlay"></div>
 <div id="player-container">
     <b>regular player:</b>
-    <script>drawCardOnScreen(0, 'player-container')</script>
 </div>
 
 <!--TODO delete-->
 <div id="player-container2">
     <b>computer player:</b>
-    <script>drawCardOnScreen(1, 'player-container2')</script>
 </div>
-
 </body>
 </html>

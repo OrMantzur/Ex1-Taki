@@ -17,4 +17,4 @@ function onClickImgTest() {
     alert("on click test !!");
 }
 
-test();
+// test();

@@ -14,7 +14,7 @@ var SpecialCard = {
     SUPER_TAKI: "super taki"
 };
 var Color = {
-    allColor: ["red", "green", "blue","orange"],
+    allColor: ["red", "green", "blue", "yellow"],
 
     getRandomColor: function () {
         var randomIndex = Math.floor((Math.random() * 10) % Object.keys(Color.allColor).length);

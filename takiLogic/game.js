@@ -341,7 +341,9 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 activePlayer.addCardsToHand(cardsTaken);
                 moveToNextPlayer();
                 if (players[activePlayerIndex].isComputerPlayer())
-                    makeComputerPlayerMove();
+                    setTimeout(function () {
+                        makeComputerPlayerMove();
+                    }, 2000);
             } catch (e) {
                 // TODO handle error
                 console.log(e.message);
@@ -355,7 +357,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 // TODO change back to error
                 // throw new Error("Invalid move!");
                 console.log("Invalid move!");
-                return;
+                return false;
             }
 
             // the move
@@ -366,7 +368,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
             // change after the move
             // there are more valid moves
-            if (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(gameState.additionalInfo) !== undefined) {
+            if (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(cardPlaced.getColor()) !== undefined) {
                 // player gets another turn;
             } else {
                 // that turn was the last card of the open taki
@@ -388,9 +390,13 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
             if (!checkIfActivePlayerWon() && players[activePlayerIndex].isComputerPlayer()) {
                 // simulate time take for real player
-                sleep(1 * 1000);
-                makeComputerPlayerMove();
+                // sleep(1 * 1000);
+                setTimeout(function () {
+                    makeComputerPlayerMove();
+                }, 2000);
             }
+
+            return true;
         },
 
         /**
