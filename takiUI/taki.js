@@ -19,7 +19,7 @@ function initGame() {
         var currPlayer;
         while (currPlayer = game.getPlayer(currPlayerIndex)) {
             var newRow = document.createElement("tr");
-            newRow.innerHTML = "<td>" + currPlayer.getName() + "</td><td id='cardsRemaining_" + currPlayerIndex.toString() + "'>" + currPlayer.getCardsRemainingNum() + "</td>";
+            newRow.innerHTML = "<td>" + currPlayer.getName() + "</td><td id='cardsRemaining_" + game.getPlayer(currPlayerIndex).getName() + "'>" + currPlayer.getCardsRemainingNum() + "</td>";
             cardsRemainingTableElement.appendChild(newRow);
             currPlayerIndex++;
         }
@@ -39,7 +39,7 @@ function drawPlayerCardsOnScreen(playerId, containerId) {
             var cardElement = createCardElement(card, true);
             cardElement.addEventListener("click", function () {
                 // if a card is clicked and a successful move is made, remove the card from the deck
-                if (card.getValue() === SpecialCard.CHANGE_COLOR && game.getGameState() !== GameState.OPEN_TAKI) {
+                if (card.getValue() === SpecialCard.CHANGE_COLOR && game.getGameState().gameState !== GameState.OPEN_TAKI) {
                     document.getElementById("colorPicker").style.display = "flex";
                     document.getElementById("colorPicker").setAttribute("selectedCardId", card.getId());
                     playerCardsContainer.removeChild(cardElement);
@@ -84,7 +84,7 @@ function clickedDeck() {
 
 function refreshCards() {
     drawPlayerCardsOnScreen(0, 'player-container');
-    drawPlayerCardsOnScreen(1, 'player-container2');
+    // drawPlayerCardsOnScreen(1, 'player-container2');
     drawTopCardOnTable("topCard");
     updateStatistics();
 }
@@ -112,6 +112,11 @@ function overlayToggle() {
             currentTopCard = game.viewTopCardOnTable();
             drawTopCardOnTable("topCard");
         }
+        if (game.getGameState().gameState === GameState.GAME_ENDED){
+            document.getElementById("playerWonScreen").style.display = 'flex';
+            document.getElementById("player-overlay").style.display = 'block';
+            document.getElementById('winningPlayerName').innerText = game.getGameState().additionalInfo.getName();
+        }
     }, OVERLAY_TOGGLE_INTERVAL)
 }
 
@@ -128,7 +133,13 @@ function updateStatistics() {
     document.getElementById('cardsInDeckCount').innerText = game.getCardsRemainingInDeck();
     document.getElementById('cardsOnTableCount').innerText = game.getCardsOnTableCount();
     while (currPlayer = game.getPlayer(currPlayerIndex)) {
-        document.getElementById("cardsRemaining_" + currPlayerIndex).innerText = game.getPlayer(currPlayerIndex).getCardsRemainingNum();
+        var tableRow = document.getElementById("cardsRemaining_" + currPlayer.getName());
+        tableRow.innerText = game.getPlayer(currPlayerIndex).getCardsRemainingNum();
+        if (currPlayer === game.getActivePlayer()) {
+            tableRow.parentElement.setAttribute("class","bold");
+        } else {
+            tableRow.parentElement.classList.remove("bold");
+        }
         currPlayerIndex++;
     }
 }

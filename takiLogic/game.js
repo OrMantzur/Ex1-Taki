@@ -3,7 +3,7 @@
  * Or Mantzur - 204311997
  */
 
-var COMPUTER_DELAY = 1.5 * 1000;
+var COMPUTER_DELAY = 0.2 * 1000;
 var NUM_STARTING_CARDS = 8;
 var GameType = {
     BASIC: "basic",
@@ -60,7 +60,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         }
     }
 
-    function getGameDurationPrivate() {
+    function getGameDurationPrivate(){
         return (gameEndTime === null ? new Date() : gameEndTime) - gameStartTime;
     }
 
@@ -194,6 +194,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             activePlayer.setIsWinner(true);
             console.log("Player \"" + activePlayer.getName() + "\" has won!");
             gameState.gameState = GameState.GAME_ENDED;
+            gameState.additionalInfo = activePlayer;
             gameEndTime = new Date();
             var stats = statistics();
             // TODO game ended - show statistics
@@ -284,7 +285,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         },
 
         getGameState: function () {
-            return gameState.gameState;
+            return gameState;
         },
 
         getCardsRemainingInDeck: function () {
@@ -300,7 +301,6 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         },
 
         getActivePlayer: function () {
-
             return players[activePlayerIndex];
         },
 
@@ -317,7 +317,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             return getGameDurationPrivate();
         },
 
-        isActivePlayerHasValidMove: function () {
+        getPossibleMoveForActivePlayer: function(){
             return players[activePlayerIndex].getPossibleMoves(isValidMove) !== null;
         },
 

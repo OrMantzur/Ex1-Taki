@@ -15,6 +15,11 @@
 <body>
 
 <div class="flex-container">
+    <div id="playerWonScreen">
+        <div id="playerWonOverlay"></div>
+        <h1><span id="winningPlayerName"></span> has won the game!</h1>
+        <button onclick="location.reload()">Play again</button>
+    </div>
 
     <div id=statistics-container>
 
@@ -38,6 +43,7 @@
         <div align="center">
             <div id="topCard" onclick="drawTopCardOnTable()"></div>
         </div>
+        <div style="height: 20%"></div>
     </div>
 
 </div>
@@ -56,9 +62,9 @@
 </div>
 
 <!--TODO delete-->
-<div id="player-container2">
+<!--<div id="player-container2">
     <b>computer player:</b>
-</div>
+</div>-->
 
 </body>
 </html>
