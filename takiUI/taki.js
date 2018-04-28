@@ -4,8 +4,8 @@
  */
 
 var game = Game(GameType.BASIC, 2, "Taki Man", "ex1");
-var regularPlayer = Player("p1", false);
-var computerPlayer = Player("p2", true);
+var regularPlayer = Player("Me", false);
+var computerPlayer = Player("Computer", true);
 
 function initGame() {
     console.log("Running tests:");
@@ -86,7 +86,20 @@ function refreshCards() {
     drawPlayerCardsOnScreen(0, 'player-container');
     // drawPlayerCardsOnScreen(1, 'player-container2');
     drawTopCardOnTable("topCard");
+    updateIsCurrPlayerTurn();
     updateStatistics();
+}
+
+function updateIsCurrPlayerTurn() {
+    var currPlayerTurn = document.getElementById("isCurrPlayerTurn");
+    var activePlayer = game.getActivePlayer();
+    var msg;
+    if (activePlayer.getId() === regularPlayer.getId()) {
+        msg = "your turn";
+    } else {
+        msg = "computer player is playing now";
+    }
+    currPlayerTurn.innerText = msg;
 }
 
 function overlayToggle() {
@@ -112,7 +125,7 @@ function overlayToggle() {
             currentTopCard = game.viewTopCardOnTable();
             drawTopCardOnTable("topCard");
         }
-        if (game.getGameState().gameState === GameState.GAME_ENDED){
+        if (game.getGameState().gameState === GameState.GAME_ENDED) {
             document.getElementById("playerWonScreen").style.display = 'flex';
             document.getElementById("player-overlay").style.display = 'block';
             document.getElementById('winningPlayerName').innerText = game.getGameState().additionalInfo.getName();
@@ -120,7 +133,7 @@ function overlayToggle() {
             document.getElementById('gameStatistics').innerHTML = "Total time played: " + stats.getGameDuration() + "</br> Total turns played: " + stats.getTotalTurnsPlayed();
             var playerStats = "";
             var player;
-            for (var i = 0 ; (player = game.getPlayer(i)) !== undefined ; i++){
+            for (var i = 0; (player = game.getPlayer(i)) !== undefined; i++) {
                 playerStats += player.getName() + ":\n    Total turns played: " + player.getTotalTurnsPlayed() + ":\n    AverageTurnTime: " + player.getAverageTurnTime() + "\n    Times reached last card: " + player.getTimesReachedSingleCard() + "\n";
             }
             document.getElementById('playerStatistics').innerText = playerStats;
@@ -145,7 +158,7 @@ function updateStatistics() {
         var tableRow = document.getElementById("cardsRemaining_" + currPlayer.getName());
         tableRow.innerText = game.getPlayer(currPlayerIndex).getCardsRemainingNum();
         if (currPlayer === game.getActivePlayer()) {
-            tableRow.parentElement.setAttribute("class","bold");
+            tableRow.parentElement.setAttribute("class", "bold");
         } else {
             tableRow.parentElement.classList.remove("bold");
         }
@@ -153,7 +166,7 @@ function updateStatistics() {
     }
 }
 
-function exitGame(){
+function exitGame() {
     // TODO test
     game.leaveGame(regularPlayer.getId());
 }

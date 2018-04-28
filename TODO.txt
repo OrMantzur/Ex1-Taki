@@ -3,9 +3,7 @@ TODO
 
 remark more who is the active player
 
-remark when need to take from the deck
-
-add to table how much turn make
+msg when trying to take card from deck when it not allow
 
 UI design
 
