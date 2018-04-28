@@ -283,6 +283,14 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             return gameState.gameState;
         },
 
+        getCardsRemainingInDeck: function(){
+          return m_Deck.getSize();
+        },
+
+        getCardsOnTableCount: function(){
+          return m_CardsOnTable.getSize();
+        },
+
         isActive: function () {
             return gameIsActive;
         },
