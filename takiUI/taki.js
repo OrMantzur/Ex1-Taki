@@ -31,11 +31,8 @@ function drawPlayerCardsOnScreen(playerId, containerId) {
                 // if a card is clicked and a successful move is made, remove the card from the deck
                 if (card.getValue() === SpecialCard.CHANGE_COLOR) {
                     document.getElementById("colorPicker").style.display = "flex";
-                    document.getElementById("colorPicker").addEventListener("click", function (event) {
-                        alert("click");
-                        console.log(event.target)
-                        // makeMove(playerCardsContainer, card);
-                    })
+                    document.getElementById("colorPicker").setAttribute("selectedCardId", card.getId());
+                    playerCardsContainer.removeChild(cardElement);
                 }
                 else {
                     if (game.makeMove(card)) {
@@ -83,6 +80,7 @@ function refreshCards() {
 
 function overlayToggle() {
     var currentPlayer = null;
+    var currentTopCard = null;
     setInterval(function () {
         //if the active player hasn't changed don't do anything
         if (currentPlayer !== game.getActivePlayer()) {
@@ -96,14 +94,20 @@ function overlayToggle() {
                 screenOverlay.style.display = "none";
                 deck.classList.remove("disabled-button");
             }
-            drawTopCardOnTable("topCard");
             refreshCards();
+        }
+        if (currentTopCard !== game.viewTopCardOnTable()) {
+            currentTopCard = game.viewTopCardOnTable();
+            drawTopCardOnTable("topCard");
         }
     }, 100)
 }
 
 function colorPickerClickedCard(color) {
     document.getElementById("colorPicker").style.display = "none";
+    var selectedCard = game.getActivePlayer().getCardById(document.getElementById("colorPicker").getAttribute("selectedCardId"));
+    game.makeMove(selectedCard, color);
+    drawTopCardOnTable()
 }
 
 initGame();

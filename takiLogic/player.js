@@ -85,6 +85,13 @@ function Player(i_PlayerName, i_IsComputer) {
             return cards;
         },
 
+        getCardById: function(cardId){
+            var cardFound = cards.find(function (card) {
+                return card.getId() === parseInt(cardId);
+            });
+            return cardFound;
+        },
+
         // getCardsStrArr: function () {
         //     var cardsToReturn = [];
         // TODO if uncomment change arrow function
