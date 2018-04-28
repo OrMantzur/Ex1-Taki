@@ -116,6 +116,14 @@ function overlayToggle() {
             document.getElementById("playerWonScreen").style.display = 'flex';
             document.getElementById("player-overlay").style.display = 'block';
             document.getElementById('winningPlayerName').innerText = game.getGameState().additionalInfo.getName();
+            var stats = game.getStatistics();
+            document.getElementById('gameStatistics').innerHTML = "Total time played: " + stats.gameDuration + "</br> Total turns played: " + stats.totalTurnsPlayed;
+            var playerStats = "";
+            var player;
+            for (var i = 0 ; (player = game.getPlayer(i)) !== undefined ; i++){
+                playerStats += player.getName() + ":\n    Total turns played: " + player.statistics.totalTurnsPlayed() + ":\n    AverageTurnTime: " + player.statistics.averageTurnTime() + "\n    Times reached last card: " + player.statistics.timesReachedSingleCard + "\n";
+            }
+            document.getElementById('playerStatistics').innerText = playerStats;
         }
     }, OVERLAY_TOGGLE_INTERVAL)
 }
