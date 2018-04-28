@@ -21,8 +21,9 @@
  * there are 4 color
  * total 102 cards (92 + 4*2 + 2)
  *
- * @returns {{getSize: (function(): number), addCardsToDeck: addCardsToDeck, drawCards: (function(*): Array)}}
- * @varructor
+ * @param i_GameType
+ * @returns {{getSize: (function(): number), addCardsToDeck: addCardsToDeck, drawCards: (function(*): Array), printAllCards: printAllCards}}
+ * @constructor
  */
 function Deck(i_GameType) {
     var CARD_NUMBER_OF_EACH_COLOR = 2;

@@ -1,3 +1,0 @@
-
-ask about var
-syntax function NAME(){ ... }

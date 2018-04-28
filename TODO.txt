@@ -1,15 +1,8 @@
 
-game statistic
+open new brunch with all advance game change ?
 
+Super taki and change color not allow in the first card
 
-בכל רגע נתון:
-ניקוד
-מצב הערימה המרכזית
-הקופה
-קלפי השחקנים
-סטטיסטיקה (במקומות בהם זה רלבנטי)
-מספר הקלפים שיש בידי השחקן הממוחשב
-מי השחקן המשחק כעת (-האם זה תורו לשחק במילים אחרות)
+Auto take card from deck when + or change color last (like +2)
 
-
-add delay between the turns
+bonus

@@ -13,7 +13,6 @@ var GameState = {
     OPEN_TAKI: "takiOpen",
     OPEN_PLUS: "+Open",
     CHANGE_COLOR: "changeColor",
-    // GAME_NOT_INITIALIZE:"gameNotInitialize",
     GAME_STARTED: "gameStarted",
     GAME_ENDED: "gameEnded - Player won",
     // TODO advance game
@@ -57,7 +56,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         return {
             totalTurnsPlayed: totalTurnsPlayed,
             gameDuration:
-                (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" + (secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed)
+            (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" + (secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed)
         }
     }
 
@@ -378,7 +377,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             var activePlayer = players[activePlayerIndex];
             activePlayer.removeCardFromHand(cardPlaced);
             m_CardsOnTable.putCardOnTable(cardPlaced);
-            if (activePlayer.getCardsRemainingNum() === 1){
+            if (activePlayer.getCardsRemainingNum() === 1) {
                 activePlayer.statistics.timesReachedSingleCard++;
             }
             // change after the move
