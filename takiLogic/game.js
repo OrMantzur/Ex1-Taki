@@ -60,7 +60,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         }
     }
 
-    function getGameDurationPrivate(){
+    function getGameDurationPrivate() {
         return (gameEndTime === null ? new Date() : gameEndTime) - gameStartTime;
     }
 
@@ -287,12 +287,12 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             return gameState.gameState;
         },
 
-        getCardsRemainingInDeck: function(){
-          return m_Deck.getSize();
+        getCardsRemainingInDeck: function () {
+            return m_Deck.getSize();
         },
 
-        getCardsOnTableCount: function(){
-          return m_CardsOnTable.getSize();
+        getCardsOnTableCount: function () {
+            return m_CardsOnTable.getSize();
         },
 
         isActive: function () {
@@ -313,11 +313,11 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             return statistics();
         },
 
-        getGameDuration: function(){
+        getGameDuration: function () {
             return getGameDurationPrivate();
         },
 
-        isActivePlayerHasValidMove: function(){
+        isActivePlayerHasValidMove: function () {
             return players[activePlayerIndex].getPossibleMoves(isValidMove) !== null;
         },
 
@@ -437,15 +437,15 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         /**
          * player leave before the game ended
          */
-        leaveGame: function (playerWhoLeave) {
-            players[playerWhoLeave].setIsLeave(true);
-
+        leaveGame: function (playerIdWhoLeave) {
             var countPlayerThatInGame = 0;
-            for (var player in players) {
-                if (!player.isLeave()) {
+            players.forEach(function (player) {
+                if (player.getId() === playerIdWhoLeave) {
+                    player.setIsLeave(true);
+                } else if (!player.isLeave()) {
                     countPlayerThatInGame++;
                 }
-            }
+            });
 
             if (countPlayerThatInGame < 2) {
                 gameEnded();

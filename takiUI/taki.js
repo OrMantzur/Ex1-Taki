@@ -4,13 +4,13 @@
  */
 
 var game = Game(GameType.BASIC, 2, "Taki Man", "ex1");
+var regularPlayer = Player("p1", false);
+var computerPlayer = Player("p2", true);
 
 function initGame() {
     console.log("Running tests:");
-    var player1 = Player("p1", false);
-    var player2 = Player("p2", true);
-    game.addPlayerToGame(player1);
-    game.addPlayerToGame(player2);
+    game.addPlayerToGame(regularPlayer);
+    game.addPlayerToGame(computerPlayer);
     console.log("Top card is: ");
     game.viewTopCardOnTable().printCardToConsole();
     document.addEventListener("DOMContentLoaded", function () {
@@ -131,6 +131,11 @@ function updateStatistics() {
         document.getElementById("cardsRemaining_" + currPlayerIndex).innerText = game.getPlayer(currPlayerIndex).getCardsRemainingNum();
         currPlayerIndex++;
     }
+}
+
+function exitGame(){
+    // TODO test
+    game.leaveGame(regularPlayer.getId());
 }
 
 initGame();
