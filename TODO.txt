@@ -3,6 +3,8 @@ TODO
 
 msg when trying to take card from deck when it not allow
 
+BUG no stop when computer win
+
 UI design
 
 bonus
