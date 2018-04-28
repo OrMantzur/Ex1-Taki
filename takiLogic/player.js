@@ -48,7 +48,10 @@ function Player(i_PlayerName, i_IsComputer) {
             },
             timesReachedSingleCard: 0,
             averageTurnTime: function () {
-                return totalTimePlayed % turnsPlayed;
+                var totalAvgTimeInSeconds = (totalTimePlayed/turnsPlayed) / 1000;
+                var avgTimeSeconds = Math.floor(totalAvgTimeInSeconds % 60);
+                var avgTimeMinutes = Math.floor(totalAvgTimeInSeconds / 60);
+                return (avgTimeMinutes < 10 ? "0" + avgTimeMinutes : avgTimeMinutes) + ":" + (avgTimeSeconds < 10 ? "0" + avgTimeSeconds : avgTimeSeconds);
             },
         },
 

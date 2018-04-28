@@ -57,8 +57,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         return {
             totalTurnsPlayed: totalTurnsPlayed,
             gameDuration:
-                (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" +
-                secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed
+                (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" + (secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed)
         }
     }
 
