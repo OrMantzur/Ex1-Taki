@@ -16,13 +16,21 @@
 
 <div class="flex-container">
 
-    <div id=statistic-container>
-        <b>statistic</b>
+    <div id=statistics-container>
+        <b>statistics</b>
+        <table id="cardsRemainingTable">
+            <tr><th style="width: 50%">owner</th><th>cards remaining</th></tr>
+            <tr><td>deck</td><td id="cardsInDeckCount"></td></tr>
+            <tr><td>table</td><td id="cardsOnTableCount"></td></tr>
+        </table>
     </div>
 
-    <div id=deck-container>
-        <div id="deck" class="card backOfCard clickable-card" onclick="clickedDeck()"></div>
-        <div id="topCard" onclick="drawTopCardOnTable()">
+    <div id=playing_table_container>
+        <div align="right" style="margin: 40px 40px 0 0;">
+            <div id="deck" class="card backOfCard clickable-card" onclick="clickedDeck()"></div>
+        </div>
+        <div align="center">
+            <div id="topCard" onclick="drawTopCardOnTable()"></div>
         </div>
     </div>
 

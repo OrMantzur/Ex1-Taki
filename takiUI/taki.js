@@ -14,6 +14,16 @@ function initGame() {
     console.log("Top card is: ");
     game.viewTopCardOnTable().printCardToConsole();
     document.addEventListener("DOMContentLoaded", function () {
+        var currPlayerIndex = 0;
+        var cardsRemainingTableElement = document.getElementById('cardsRemainingTable');
+        var currPlayer;
+        while (currPlayer = game.getPlayer(currPlayerIndex)) {
+            var newRow = document.createElement("tr");
+            newRow.innerHTML = "<td>" + currPlayer.getName() + "</td><td id='cardsRemaining_" + currPlayerIndex.toString() + "'>" + currPlayer.getCardsRemainingNum() + "</td>";
+            cardsRemainingTableElement.appendChild(newRow);
+            currPlayerIndex++;
+        }
+        updateStatistics();
         refreshCards();
         overlayToggle();
     });
@@ -76,11 +86,12 @@ function refreshCards() {
     drawPlayerCardsOnScreen(0, 'player-container');
     drawPlayerCardsOnScreen(1, 'player-container2');
     drawTopCardOnTable("topCard");
+    updateStatistics();
 }
 
 function overlayToggle() {
     var currentPlayer = null;
-    var OVERLAY_TOGGLE_INTERVAL = 100;
+    var OVERLAY_TOGGLE_INTERVAL = 200;
     var currentTopCard = null;
     setInterval(function () {
         //if the active player hasn't changed don't do anything
@@ -109,6 +120,17 @@ function colorPickerClickedCard(color) {
     var selectedCard = game.getActivePlayer().getCardById(document.getElementById("colorPicker").getAttribute("selectedCardId"));
     game.makeMove(selectedCard, color);
     drawTopCardOnTable()
+}
+
+function updateStatistics(){
+    var currPlayerIndex = 0;
+    var currPlayer;
+    document.getElementById('cardsInDeckCount').innerText = game.getCardsRemainingInDeck();
+    document.getElementById('cardsOnTableCount').innerText = game.getCardsOnTableCount();
+    while (currPlayer = game.getPlayer(currPlayerIndex)) {
+        document.getElementById("cardsRemaining_" + currPlayerIndex).innerText = game.getPlayer(currPlayerIndex).getCardsRemainingNum();
+        currPlayerIndex++;
+    }
 }
 
 initGame();
