@@ -29,9 +29,19 @@ function drawPlayerCardsOnScreen(playerId, containerId) {
             var cardElement = createCardElement(card, true);
             cardElement.addEventListener("click", function () {
                 // if a card is clicked and a successful move is made, remove the card from the deck
-                if (game.makeMove(card)) {
-                    playerCardsContainer.removeChild(cardElement);
-                    drawTopCardFromDeck()
+                if (card.getValue() === SpecialCard.CHANGE_COLOR) {
+                    document.getElementById("colorPicker").style.display = "flex";
+                    document.getElementById("colorPicker").addEventListener("click", function (event) {
+                        alert("click");
+                        console.log(event.target)
+                        // makeMove(playerCardsContainer, card);
+                    })
+                }
+                else {
+                    if (game.makeMove(card)) {
+                        playerCardsContainer.removeChild(cardElement);
+                        drawTopCardOnTable()
+                    }
                 }
             });
             playerCardsContainer.appendChild(cardElement);
@@ -51,7 +61,7 @@ function createCardElement(card, isClickable) {
     return cardElement;
 }
 
-function drawTopCardFromDeck() {
+function drawTopCardOnTable() {
     var card = game.viewTopCardOnTable();
     var deckElement = document.getElementById('topCard');
     var cardElement = createCardElement(card, false);
@@ -68,7 +78,7 @@ function clickedDeck() {
 function refreshCards() {
     drawPlayerCardsOnScreen(0, 'player-container');
     drawPlayerCardsOnScreen(1, 'player-container2');
-    drawTopCardFromDeck("topCard");
+    drawTopCardOnTable("topCard");
 }
 
 function overlayToggle() {
@@ -86,10 +96,14 @@ function overlayToggle() {
                 screenOverlay.style.display = "none";
                 deck.classList.remove("disabled-button");
             }
-            drawTopCardFromDeck("topCard");
+            drawTopCardOnTable("topCard");
             refreshCards();
         }
     }, 100)
+}
+
+function colorPickerClickedCard(color) {
+    document.getElementById("colorPicker").style.display = "none";
 }
 
 initGame();

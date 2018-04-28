@@ -25,15 +25,22 @@
 
     <div id=deck-container>
         <div id="deck" class="card backOfCard clickable-card" onclick="clickedDeck()"></div>
-        <div id="topCard" onclick="drawTopCardFromDeck()">
+        <div id="topCard" onclick="drawTopCardOnTable()">
         </div>
     </div>
 
 </div>
 
 <!--in order to use screen-overlay change attribute display to block-->
-<div id="player-overlay" class="screen-overlay"></div>
 <div id="player-container">
+    <div id="player-overlay" class="screen-overlay"></div>
+    <div id="colorPicker" class="screen-overlay">
+        <h2>Please choose a color: </h2>
+        <div class="card red clickable-card" onclick="colorPickerClickedCard('red')"></div>
+        <div class="card green clickable-card" onclick="colorPickerClickedCard('green')"></div>
+        <div class="card blue clickable-card" onclick="colorPickerClickedCard('blue')"></div>
+        <div class="card yellow clickable-card" onclick="colorPickerClickedCard('yellow')"></div>
+    </div>
     <b>regular player:</b>
 </div>
 
@@ -41,5 +48,6 @@
 <div id="player-container2">
     <b>computer player:</b>
 </div>
+
 </body>
 </html>

@@ -42,6 +42,13 @@ html, body {
     overflow: auto;
 }
 
+#colorPicker{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(200, 200, 200, 0.9);
+}
+
 .textCard{
     font-size: 100% !important;
 }

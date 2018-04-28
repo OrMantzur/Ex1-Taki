@@ -3,6 +3,7 @@
  * Or Mantzur - 204311997
  */
 
+var COMPUTER_DELAY = 1500;
 var NUM_STARTING_CARDS = 8;
 var GameType = {
     BASIC: "basic",
@@ -343,7 +344,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 if (players[activePlayerIndex].isComputerPlayer())
                     setTimeout(function () {
                         makeComputerPlayerMove();
-                    }, 2000);
+                    }, COMPUTER_DELAY);
             } catch (e) {
                 // TODO handle error
                 console.log(e.message);
@@ -393,7 +394,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 // sleep(1 * 1000);
                 setTimeout(function () {
                     makeComputerPlayerMove();
-                }, 2000);
+                }, COMPUTER_DELAY);
             }
 
             return true;
