@@ -369,7 +369,9 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             var activePlayer = players[activePlayerIndex];
             activePlayer.removeCardFromHand(cardPlaced);
             m_CardsOnTable.putCardOnTable(cardPlaced);
-
+            if (activePlayer.getCardsRemainingNum() === 1){
+                activePlayer.statistics.timesReachedSingleCard++;
+            }
             // change after the move
             // there are more valid moves
             if (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(cardPlaced.getColor()) !== undefined) {
