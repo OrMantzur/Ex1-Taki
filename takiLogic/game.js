@@ -60,7 +60,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         }
     }
 
-    function getGameDurationPrivate(){
+    function getGameDurationPrivate() {
         return (gameEndTime === null ? new Date() : gameEndTime) - gameStartTime;
     }
 
@@ -272,6 +272,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
     function gameEnded() {
         gameIsActive = false;
+        console.log("game ended");
     }
 
     return {
@@ -317,7 +318,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             return getGameDurationPrivate();
         },
 
-        getPossibleMoveForActivePlayer: function(){
+        getPossibleMoveForActivePlayer: function () {
             return players[activePlayerIndex].getPossibleMoves(isValidMove);
         },
 
@@ -442,6 +443,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             players.forEach(function (player) {
                 if (player.getId() === playerIdWhoLeave) {
                     player.setIsLeave(true);
+                    console.log("player " + player.getName() + " leave the game");
                 } else if (!player.isLeave()) {
                     countPlayerThatInGame++;
                 }
