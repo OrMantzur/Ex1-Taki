@@ -1,8 +1,11 @@
 
-open new brunch with all advance game change ?
-
-Super taki and change color not allow in the first card
 
 Auto take card from deck when + or change color last (like +2)
 
 bonus
+
+over all the TODO's
+
+run code investigation
+
+open new brunch with all advance game change ?

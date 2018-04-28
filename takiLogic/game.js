@@ -68,7 +68,8 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             var cardDrawnFromDeck;
             do {
                 cardDrawnFromDeck = m_Deck.drawCards(1)[0];
-            } while (cardDrawnFromDeck.getValue() === SpecialCard.CHANGE_COLOR);
+            } while (cardDrawnFromDeck.getValue() === SpecialCard.CHANGE_COLOR ||
+            cardDrawnFromDeck.getValue() === SpecialCard.SUPER_TAKI);
 
             m_CardsOnTable.putCardOnTable(cardDrawnFromDeck);
 
