@@ -19,7 +19,7 @@ function initGame() {
         var currPlayer;
         while (currPlayer = game.getPlayer(currPlayerIndex)) {
             var newRow = document.createElement("tr");
-            newRow.innerHTML = "<td>" + currPlayer.getName() + "</td><td id='cardsRemaining_" + currPlayerIndex.toString() + "'>" + currPlayer.getCardsRemainingNum() + "</td>";
+            newRow.innerHTML = "<td>" + currPlayer.getName() + "</td><td id='cardsRemaining_" + game.getPlayer(currPlayerIndex).getName() + "'>" + currPlayer.getCardsRemainingNum() + "</td>";
             cardsRemainingTableElement.appendChild(newRow);
             currPlayerIndex++;
         }
@@ -122,13 +122,19 @@ function colorPickerClickedCard(color) {
     drawTopCardOnTable()
 }
 
-function updateStatistics(){
+function updateStatistics() {
     var currPlayerIndex = 0;
     var currPlayer;
     document.getElementById('cardsInDeckCount').innerText = game.getCardsRemainingInDeck();
     document.getElementById('cardsOnTableCount').innerText = game.getCardsOnTableCount();
     while (currPlayer = game.getPlayer(currPlayerIndex)) {
-        document.getElementById("cardsRemaining_" + currPlayerIndex).innerText = game.getPlayer(currPlayerIndex).getCardsRemainingNum();
+        var tableRow = document.getElementById("cardsRemaining_" + currPlayer.getName());
+        tableRow.innerText = game.getPlayer(currPlayerIndex).getCardsRemainingNum();
+        if (currPlayer === game.getActivePlayer()) {
+            tableRow.parentElement.setAttribute("class","bold");
+        } else {
+            tableRow.parentElement.classList.remove("bold");
+        }
         currPlayerIndex++;
     }
 }

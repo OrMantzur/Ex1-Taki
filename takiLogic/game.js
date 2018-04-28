@@ -372,7 +372,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
         },
 
-        isActivePlayerHasValidMove: function(){
+        getPossibleMoveForActivePlayer: function(){
             return players[activePlayerIndex].getPossibleMoves(isValidMove) !== null;
         },
 
