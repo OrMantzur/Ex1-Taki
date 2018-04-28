@@ -317,7 +317,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             return getGameDurationPrivate();
         },
 
-        isActivePlayerHasValidMove: function(){
+        getPossibleMoveForActivePlayer: function(){
             return players[activePlayerIndex].getPossibleMoves(isValidMove) !== null;
         },
 
