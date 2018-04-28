@@ -54,9 +54,13 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         var minutesPlayed = Math.floor(gameDuration / (1000 * 60));
         var secondsPlayed = Math.floor(gameDuration / 1000) % 60;
         return {
-            totalTurnsPlayed: totalTurnsPlayed,
-            gameDuration:
-            (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" + (secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed)
+            getTotalTurnsPlayed:function(){
+                return totalTurnsPlayed;
+            },
+
+            getGameDuration: function(){
+                return (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" + (secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed);
+            }
         }
     }
 

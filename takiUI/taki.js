@@ -117,7 +117,7 @@ function overlayToggle() {
             document.getElementById("player-overlay").style.display = 'block';
             document.getElementById('winningPlayerName').innerText = game.getGameState().additionalInfo.getName();
             var stats = game.getStatistics();
-            document.getElementById('gameStatistics').innerHTML = "Total time played: " + stats.gameDuration + "</br> Total turns played: " + stats.totalTurnsPlayed;
+            document.getElementById('gameStatistics').innerHTML = "Total time played: " + stats.getGameDuration() + "</br> Total turns played: " + stats.getTotalTurnsPlayed();
             var playerStats = "";
             var player;
             for (var i = 0 ; (player = game.getPlayer(i)) !== undefined ; i++){
@@ -140,6 +140,7 @@ function updateStatistics() {
     var currPlayer;
     document.getElementById('cardsInDeckCount').innerText = game.getCardsRemainingInDeck();
     document.getElementById('cardsOnTableCount').innerText = game.getCardsOnTableCount();
+    document.getElementById('totalTurn').innerText = game.getStatistics().getTotalTurnsPlayed();
     while (currPlayer = game.getPlayer(currPlayerIndex)) {
         var tableRow = document.getElementById("cardsRemaining_" + currPlayer.getName());
         tableRow.innerText = game.getPlayer(currPlayerIndex).getCardsRemainingNum();
