@@ -112,7 +112,7 @@ html, body {
 }
 
 .backOfCard {
-    background-image: url("../takiImages/backOfCard.jpg");
+    background-image: url("takiImages/backOfCard.jpg");
     background-size: contain;
     transform: rotate(-45deg);
 }
