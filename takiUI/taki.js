@@ -80,12 +80,13 @@ function refreshCards() {
 
 function overlayToggle() {
     var currentPlayer = null;
+    var OVERLAY_TOGGLE_INTERVAL = 100;
     var currentTopCard = null;
     setInterval(function () {
         //if the active player hasn't changed don't do anything
         if (currentPlayer !== game.getActivePlayer()) {
             currentPlayer = game.getActivePlayer();
-            var screenOverlay = document.getElementById("player-overlay")
+            var screenOverlay = document.getElementById("player-overlay");
             var deck = document.getElementById("deck");
             if (game.getActivePlayer().getName() === 'p2') {
                 screenOverlay.style.display = "block";
@@ -100,7 +101,7 @@ function overlayToggle() {
             currentTopCard = game.viewTopCardOnTable();
             drawTopCardOnTable("topCard");
         }
-    }, 100)
+    }, OVERLAY_TOGGLE_INTERVAL)
 }
 
 function colorPickerClickedCard(color) {

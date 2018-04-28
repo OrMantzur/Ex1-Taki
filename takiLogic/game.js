@@ -3,7 +3,7 @@
  * Or Mantzur - 204311997
  */
 
-var COMPUTER_DELAY = 1500;
+var COMPUTER_DELAY = 1.5 * 1000;
 var NUM_STARTING_CARDS = 8;
 var GameType = {
     BASIC: "basic",
