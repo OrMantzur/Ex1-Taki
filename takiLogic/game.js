@@ -193,6 +193,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             playerWon = true;
             activePlayer.setIsWinner(true);
             console.log("Player \"" + activePlayer.getName() + "\" has won!");
+            gameEnded(activePlayer);
         }
         return playerWon;
     }
