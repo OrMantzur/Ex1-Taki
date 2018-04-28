@@ -29,7 +29,7 @@ function drawPlayerCardsOnScreen(playerId, containerId) {
             var cardElement = createCardElement(card, true);
             cardElement.addEventListener("click", function () {
                 // if a card is clicked and a successful move is made, remove the card from the deck
-                if (card.getValue() === SpecialCard.CHANGE_COLOR) {
+                if (card.getValue() === SpecialCard.CHANGE_COLOR && game.getGameState() !== GameState.OPEN_TAKI) {
                     document.getElementById("colorPicker").style.display = "flex";
                     document.getElementById("colorPicker").setAttribute("selectedCardId", card.getId());
                     playerCardsContainer.removeChild(cardElement);

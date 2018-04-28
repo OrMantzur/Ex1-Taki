@@ -51,7 +51,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         players.forEach(function (player) {
             totalTurnsPlayed += player.statistics.totalTurnsPlayed();
         });
-        var gameDuration = gameEndTime - gameStartTime;
+        var gameDuration = (gameEndTime === null ? new Date() : gameEndTime) - gameStartTime;
         var minutesPlayed = Math.floor(gameDuration / (1000 * 60));
         var secondsPlayed = Math.floor(gameDuration / 1000) % 60;
         return {
@@ -269,6 +269,10 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
         getGameCreator: function () {
             return gameCreator;
+        },
+
+        getGameState: function () {
+            return gameState.gameState;
         },
 
         isActive: function () {
