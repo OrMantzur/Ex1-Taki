@@ -387,6 +387,8 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
 
             if (!checkIfActivePlayerWon() && players[activePlayerIndex].isComputerPlayer()) {
+                // simulate time take for real player
+                sleep(1 * 1000);
                 makeComputerPlayerMove();
             }
         },
