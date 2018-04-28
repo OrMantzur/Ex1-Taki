@@ -318,7 +318,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         },
 
         getPossibleMoveForActivePlayer: function(){
-            return players[activePlayerIndex].getPossibleMoves(isValidMove) !== null;
+            return players[activePlayerIndex].getPossibleMoves(isValidMove);
         },
 
         addPlayerToGame: function (i_playerToAdd) {
