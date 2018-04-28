@@ -50,7 +50,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         players.forEach(function (player) {
             totalTurnsPlayed += player.statistics.totalTurnsPlayed();
         });
-        var gameDuration = (gameEndTime === null ? new Date() : gameEndTime) - gameStartTime;
+        var gameDuration = getGameDurationPrivate();
         var minutesPlayed = Math.floor(gameDuration / (1000 * 60));
         var secondsPlayed = Math.floor(gameDuration / 1000) % 60;
         return {
@@ -58,6 +58,10 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             gameDuration:
             (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" + (secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed)
         }
+    }
+
+    function getGameDurationPrivate(){
+        return (gameEndTime === null ? new Date() : gameEndTime) - gameStartTime;
     }
 
     function startGame() {
@@ -309,6 +313,14 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             return statistics();
         },
 
+        getGameDuration: function(){
+            return getGameDurationPrivate();
+        },
+
+        isActivePlayerHasValidMove: function(){
+            return players[activePlayerIndex].getPossibleMoves(isValidMove) !== null;
+        },
+
         addPlayerToGame: function (i_playerToAdd) {
             var playerAdded = false;
             if (gameIsActive || players.length >= numPlayersToStartGame) {
@@ -370,10 +382,6 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 console.log(e.message);
             }
 
-        },
-
-        getPossibleMoveForActivePlayer: function(){
-            return players[activePlayerIndex].getPossibleMoves(isValidMove) !== null;
         },
 
         makeMove: function (cardPlaced, additionalData) {

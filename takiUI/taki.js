@@ -145,3 +145,17 @@ function updateStatistics() {
 }
 
 initGame();
+
+setInterval(function () {
+    var timerElement = document.getElementById("timer");
+    var gameDurationInMilliSecond = game.getGameDuration().toString();
+    var secondsPlayed = Math.floor(gameDurationInMilliSecond / 1000) % 60;
+    var minutesPlayed = Math.floor(gameDurationInMilliSecond / (1000 * 60));
+    var hoursPlayed = Math.floor(gameDurationInMilliSecond / (1000 * 60 * 60));
+    var timer = (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" + (secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed);
+
+    if (hoursPlayed !== 0) {
+        timer = hoursPlayed + ":" + timer;
+    }
+    timerElement.innerText = timer;
+}, 1000);
