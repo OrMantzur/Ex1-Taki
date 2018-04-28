@@ -316,8 +316,12 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             return getGameDurationPrivate();
         },
 
+        /**
+         * return null if out of move
+         * @returns {boolean}
+         */
         getPossibleMoveForActivePlayer: function(){
-            return players[activePlayerIndex].getPossibleMove(isValidMove) !== null;
+            return players[activePlayerIndex].getPossibleMove(isValidMove);
         },
 
         addPlayerToGame: function (i_playerToAdd) {

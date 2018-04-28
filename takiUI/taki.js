@@ -174,6 +174,7 @@ function exitGame() {
 initGame();
 
 setInterval(function () {
+    // update clock
     var timerElement = document.getElementById("timer");
     var gameDurationInMilliSecond = game.getGameDuration().toString();
     var secondsPlayed = Math.floor(gameDurationInMilliSecond / 1000) % 60;
@@ -185,4 +186,12 @@ setInterval(function () {
         timer = hoursPlayed + ":" + timer;
     }
     timerElement.innerText = timer;
+
+    // check hint to player that he need to take card from deck
+    var activePlayer = game.getActivePlayer();
+    if (activePlayer.getId() === regularPlayer.getId() && game.getPossibleMoveForActivePlayer() === null) {
+        document.getElementById("needTakeCardFromDeck").innerText = "out of move take card from deck";
+    } else {
+        document.getElementById("needTakeCardFromDeck").innerText = "";
+    }
 }, 1000);

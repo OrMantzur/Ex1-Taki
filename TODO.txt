@@ -1,8 +1,6 @@
 
 TODO
 
-remark more who is the active player
-
 msg when trying to take card from deck when it not allow
 
 UI design
@@ -10,6 +8,10 @@ UI design
 bonus
 
 
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 BEFORE SUBMISSION
 over all the TODO's
 
