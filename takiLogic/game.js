@@ -79,16 +79,6 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         players[activePlayerIndex].startTurn();
     }
 
-    function restartGame() {
-        m_Deck = Deck(gameType);
-        m_CardsOnTable = CardsOnTable();
-        for (var player in players) {
-            player.removeAllCardsFromHand();
-            player.addCardsToHand(m_Deck.drawCards(NUM_STARTING_CARDS));
-        }
-        // TODO ..
-    }
-
     function moveCardsFromTableToDeck() {
         var pickedUpCards = m_CardsOnTable.takeAllButTopCard();
         m_Deck.addCardsToDeck(pickedUpCards);
@@ -439,11 +429,11 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         /**
          * player leave before the game ended
          */
-        leaveGame: function (playerIdWhoLeave) {
+        leaveGame: function (playerWhoLeftTheGame) {
             var countPlayerThatInGame = 0;
-            var somePlayerInGame;
+            var somePlayerInGame = playerWhoLeftTheGame;
             players.forEach(function (player) {
-                if (player.getId() === playerIdWhoLeave) {
+                if (player === playerWhoLeftTheGame) {
                     player.setIsLeave(true);
                     console.log("player " + player.getName() + " leave the game");
                 } else if (!player.isLeave()) {
@@ -459,7 +449,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             }
         },
 
-        //TODO delete
+        // used for debugging
         MakeComputerMove: function () {
             // setTimeout(makeComputerPlayerMove, 1000);
             makeComputerPlayerMove();

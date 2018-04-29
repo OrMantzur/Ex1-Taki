@@ -106,7 +106,7 @@ function Player(i_PlayerName, i_IsComputer) {
             return cardFound;
         },
 
-
+        // used for debugging
         getCardsStrArr: function () {
             var cardsToReturn = [];
             cards.forEach(function (card) {
@@ -144,8 +144,7 @@ function Player(i_PlayerName, i_IsComputer) {
             if (currTurnStartTime !== null) {
                 isActive = false;
                 var endTurnTime = new Date();
-                var turnDuration = endTurnTime - currTurnStartTime;
-                totalTimePlayed += turnDuration;
+                totalTimePlayed += endTurnTime - currTurnStartTime;
                 endTurnTime = null;
                 currTurnStartTime = null;
                 turnsPlayed++;
