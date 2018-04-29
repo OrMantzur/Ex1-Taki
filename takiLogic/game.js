@@ -15,7 +15,6 @@ var GameState = {
     CHANGE_COLOR: "changeColor",
     GAME_STARTED: "gameStarted",
     GAME_ENDED: "gameEnded - Player won",
-    // TODO advance game
     SUPER_TAKI: "superTaki",
     CLOSE_TAKI: "takiClose",
     CLOSE_PLUS: "+Close",
@@ -25,7 +24,7 @@ var GameState = {
 Game.nextFreeGameId = 0;
 
 function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
-    // TODO Validate in gameManager when there is more than one game
+    // TODO (advanced game) Validate in gameManager when there is more than one game
     var numPlayersToStartGame = i_PlayerNum;
     var gameCreator = i_GameCreator;
     var gameID = Game.nextFreeGameId++;
@@ -41,7 +40,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
     var gameState = {
         currColor: null,
         gameState: null,
-        additionalInfo: null // TODO will be used for counter on +2
+        additionalInfo: null // TODO (advanced game) will be used for counter on +2
     };
 
     function statistics() {
@@ -70,21 +69,14 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
     function startGame() {
         gameIsActive = true;
         console.log("GameID (" + gameID + "): The game has started");
-        try {
-            // open start card (can't start with changeColor card)
-            var cardDrawnFromDeck;
-            do {
-                cardDrawnFromDeck = m_Deck.drawCards(1)[0];
-            } while (cardDrawnFromDeck.getValue() === SpecialCard.CHANGE_COLOR ||
-            cardDrawnFromDeck.getValue() === SpecialCard.SUPER_TAKI);
+        // open start card (can't start with changeColor or superTaki card)
+        var cardDrawnFromDeck;
+        do {
+            cardDrawnFromDeck = m_Deck.drawCards(1)[0];
+        } while (cardDrawnFromDeck.getValue() === SpecialCard.CHANGE_COLOR || cardDrawnFromDeck.getValue() === SpecialCard.SUPER_TAKI);
 
-            m_CardsOnTable.putCardOnTable(cardDrawnFromDeck);
-
-        } catch (e) {
-            // TODO handle error
-        }
+        m_CardsOnTable.putCardOnTable(cardDrawnFromDeck);
         players[activePlayerIndex].startTurn();
-        //    TODO do stuff
     }
 
     function restartGame() {
@@ -108,7 +100,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         if (gameState.gameState === GameState.OPEN_TAKI) {
             isValid = topCardOnTable.getColor() === cardPlaced.getColor();
         } else if (gameState.gameState === GameState.SUPER_TAKI) {
-            // TODO advanced game
+            // TODO (advanced game)
         } else if (gameState.gameState === GameState.OPEN_PLUS_2) {
             isValid = cardPlaced.getValue() === SpecialCard.PLUS_2;
         } else {
@@ -116,14 +108,13 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 (topCardOnTable.getColor() === cardPlaced.getColor()) ||
                 (topCardOnTable.getValue() === cardPlaced.getValue()) ||
                 (cardPlaced.getValue() === SpecialCard.CHANGE_COLOR);
-            // TODO add any relevant special card
+            // TODO (advanced game) - add any relevant special card
         }
 
         return isValid;
     }
 
     function makeComputerPlayerMove() {
-        // TODO should we check if this is really a computer player?
         var activePlayer = players[activePlayerIndex];
         var topCard = m_CardsOnTable.viewTopCard();
         var cardToPlace;
@@ -226,15 +217,14 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                     gameState.gameState = null;
                     moveToNextPlayer();
                 }
-                console.log("in case - Taki")
+                console.log("in case - Taki");
                 break;
             case SpecialCard.SUPER_TAKI:
                 card.setColor(additionalData);
                 gameState.gameState = GameState.OPEN_TAKI;
-                console.log("in case - Super Taki")
+                console.log("in case - Super Taki");
                 break;
             case SpecialCard.CHANGE_COLOR:
-                // TODO get color from user and not random!
                 if (additionalData === undefined) {
                     additionalData = Color.getRandomColor();
                 }
@@ -258,7 +248,6 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 console.log("in case - PLUS")
                 break;
             default:
-                // TODO change to error
                 console.log("no match to any special card")
         }
     }
@@ -361,30 +350,27 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             }
 
             var cardsTaken = [];
-            try {
-                //TODO add documentation
-                if (gameState.gameState === GameState.OPEN_PLUS_2) {
-                    var numCardsToTake = gameState.additionalInfo;
-                    cardsTaken = m_Deck.drawCards(numCardsToTake);
-                    gameState.gameState = null;
-                    gameState.additionalInfo = null;
-                } else {
-                    cardsTaken = m_Deck.drawCards(1);
-                }
 
-                var activePlayer = players[activePlayerIndex];
-                console.log("player: " + activePlayer.getName() + " took a card from the deck");
-                activePlayer.addCardsToHand(cardsTaken);
-                moveToNextPlayer();
-                if (players[activePlayerIndex].isComputerPlayer())
-                    setTimeout(function () {
-                        makeComputerPlayerMove();
-                    }, COMPUTER_DELAY);
-            } catch (e) {
-                // TODO handle error
-                console.log(e.message);
-                return false;
+            //TODO add documentation
+            if (gameState.gameState === GameState.OPEN_PLUS_2) {
+                var numCardsToTake = gameState.additionalInfo;
+                cardsTaken = m_Deck.drawCards(numCardsToTake);
+                gameState.gameState = null;
+                gameState.additionalInfo = null;
+            } else {
+                cardsTaken = m_Deck.drawCards(1);
             }
+
+            var activePlayer = players[activePlayerIndex];
+            console.log("player: " + activePlayer.getName() + " took a card from the deck");
+            activePlayer.addCardsToHand(cardsTaken);
+            moveToNextPlayer();
+            if (players[activePlayerIndex].isComputerPlayer()) {
+                setTimeout(function () {
+                    makeComputerPlayerMove();
+                }, COMPUTER_DELAY);
+            }
+
             return true;
         },
 
@@ -441,8 +427,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
 
             if (players[activePlayerIndex].isComputerPlayer()) {
-                // simulate time take for real player
-                // TODO Bug - when computer player plays a taki card with several cards sometimes he pulls a card from the deck at the end
+                // simulate thinking time
                 setTimeout(function () {
                     makeComputerPlayerMove();
                 }, COMPUTER_DELAY);

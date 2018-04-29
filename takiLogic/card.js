@@ -43,9 +43,11 @@ function Card(color, value) {
 
         setColor: function (color) {
             if (cardValue !== SpecialCard.CHANGE_COLOR) {
-                throw new Error("color can only be changed for \"change color\" cards");
+                // throw new Error("color can only be changed for \"change color\" cards");
+                console.log("card color was not changed - color can only be changed for \"change color\" cards")
+            } else {
+                cardColor = color;
             }
-            cardColor = color;
         },
 
         printCardToConsole: function () {

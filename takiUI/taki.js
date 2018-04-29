@@ -26,6 +26,7 @@ function initGame() {
         updateStatistics();
         refreshCards();
         overlayToggle();
+        setKeyMappings();
     });
 }
 
@@ -182,7 +183,6 @@ setInterval(function () {
 
     // check hint to player that he need to take card from deck
     var activePlayer = game.getActivePlayer();
-    var interval;
     if (activePlayer.getId() === regularPlayer.getId() && game.getPossibleMoveForActivePlayer() === null) {
         // document.getElementById("needTakeCardFromDeck").innerText = "out of move take card from deck";
         document.getElementById("deck").classList.add('highlightDeck');
@@ -199,5 +199,3 @@ function setKeyMappings() {
         }
     }
 }
-
-setKeyMappings();

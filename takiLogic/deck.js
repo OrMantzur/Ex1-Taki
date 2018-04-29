@@ -72,7 +72,8 @@ function Deck(i_GameType) {
 
     function drawCard() {
         if (cards.length === 0) {
-            throw new Error("DeckEmpty");
+            console.log("Tried to draw card from an empty deck - returned null")
+            return null;
         }
 
         var randIndex = Math.floor((Math.random() * 100) % cards.length);

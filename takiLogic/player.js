@@ -24,7 +24,7 @@ function Player(i_PlayerName, i_IsComputer) {
     var currTurnStartTime;
     var turnsPlayed = 0;
     var totalTimePlayed = 0;
-    var timesReachedSingleCard=0;
+    var timesReachedSingleCard = 0;
 
     return {
         setIsWinner: function (i_IsWinner) {
@@ -35,7 +35,7 @@ function Player(i_PlayerName, i_IsComputer) {
             isLeave = i_IsLeave;
         },
 
-        increaseTimesReachedSingleCard:function(){
+        increaseTimesReachedSingleCard: function () {
             timesReachedSingleCard++;
         },
 
@@ -52,11 +52,11 @@ function Player(i_PlayerName, i_IsComputer) {
         },
 
         getAverageTurnTime: function () {
-            var totalAvgTimeInSeconds = (totalTimePlayed/turnsPlayed) / 1000;
+            var totalAvgTimeInSeconds = (totalTimePlayed / turnsPlayed) / 1000;
             var avgTimeSeconds = Math.floor(totalAvgTimeInSeconds % 60);
             var avgTimeMinutes = Math.floor(totalAvgTimeInSeconds / 60);
-            if(totalAvgTimeInSeconds.toString()==="NaN" || avgTimeSeconds.toString()==="NaN" ||
-                avgTimeMinutes.toString()==="NaN"){
+            if (totalAvgTimeInSeconds.toString() === "NaN" || avgTimeSeconds.toString() === "NaN" ||
+                avgTimeMinutes.toString() === "NaN") {
                 return 0;
             }
             return (avgTimeMinutes < 10 ? "0" + avgTimeMinutes : avgTimeMinutes) + ":" + (avgTimeSeconds < 10 ? "0" + avgTimeSeconds : avgTimeSeconds);
@@ -94,24 +94,26 @@ function Player(i_PlayerName, i_IsComputer) {
             });
         },
 
-        // TODO delete (we don't want access to all cards from outside
+        // TODO delete (?) (we don't want access to all cards from outside
         getCards: function () {
             return cards;
         },
 
-        getCardById: function(cardId){
+        getCardById: function (cardId) {
             var cardFound = cards.find(function (card) {
                 return card.getId() === parseInt(cardId);
             });
             return cardFound;
         },
 
-        // getCardsStrArr: function () {
-        //     var cardsToReturn = [];
-        // TODO if uncomment change arrow function
-        //     cards.forEach(card => cardsToReturn.push(card.getColor() + " " + card.getValue()));
-        //     return cardsToReturn.join(", ");
-        // },
+
+        getCardsStrArr: function () {
+            var cardsToReturn = [];
+            cards.forEach(function (card) {
+                return cardsToReturn.push(card.getColor() + " " + card.getValue());
+            });
+            return cardsToReturn.join(", ");
+        },
 
         getCardsRemainingNum: function () {
             return cards.length;
