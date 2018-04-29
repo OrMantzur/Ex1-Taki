@@ -4,8 +4,8 @@
  */
 
 var game = Game(GameType.BASIC, 2, "Taki Man", "ex1");
-var regularPlayer = Player("Me", false);
-var computerPlayer = Player("Computer", true);
+var regularPlayer = Player("Human player", false);
+var computerPlayer = Player("Computer player", true);
 
 function initGame() {
     console.log("Running tests:");
@@ -42,6 +42,7 @@ function drawPlayerCardsOnScreen(playerId) {
                 if (card.getValue() === SpecialCard.CHANGE_COLOR && game.getGameState().gameState !== GameState.OPEN_TAKI) {
                     document.getElementById("colorPicker").style.display = "flex";
                     document.getElementById("colorPicker").setAttribute("selectedCardId", card.getId());
+                    document.getElementById("deck").classList.add("disabled-button");
                     playerCardsContainer.removeChild(cardElement);
                 }
                 else {
@@ -78,7 +79,11 @@ function drawTopCardOnTable() {
 }
 
 function clickedDeck() {
-    game.takeCardsFromDeck();
+    if (!game.takeCardsFromDeck()) {
+        var cardThatCanBePlaced = game.getPossibleMoveForActivePlayer();
+        var msg = "Cannot take card from the deck when there is a possible move to play\nYou can try placing '" + cardThatCanBePlaced.getValue() + " " + (cardThatCanBePlaced.getColor() !== null ? cardThatCanBePlaced.getColor() : "") + "'";
+        alert(msg);
+    }
     refreshCards();
 }
 
@@ -130,6 +135,7 @@ function overlayToggle() {
 
 function colorPickerClickedCard(color) {
     document.getElementById("colorPicker").style.display = "none";
+    document.getElementById("deck").classList.remove("disabled-button");
     var selectedCard = game.getActivePlayer().getCardById(document.getElementById("colorPicker").getAttribute("selectedCardId"));
     game.makeMove(selectedCard, color);
     drawTopCardOnTable()

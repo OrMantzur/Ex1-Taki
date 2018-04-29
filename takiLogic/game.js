@@ -24,7 +24,6 @@ var GameState = {
 };
 Game.nextFreeGameId = 0;
 
-
 function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
     // TODO Validate in gameManager when there is more than one game
     var numPlayersToStartGame = i_PlayerNum;
@@ -206,8 +205,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
      * @returns {boolean}
      */
     function needToTakeCardFromDeck() {
-        return m_CardsOnTable.viewTopCard().getValue() === SpecialCard.PLUS ||
-            m_CardsOnTable.viewTopCard().getValue() === SpecialCard.STOP; //TODO why is stop here?
+        return m_CardsOnTable.viewTopCard().getValue() === SpecialCard.PLUS;
     }
 
     function afterMoveOfSpecialCard(card, additionalData) {
@@ -217,6 +215,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 // two calls to skip the next player
                 var skipOnePlayer = true;
                 moveToNextPlayer(skipOnePlayer);
+                console.log("in case - Stop")
                 break;
             case SpecialCard.TAKI:
                 // if the player put down a "taki" card and has more cards to put then set state to "openTaki"
@@ -227,10 +226,12 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                     gameState.gameState = null;
                     moveToNextPlayer();
                 }
+                console.log("in case - Taki")
                 break;
             case SpecialCard.SUPER_TAKI:
                 card.setColor(additionalData);
                 gameState.gameState = GameState.OPEN_TAKI;
+                console.log("in case - Super Taki")
                 break;
             case SpecialCard.CHANGE_COLOR:
                 // TODO get color from user and not random!
@@ -240,6 +241,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 card.setColor(additionalData);
                 console.log("change color to " + additionalData);
                 moveToNextPlayer();
+                console.log("in case - Change Color")
                 break;
             case SpecialCard.PLUS_2:
                 if (gameState.gameState === GameState.OPEN_PLUS_2)
@@ -249,9 +251,11 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                     gameState.additionalInfo = 2;
                 }
                 moveToNextPlayer();
+                console.log("in case - PLUS_2")
                 break;
             case SpecialCard.PLUS:
                 // do nothing, the player gets another turn
+                console.log("in case - PLUS")
                 break;
             default:
                 // TODO change to error
@@ -316,10 +320,6 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             return getGameDurationPrivate();
         },
 
-        /**
-         * return null if out of move
-         * @returns {boolean}
-         */
         getPossibleMoveForActivePlayer: function () {
             return players[activePlayerIndex].getPossibleMove(isValidMove);
         },
@@ -351,7 +351,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             if (card !== null) {
                 // throw new Error("Cannot take card from deck when there is a possible move. \nThe card that can be places is: " + card.getColor() + ", " + card.getValue());
                 console.log("Cannot take card from deck when there is a possible move. \nThe card that can be places is: " + card.getColor() + ", " + card.getValue());
-                return;
+                return false;
             }
 
             // check that there are enough cards in the deck
@@ -383,8 +383,9 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             } catch (e) {
                 // TODO handle error
                 console.log(e.message);
+                return false;
             }
-
+            return true;
         },
 
         makeMove: function (cardPlaced, additionalData) {
@@ -401,24 +402,34 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             var activePlayer = players[activePlayerIndex];
             activePlayer.removeCardFromHand(cardPlaced);
             m_CardsOnTable.putCardOnTable(cardPlaced);
+
             if (activePlayer.getCardsRemainingNum() === 1) {
                 activePlayer.increaseTimesReachedSingleCard();
             } else if (checkIfActivePlayerWon()) {
+                return true;
+            }
 
+            console.log("1");
+            // check if after the move there are more valid moves
+            if (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(cardPlaced.getColor()) !== undefined) {
+                // taki open + player has more cards of the same color = player gets another turn;
+                console.log("2");
             } else {
-                // change after the move
-                // there are more valid moves
-                if (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(cardPlaced.getColor()) !== undefined) {
-                    // player gets another turn;
+                if (gameState.gameState === GameState.OPEN_TAKI) {
+                    // taki open + player has no more cards of the same color = return to normal state
+                    console.log("3");
+                    gameState.gameState = null;
+                    gameState.additionalInfo = null;
+                }
+                if (cardPlaced.isSpecialCard()) {
+                    // make changes to game state according to placed card
+                    console.log("4");
+                    afterMoveOfSpecialCard(cardPlaced, additionalData);
                 } else {
-                    // that turn was the last card of the open taki
-                    if (cardPlaced.isSpecialCard()) {
-                        afterMoveOfSpecialCard(cardPlaced, additionalData);
-                    } else {
-                        gameState.gameState = null;
-                        gameState.additionalInfo = null;
-                        moveToNextPlayer();
-                    }
+                    console.log("5");
+                    gameState.gameState = null;
+                    gameState.additionalInfo = null;
+                    moveToNextPlayer();
                 }
             }
 

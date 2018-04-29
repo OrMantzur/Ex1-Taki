@@ -117,6 +117,11 @@ function Player(i_PlayerName, i_IsComputer) {
             return cards.length;
         },
 
+        /**
+         *
+         * @param isValidFunc
+         * @returns {Card}
+         */
         getPossibleMove(isValidFunc) {
             var cardThatCanBePlaced = null;
             for (var i = 0; i < cards.length; i++) {

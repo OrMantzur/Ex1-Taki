@@ -22,9 +22,9 @@
         <div id=playing_table_container>
             <!--<h1 id="needTakeCardFromDeck"></h1>-->
             <img src="takiImages/TAKI_logo.png" alt="Taki Logo"
-                 style="width: fit-content; height: fit-content; align-self: center">
+                 style="width: fit-content; height: fit-content; align-self: center;">
             <div style="height: 15%"></div>
-            <div align="center" style="margin: 0 0 0 200px;">
+            <div align="center" style="margin: 0 0 0 15vw;">
                 <div id="deck" class="card backOfCard clickable-card" onclick="clickedDeck()"></div>
             </div>
             <div align="center">
@@ -37,7 +37,7 @@
             <div id="playerWonScreen">
                 <!--<div id="playerWonOverlay"></div>-->
                 <h1><span id="winningPlayerName"></span> has won the game!</h1>
-                <button onclick="location.reload()">Play again</button>
+                <button class="green" onclick="location.reload()">Play again</button>
                 <h3><u>Game statistics:</u></h3>
                 <p id="gameStatistics" style="margin: 0"></p>
                 <p id="playerStatistics"></p>
@@ -66,7 +66,7 @@
         <div id=statistics-container>
             <div>Game timer: <span id="timer">00:00</span></div>
             </br>
-            <button type="button" onclick="exitGame()" style="width: fit-content">exit game</button>
+            <button type="button" class="red" onclick="exitGame()" style="width: fit-content">Exit game</button>
 
             <h5>Cards remaining:</h5>
             <table id="cardsRemainingTable">
