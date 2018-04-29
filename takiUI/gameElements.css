@@ -48,11 +48,10 @@ html, body {
 #player-container {
     height: 30%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     overflow-scrolling: auto;
     overflow: auto;
-    padding-left: 20%;
 }
 
 #colorPicker {
