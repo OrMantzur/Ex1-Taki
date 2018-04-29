@@ -161,7 +161,7 @@ function updateStatistics() {
 }
 
 function exitGame() {
-    game.leaveGame(regularPlayer.getId());
+    game.leaveGame(regularPlayer);
 }
 
 initGame();
