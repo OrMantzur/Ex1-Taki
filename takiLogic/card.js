@@ -50,16 +50,26 @@ function Card(color, value) {
 
         printCardToConsole: function () {
             console.log("Color: " + cardColor + ", Value: " + cardValue);
+        },
+
+        isSpecialCard: function () {
+            var isSpecial = false;
+            for (var specialCardKey in SpecialCard) {
+                if (value === SpecialCard[specialCardKey]) {
+                    isSpecial = true;
+                }
+            }
+            return isSpecial;
         }
     }
 }
 
-Card.isSpecialCard = function (card) {
-    for (var specialCardKey in SpecialCard) {
-        if (card === SpecialCard[specialCardKey]) {
-            return true;
-        }
-    }
-    return false;
-};
+// Card.isSpecialCard = function (card) {
+//     for (var specialCardKey in SpecialCard) {
+//         if (card === SpecialCard[specialCardKey]) {
+//             return true;
+//         }
+//     }
+//     return false;
+// };
 

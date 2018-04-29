@@ -14,56 +14,78 @@
 
 <body>
 
-<div class="flex-container">
-    <div id="playerWonScreen">
-        <div id="playerWonOverlay"></div>
-        <h1><span id="winningPlayerName"></span> has won the game!</h1>
-        <h3>Game statistics:</h3>
-        <p id="gameStatistics"></p>
-        <p id="playerStatistics"></p>
-        <button onclick="location.reload()">Play again</button>
-    </div>
-
-    <div id=statistics-container>
-
-        <div id="timer">00:00</div>
-
-        <button type="button" onclick="exitGame()">exit game</button>
-
-        <h5>Cards remaining:</h5>
-        <table id="cardsRemainingTable">
-            <tr><th style="width: 50%">owner</th><th>cards</th></tr>
-            <tr><td>deck</td><td id="cardsInDeckCount"></td></tr>
-            <tr><td>table</td><td id="cardsOnTableCount"></td></tr>
-        </table>
-        <h5>total turns played: <span id="totalTurnsPlayed"></span></h5>
-        <h5>Active player: <span id="activePlayer"></span></h5>
-
-    </div>
-
-    <div id=playing_table_container>
-        <h1 id="isCurrPlayerTurn"></h1>
-        <h1 id="needTakeCardFromDeck"></h1>
-        <div align="center" style="margin: 0px 0px 0 200px;">
-            <div id="deck" class="card backOfCard clickable-card" onclick="clickedDeck()"></div>
+<div class="main-container">
+    <div style="width: 70%">
+        <!--==============================================================================================================-->
+        <!--================================================ Playing Table ===============================================-->
+        <!--==============================================================================================================-->
+        <div id=playing_table_container>
+            <!--<h1 id="needTakeCardFromDeck"></h1>-->
+            <img src="takiImages/TAKI_logo.png" alt="Taki Logo"
+                 style="width: fit-content; height: fit-content; align-self: center">
+            <div style="height: 15%"></div>
+            <div align="center" style="margin: 0 0 0 200px;">
+                <div id="deck" class="card backOfCard clickable-card" onclick="clickedDeck()"></div>
+            </div>
+            <div align="center">
+                <div id="topCard" onclick="drawTopCardOnTable()"></div>
+            </div>
+            <div style="height: 20%"></div>
+            <!--==============================================================================================================-->
+            <!--============================================ Player won Overlay ==============================================-->
+            <!--==============================================================================================================-->
+            <div id="playerWonScreen">
+                <!--<div id="playerWonOverlay"></div>-->
+                <h1><span id="winningPlayerName"></span> has won the game!</h1>
+                <button onclick="location.reload()">Play again</button>
+                <h3><u>Game statistics:</u></h3>
+                <p id="gameStatistics" style="margin: 0"></p>
+                <p id="playerStatistics"></p>
+            </div>
         </div>
-        <div align="center">
-            <div id="topCard" onclick="drawTopCardOnTable()"></div>
+
+        <!--==============================================================================================================-->
+        <!--================================================ Player Cards ================================================-->
+        <!--==============================================================================================================-->
+        <!--in order to use screen-overlay change attribute display to block-->
+        <div id="player-container">
+            <div id="player-overlay" class="screen-overlay"><h1>Please wait for you turn</h1></div>
+            <div id="colorPicker" class="screen-overlay">
+                <h2>Please choose a color: </h2>
+                <div class="card red clickable-card" onclick="colorPickerClickedCard('red')"></div>
+                <div class="card green clickable-card" onclick="colorPickerClickedCard('green')"></div>
+                <div class="card blue clickable-card" onclick="colorPickerClickedCard('blue')"></div>
+                <div class="card yellow clickable-card" onclick="colorPickerClickedCard('yellow')"></div>
+            </div>
         </div>
-        <div style="height: 20%"></div>
     </div>
+    <!--==============================================================================================================-->
+    <!--================================================= Statistics =================================================-->
+    <!--==============================================================================================================-->
+    <div style="width: 30%; display: flex; align-content: center">
+        <div id=statistics-container>
+            <div>Game timer: <span id="timer">00:00</span></div>
+            </br>
+            <button type="button" onclick="exitGame()" style="width: fit-content">exit game</button>
 
-</div>
-
-<!--in order to use screen-overlay change attribute display to block-->
-<div id="player-container">
-    <div id="player-overlay" class="screen-overlay"></div>
-    <div id="colorPicker" class="screen-overlay">
-        <h2>Please choose a color: </h2>
-        <div class="card red clickable-card" onclick="colorPickerClickedCard('red')"></div>
-        <div class="card green clickable-card" onclick="colorPickerClickedCard('green')"></div>
-        <div class="card blue clickable-card" onclick="colorPickerClickedCard('blue')"></div>
-        <div class="card yellow clickable-card" onclick="colorPickerClickedCard('yellow')"></div>
+            <h5>Cards remaining:</h5>
+            <table id="cardsRemainingTable">
+                <tr>
+                    <th style="width: 50%">owner</th>
+                    <th>cards</th>
+                </tr>
+                <tr>
+                    <td>deck</td>
+                    <td id="cardsInDeckCount"></td>
+                </tr>
+                <tr>
+                    <td>table</td>
+                    <td id="cardsOnTableCount"></td>
+                </tr>
+            </table>
+            <h5>Total turns played: <span id="totalTurnsPlayed"></span></h5>
+            <h5>Active player: <span id="activePlayer"></span></h5>
+        </div>
     </div>
 </div>
 </body>

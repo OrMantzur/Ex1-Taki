@@ -3,7 +3,7 @@
  * Or Mantzur - 204311997
  */
 
-var COMPUTER_DELAY = 0.2 * 1000;
+var COMPUTER_DELAY = 1 * 1000;
 var NUM_STARTING_CARDS = 8;
 var GameType = {
     BASIC: "basic",
@@ -261,7 +261,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
     function moveToNextPlayer(skipOnePlayer) {
         players[activePlayerIndex].endTurn();
-        activePlayerIndex = (activePlayerIndex + (skipOnePlayer ? 2 : 1)) % players.length;
+        activePlayerIndex = (activePlayerIndex + (skipOnePlayer === true ? 2 : 1)) % players.length;
         players[activePlayerIndex].startTurn();
     }
 
@@ -397,7 +397,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             }
 
             // the move
-            var cardValue = cardPlaced.getValue();
+            // var cardValue = cardPlaced.getValue();
             var activePlayer = players[activePlayerIndex];
             activePlayer.removeCardFromHand(cardPlaced);
             m_CardsOnTable.putCardOnTable(cardPlaced);
@@ -412,7 +412,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                     // player gets another turn;
                 } else {
                     // that turn was the last card of the open taki
-                    if (Card.isSpecialCard(cardValue)) {
+                    if (cardPlaced.isSpecialCard()) {
                         afterMoveOfSpecialCard(cardPlaced, additionalData);
                     } else {
                         gameState.gameState = null;
@@ -431,6 +431,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
             if (players[activePlayerIndex].isComputerPlayer()) {
                 // simulate time take for real player
+                // TODO Bug - when computer player plays a taki card with several cards sometimes he pulls a card from the deck at the end
                 setTimeout(function () {
                     makeComputerPlayerMove();
                 }, COMPUTER_DELAY);
