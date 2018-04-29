@@ -35,15 +35,16 @@
             <tr><th style="width: 50%">owner</th><th>cards</th></tr>
             <tr><td>deck</td><td id="cardsInDeckCount"></td></tr>
             <tr><td>table</td><td id="cardsOnTableCount"></td></tr>
-            <tr><td>total turn</td><td id="totalTurn"></td></tr>
         </table>
+        <h5>total turns played: <span id="totalTurnsPlayed"></span></h5>
+        <h5>Active player: <span id="activePlayer"></span></h5>
 
     </div>
 
     <div id=playing_table_container>
         <h1 id="isCurrPlayerTurn"></h1>
         <h1 id="needTakeCardFromDeck"></h1>
-        <div align="right" style="margin: 40px 40px 0 0;">
+        <div align="center" style="margin: 0px 0px 0 200px;">
             <div id="deck" class="card backOfCard clickable-card" onclick="clickedDeck()"></div>
         </div>
         <div align="center">
@@ -65,11 +66,5 @@
         <div class="card yellow clickable-card" onclick="colorPickerClickedCard('yellow')"></div>
     </div>
 </div>
-
-<!--TODO delete-->
-<!--<div id="player-container2">
-    <b>computer player:</b>
-</div>-->
-
 </body>
 </html>

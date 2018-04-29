@@ -54,11 +54,11 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         var minutesPlayed = Math.floor(gameDuration / (1000 * 60));
         var secondsPlayed = Math.floor(gameDuration / 1000) % 60;
         return {
-            getTotalTurnsPlayed:function(){
+            getTotalTurnsPlayed: function () {
                 return totalTurnsPlayed;
             },
 
-            getGameDuration: function(){
+            getGameDuration: function () {
                 return (minutesPlayed < 10 ? "0" + minutesPlayed : minutesPlayed) + ":" + (secondsPlayed < 10 ? "0" + secondsPlayed : secondsPlayed);
             }
         }
@@ -186,7 +186,6 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         }
 
         cardToPlace === undefined ? game.takeCardsFromDeck() : game.makeMove(cardToPlace, additionalData);
-        checkIfActivePlayerWon();
     }
 
     function checkIfActivePlayerWon() {
@@ -208,7 +207,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
      */
     function needToTakeCardFromDeck() {
         return m_CardsOnTable.viewTopCard().getValue() === SpecialCard.PLUS ||
-            m_CardsOnTable.viewTopCard().getValue() === SpecialCard.STOP;
+            m_CardsOnTable.viewTopCard().getValue() === SpecialCard.STOP; //TODO why is stop here?
     }
 
     function afterMoveOfSpecialCard(card, additionalData) {
@@ -216,8 +215,8 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         switch (cardValue) {
             case SpecialCard.STOP:
                 // two calls to skip the next player
-                moveToNextPlayer();
-                moveToNextPlayer();
+                var skipOnePlayer = true;
+                moveToNextPlayer(skipOnePlayer);
                 break;
             case SpecialCard.TAKI:
                 // if the player put down a "taki" card and has more cards to put then set state to "openTaki"
@@ -225,6 +224,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                     gameState.gameState = GameState.OPEN_TAKI;
                 } else {
                     // the player doesn't have more cards to place, so no need to change state to "openTaki"
+                    gameState.gameState = null;
                     moveToNextPlayer();
                 }
                 break;
@@ -259,9 +259,9 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         }
     }
 
-    function moveToNextPlayer() {
+    function moveToNextPlayer(skipOnePlayer) {
         players[activePlayerIndex].endTurn();
-        activePlayerIndex = (activePlayerIndex + 1) % players.length;
+        activePlayerIndex = (activePlayerIndex + (skipOnePlayer ? 2 : 1)) % players.length;
         players[activePlayerIndex].startTurn();
     }
 
@@ -320,7 +320,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
          * return null if out of move
          * @returns {boolean}
          */
-        getPossibleMoveForActivePlayer: function(){
+        getPossibleMoveForActivePlayer: function () {
             return players[activePlayerIndex].getPossibleMove(isValidMove);
         },
 
@@ -403,20 +403,22 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             m_CardsOnTable.putCardOnTable(cardPlaced);
             if (activePlayer.getCardsRemainingNum() === 1) {
                 activePlayer.increaseTimesReachedSingleCard();
-            }
+            } else if (checkIfActivePlayerWon()) {
 
-            // change after the move
-            // there are more valid moves
-            if (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(cardPlaced.getColor()) !== undefined) {
-                // player gets another turn;
             } else {
-                // that turn was the last card of the open taki
-                if (Card.isSpecialCard(cardValue)) {
-                    afterMoveOfSpecialCard(cardPlaced, additionalData);
+                // change after the move
+                // there are more valid moves
+                if (gameState.gameState === GameState.OPEN_TAKI && activePlayer.getCardOfColor(cardPlaced.getColor()) !== undefined) {
+                    // player gets another turn;
                 } else {
-                    gameState.gameState = null;
-                    gameState.additionalInfo = null;
-                    moveToNextPlayer();
+                    // that turn was the last card of the open taki
+                    if (Card.isSpecialCard(cardValue)) {
+                        afterMoveOfSpecialCard(cardPlaced, additionalData);
+                    } else {
+                        gameState.gameState = null;
+                        gameState.additionalInfo = null;
+                        moveToNextPlayer();
+                    }
                 }
             }
 
@@ -427,7 +429,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
             }
 
 
-            if (!checkIfActivePlayerWon() && players[activePlayerIndex].isComputerPlayer()) {
+            if (players[activePlayerIndex].isComputerPlayer()) {
                 // simulate time take for real player
                 setTimeout(function () {
                     makeComputerPlayerMove();
@@ -450,7 +452,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 } else if (!player.isLeave()) {
                     // if that player was the only player that stay in game
                     // determine him to the winner
-                    somePlayerInGame= player;
+                    somePlayerInGame = player;
                     countPlayerThatInGame++;
                 }
             });
