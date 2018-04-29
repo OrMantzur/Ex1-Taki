@@ -196,7 +196,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 // two calls to skip the next player
                 var skipOnePlayer = true;
                 moveToNextPlayer(skipOnePlayer);
-                console.log("in case - Stop")
+                console.log("in case - Stop");
                 break;
             case SpecialCard.TAKI:
                 // if the player put down a "taki" card and has more cards to put then set state to "openTaki"
@@ -221,7 +221,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 card.setColor(additionalData);
                 console.log("change color to " + additionalData);
                 moveToNextPlayer();
-                console.log("in case - Change Color")
+                console.log("in case - Change Color");
                 break;
             case SpecialCard.PLUS_2:
                 if (gameState.gameState === GameState.OPEN_PLUS_2)
@@ -231,11 +231,11 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                     gameState.additionalInfo = 2;
                 }
                 moveToNextPlayer();
-                console.log("in case - PLUS_2")
+                console.log("in case - PLUS_2");
                 break;
             case SpecialCard.PLUS:
                 // do nothing, the player gets another turn
-                console.log("in case - PLUS")
+                console.log("in case - PLUS");
                 break;
             default:
                 console.log("no match to any special card")
@@ -287,7 +287,6 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         },
 
         getPlayer: function (playerId) {
-            // TODO we don't have unique id yet so we treat to it like index
             return players[playerId];
         },
 
@@ -341,7 +340,6 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
 
             var cardsTaken = [];
 
-            //TODO add documentation
             if (gameState.gameState === GameState.OPEN_PLUS_2) {
                 var numCardsToTake = gameState.additionalInfo;
                 cardsTaken = m_Deck.drawCards(numCardsToTake);

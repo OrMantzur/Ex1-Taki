@@ -161,8 +161,7 @@ function updateStatistics() {
 }
 
 function exitGame() {
-    // TODO test
-    game.leaveGame(regularPlayer);
+    game.leaveGame(regularPlayer.getId());
 }
 
 initGame();

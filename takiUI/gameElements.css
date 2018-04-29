@@ -108,7 +108,7 @@ html, body {
     background-color: #c9c8f5;
 }
 
-.yellow, .orange {
+.yellow {
     color: orange;
     background-color: #f4f5c8;
 }
@@ -166,7 +166,7 @@ td {
 }
 
 .screen-overlay>h1 {
-    text-shadow: 0px 0px 10px whitesmoke;
+    text-shadow: 0 0 10px whitesmoke;
     font-weight: bolder;
     width: fit-content;
     align-self: center;

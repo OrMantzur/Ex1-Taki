@@ -72,7 +72,7 @@ function Deck(i_GameType) {
 
     function drawCard() {
         if (cards.length === 0) {
-            console.log("Tried to draw card from an empty deck - returned null")
+            console.log("Tried to draw card from an empty deck - returned null");
             return null;
         }
 
