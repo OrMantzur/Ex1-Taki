@@ -52,8 +52,7 @@ html, body {
     align-items: center;
     overflow-scrolling: auto;
     overflow: auto;
-    padding-left: 30%;
-    padding-right: 30%;
+    padding-left: 20%;
 }
 
 #colorPicker {
