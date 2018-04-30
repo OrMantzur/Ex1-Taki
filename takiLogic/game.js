@@ -112,54 +112,44 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         var chooseCardToPlaceFunc = [
             function () {
                 // anyColorPlus2card
-                //4.1. ישנו קלף 2+ פעיל (כפי שהוסבר בפרטי המשחק המתקדם) ולשחקן הממוחשב יש קלף 2+ - הוא יניח קלף זה בערימה המרכזית. אחרת ימשוך מהקופה את מספר הקלפים הנדרש.
                 cardToPlace = gameState.gameState === GameState.OPEN_PLUS_2 ? activePlayer.getCardOfValue(SpecialCard.PLUS_2) : undefined;
             },
             function () {
                 // sameColorPlus2card
-                //4.2.  במידה ולשחקן הממוחשב יש קלף 2+ שצבעו זהה לקלף העליון בערימה המרכזית יניח קלף זה בערימה המרכזית
                 cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), SpecialCard.PLUS_2);
             },
             function () {
                 // changeColorCard
-                //4.3. במידה ולשחקן הממוחשב יש קלף שנה צבע – יניח אותו בערימה המרכזית ויבחר צבע בצורה אקראית
                 cardToPlace = activePlayer.getCardOfValue(SpecialCard.CHANGE_COLOR);
                 additionalData = Color.getRandomColor();
             },
             function () {
                 // sameColorStopCard
-                //4.4. במידה ולשחקן הממוחשב יש קלף עצור שצבעו זהה לקלף העליון בערימה המרכזית – יניח קלף זה בערימה המרכזית
                 cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), SpecialCard.STOP);
             },
             function () {
                 // sameColorPlusCard
-                //4.5. במידה ולשחקן הממוחשב יש קלף פלוס (+) שצבעו זהה לקלף העליון בערימה המרכזית – יניח קלף זה בערימה המרכזית
                 cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), SpecialCard.PLUS);
             },
             function () {
                 // superTakiCard
-                //4.6. במידה ולשחקן הממוחשב יש קלף סופר טאקי– יניח קלף זה בערימה המרכזית ולאחר מכן את כל הקלפים בצבע הטאקי בצורה כלשהי (אקראית, לפי הסדר שהקלפים מסודרים במבנה נתונים – לשיקולכם)
                 cardToPlace = activePlayer.getCardOfValue(SpecialCard.SUPER_TAKI);
                 additionalData = topCard.getColor();
             },
             function () {
                 // sameColorTakiCard
-                //4.7. במידה ולשחקן הממוחשב יש קלף טאקי (+) שצבעו זהה לקלף העליון בערימה המרכזית – יניח קלף זה בערימה המרכזית ו לאחר מכן את כל הקלפים בצבע הטאקי בצורה כלשהי (אקראית, לפי הסדר שהקלפים מסודרים במבנה נתונים – לשיקולכם)
                 cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), SpecialCard.TAKI);
             },
             function () {
-                //4.8. במידה ולשחקן הממוחשב יש קלף שצבעו זהה לקלף העליון בערימה המרכזית – יניח קלף זה בערימה המרכזית
                 cardToPlace = activePlayer.getCardOfColor(topCard.getColor());
             },
             function () {
-                //4.9. במידה ולשחקן הממוחשב יש קלף שמספרו זהה לקלף העליון בערימה המרכזית – יניח קלף זה בערימה המרכזית
                 if (gameState.gameState !== GameState.OPEN_TAKI) {
                     cardToPlace = activePlayer.getCardOfValue(topCard.getValue());
                 }
             }
         ];
 
-        //4.10. ימשוך קלף מהקופה
         // iterate through all function until a card is found, if not then draw a card from th deck
         for (var i = 0; i < chooseCardToPlaceFunc.length && cardToPlace === undefined; i++) {
             chooseCardToPlaceFunc[i]();
