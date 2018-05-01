@@ -8,10 +8,9 @@ var regularPlayer = Player("Human player", false);
 var computerPlayer = Player("Computer player", true);
 
 function initGame() {
-    console.log("Running tests:");
     game.addPlayerToGame(regularPlayer);
     game.addPlayerToGame(computerPlayer);
-    console.log("Top card is: ");
+    console.log("Game started - top card is: ");
     game.viewTopCardOnTable().printCardToConsole();
     document.addEventListener("DOMContentLoaded", function () {
         var currPlayerIndex = 0;
@@ -30,8 +29,9 @@ function initGame() {
     });
 }
 
-function drawPlayerCardsOnScreen(playerId) {
-    var playerCards = game.getPlayer(playerId).getCards();
+function drawPlayerCardsOnScreen() {
+    var humanPlayerID = 0;
+    var playerCards = game.getPlayer(humanPlayerID).getCards();
     var playerCardsContainer = document.getElementById('player-container');
 
     // if there is a card in the players hand that is not on the screen then add it
@@ -89,7 +89,7 @@ function clickedDeck() {
 }
 
 function refreshCards() {
-    drawPlayerCardsOnScreen(0);
+    drawPlayerCardsOnScreen();
     drawTopCardOnTable("topCard");
     updateStatistics();
 }
@@ -164,6 +164,14 @@ function exitGame() {
     game.leaveGame(regularPlayer);
 }
 
+function setKeyMappings() {
+    document.onkeypress = function (keyPressed) {
+        if (keyPressed.code === "Space") {
+            clickedDeck();
+        }
+    }
+}
+
 initGame();
 
 setInterval(function () {
@@ -180,7 +188,7 @@ setInterval(function () {
     }
     timerElement.innerText = timer;
 
-    // check hint to player that he need to take card from deck
+    // show hint (enlarge deck) when the player has no possible moves
     var activePlayer = game.getActivePlayer();
     if (activePlayer.getId() === regularPlayer.getId() && game.getPossibleMoveForActivePlayer() === null) {
         // document.getElementById("needTakeCardFromDeck").innerText = "out of move take card from deck";
@@ -190,11 +198,3 @@ setInterval(function () {
         document.getElementById("deck").classList.remove('highlightDeck')
     }
 }, 1000);
-
-function setKeyMappings() {
-    document.onkeypress = function (keyPressed) {
-        if (keyPressed.code === "Space") {
-            clickedDeck();
-        }
-    }
-}

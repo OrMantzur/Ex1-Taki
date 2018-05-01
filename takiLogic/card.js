@@ -14,11 +14,11 @@ var SpecialCard = {
     SUPER_TAKI: "super taki"
 };
 var Color = {
-    allColor: ["red", "green", "blue", "yellow"],
+    allColors: ["red", "green", "blue", "yellow"],
 
     getRandomColor: function () {
-        var randomIndex = Math.floor((Math.random() * 10) % Object.keys(Color.allColor).length);
-        return Color.allColor[randomIndex];
+        var randomIndex = Math.floor((Math.random() * 10) % Object.keys(Color.allColors).length);
+        return Color.allColors[randomIndex];
     }
 };
 Card.nextFreeCardId = 0;
@@ -44,7 +44,7 @@ function Card(color, value) {
         setColor: function (color) {
             if (cardValue !== SpecialCard.CHANGE_COLOR) {
                 // throw new Error("color can only be changed for \"change color\" cards");
-                console.log("card color was not changed - color can only be changed for \"change color\" cards")
+                console.log("card color was not changed - color can only be changed for \"change color\" cards");
             } else {
                 cardColor = color;
             }
@@ -63,15 +63,5 @@ function Card(color, value) {
             }
             return isSpecial;
         }
-    }
+    };
 }
-
-// Card.isSpecialCard = function (card) {
-//     for (var specialCardKey in SpecialCard) {
-//         if (card === SpecialCard[specialCardKey]) {
-//             return true;
-//         }
-//     }
-//     return false;
-// };
-

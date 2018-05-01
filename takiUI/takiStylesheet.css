@@ -54,19 +54,65 @@ html, body {
     overflow: auto;
 }
 
+/*======================================================================================*/
+/*====================================== Overlays ======================================*/
+/*======================================================================================*/
+
 #colorPicker {
     display: none;
     align-items: center;
     justify-content: center;
+    flex-direction: row;
     background: rgba(200, 200, 200, 0.9);
 }
 
-#deck {
-    alignment: right;
+.screen-overlay {
+    z-index: 9999;
+    position: absolute;
+    top: 70%;
+    width: 70%;
+    height: 30%;
+    display: none;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(200, 200, 200, 0.7);
 }
 
-.textCard {
-    font-size: 1.8vw !important;
+.screen-overlay>h1 {
+    text-shadow: 0 0 10px whitesmoke;
+    font-weight: bolder;
+    width: fit-content;
+    align-self: center;
+    background-color: rgba(201, 200, 245, 0.9);
+    border-radius: 10px;
+    padding: 5px 15px ;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.8);;
+}
+
+#playerWonScreen {
+    z-index: 999;
+    display: none;
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    background: rgba(200, 200, 200, 0.9);
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    overflow: auto;
+}
+
+#playerWonScreen > button {
+    flex-shrink: 0
+}
+
+/*======================================================================================*/
+/*=================================== Game Elements ====================================*/
+/*======================================================================================*/
+
+#deck {
+    alignment: right;
 }
 
 .card {
@@ -89,13 +135,13 @@ html, body {
 
 }
 
+.textCard {
+    font-size: 1.8vw !important;
+}
+
 .noColor {
     color: GrayText;
     background: #f5f5f5;
-}
-
-.multicolor {
-    background: linear-gradient(red, yellow, green, blue);
 }
 
 .red {
@@ -130,6 +176,15 @@ html, body {
     transform: rotate(-45deg);
 }
 
+.highlightDeck {
+    transform: scale(1.2);
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+/*======================================================================================*/
+/*===================================== Statistics =====================================*/
+/*======================================================================================*/
+
 #cardsRemainingTable {
     width: 96%;
     margin: 2%;
@@ -152,60 +207,14 @@ td {
     text-shadow: 1px 1px rgba(200, 200, 200, 0.3);
 }
 
-.screen-overlay {
-    z-index: 9999;
-    position: absolute;
-    top: 70%;
-    width: 70%;
-    height: 30%;
-    display: none;
-    text-align: center;
-    flex-direction: column;
-    justify-content: center;
-    background: rgba(200, 200, 200, 0.7);
-}
-
-.screen-overlay>h1 {
-    text-shadow: 0 0 10px whitesmoke;
-    font-weight: bolder;
-    width: fit-content;
-    align-self: center;
-    background-color: rgba(201, 200, 245, 0.9);
-    border-radius: 10px;
-    padding: 5px 15px ;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.8);;
-}
-
-#colorPicker{
-    flex-direction: row;
-}
-
-#playerWonScreen {
-    z-index: 999;
-    display: none;
-    position: absolute;
-    width: 70%;
-    height: 70%;
-    background: rgba(200, 200, 200, 0.9);
-    align-items: center;
-    justify-content: flex-start;
-    flex-direction: column;
-    overflow: auto;
-}
-
-#playerWonScreen > button {
-    flex-shrink: 0
-}
+/*======================================================================================*/
+/*======================================= General ======================================*/
+/*======================================================================================*/
 
 .disabled-button {
     pointer-events: none;
     opacity: 0.4;
 
-}
-
-.highlightDeck {
-    transform: scale(1.2);
-    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
 }
 
 button{

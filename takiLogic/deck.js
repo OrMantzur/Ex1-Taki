@@ -3,7 +3,6 @@
  * Or Mantzur - 204311997
  */
 
-
 /**
  * deck in BASIC game contains:
  * number card(8): 2 of each color
@@ -14,7 +13,7 @@
  * there are 4 color
  * total 92 cards (8*4*2 + 4*2 + 4*2 + 4*2 + 4)
  *
- * deck in ADVANCE game contains:
+ * deck in ADVANCED game contains:
  * all the basic cards and in addition:
  * plus 2: 2 of each color
  * super taki: 2 cards
@@ -33,9 +32,9 @@ function Deck(i_GameType) {
     var gameType = i_GameType;
 
     // init number cards
-    Color.allColor.forEach(function (color) {
+    Color.allColors.forEach(function (color) {
         NUMBER_CARD.forEach(function (cardValue) {
-            cards = cards.concat(createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR))
+            cards = cards.concat(createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR));
         });
     });
 
@@ -54,7 +53,7 @@ function Deck(i_GameType) {
                 cardsToAdd = createCards(specialCardValue, null, SUPER_TAKI_AMOUNT);
                 cards = cards.concat(cardsToAdd);
             } else {
-                Color.allColor.forEach(function (color) {
+                Color.allColors.forEach(function (color) {
                     cardsToAdd = createCards(specialCardValue, color, CARD_NUMBER_OF_EACH_COLOR);
                     cards = cards.concat(cardsToAdd);
                 });
@@ -72,7 +71,7 @@ function Deck(i_GameType) {
 
     function drawCard() {
         if (cards.length === 0) {
-            console.log("Tried to draw card from an empty deck - returned null");
+            console.log("Deck: Tried to draw card from an empty deck - returning null");
             return null;
         }
 
@@ -122,5 +121,5 @@ function Deck(i_GameType) {
             });
             console.log(arr.join("\n"));
         }
-    }
+    };
 }

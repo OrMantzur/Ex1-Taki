@@ -24,7 +24,7 @@ function CardsOnTable() {
         },
 
         /**
-         * use for example if the deck over
+         * used in case where cards need to be move from the table back to the deck
          * @returns {*}
          */
         takeAllButTopCard: function () {

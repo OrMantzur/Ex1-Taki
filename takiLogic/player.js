@@ -94,7 +94,6 @@ function Player(i_PlayerName, i_IsComputer) {
             });
         },
 
-        // TODO delete (?) (we don't want access to all cards from outside
         getCards: function () {
             return cards;
         },
@@ -181,9 +180,5 @@ function Player(i_PlayerName, i_IsComputer) {
                 console.log(cards[i].getValue() + ", " + cards[i].getColor() + "\n");
             }
         },
-        // for testing
-        getCardAtI: function (i) {
-            return cards[i];
-        }
     }
 }
