@@ -191,10 +191,8 @@ setInterval(function () {
     // show hint (enlarge deck) when the player has no possible moves
     var activePlayer = game.getActivePlayer();
     if (activePlayer.getId() === regularPlayer.getId() && game.getPossibleMoveForActivePlayer() === null) {
-        // document.getElementById("needTakeCardFromDeck").innerText = "out of move take card from deck";
         document.getElementById("deck").classList.add('highlightDeck');
     } else {
-        // document.getElementById("needTakeCardFromDeck").innerText = "";
         document.getElementById("deck").classList.remove('highlightDeck')
     }
 }, 1000);
