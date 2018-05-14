@@ -3,6 +3,8 @@
  * Or Mantzur - 204311997
  */
 
+// import Card from "./card";
+
 /**
  * deck in BASIC game contains:
  * number card(8): 2 of each color
@@ -32,28 +34,28 @@ function Deck(i_GameType) {
     var gameType = i_GameType;
 
     // init number cards
-    Color.allColors.forEach(function (color) {
-        NUMBER_CARD.forEach(function (cardValue) {
+    Card.Color.allColors.forEach(function (color) {
+        Card.NUMBER_CARD.forEach(function (cardValue) {
             cards = cards.concat(createCards(cardValue, color, CARD_NUMBER_OF_EACH_COLOR));
         });
     });
 
     // init special cards
     var specialCardValue;
-    for (var specialCardKey in SpecialCard) {
-        specialCardValue = SpecialCard[specialCardKey];
+    for (var specialCardKey in Card.SpecialCard) {
+        specialCardValue = Card.SpecialCard[specialCardKey];
         // skip only when it basic game with PLUS_2 or SUPER_TAKI cards
         if (!(gameType === GameType.BASIC &&
-            (specialCardValue === SpecialCard.PLUS_2 || specialCardValue === SpecialCard.SUPER_TAKI))) {
+            (specialCardValue === Card.SpecialCard.PLUS_2 || specialCardValue === Card.SpecialCard.SUPER_TAKI))) {
             var cardsToAdd;
-            if (specialCardValue === SpecialCard.CHANGE_COLOR) {
+            if (specialCardValue === Card.SpecialCard.CHANGE_COLOR) {
                 cardsToAdd = createCards(specialCardValue, null, CHANGE_COLOR_AMOUNT);
                 cards = cards.concat(cardsToAdd);
-            } else if (specialCardValue === SpecialCard.SUPER_TAKI) {
+            } else if (specialCardValue === Card.SpecialCard.SUPER_TAKI) {
                 cardsToAdd = createCards(specialCardValue, null, SUPER_TAKI_AMOUNT);
                 cards = cards.concat(cardsToAdd);
             } else {
-                Color.allColors.forEach(function (color) {
+                Card.Color.allColors.forEach(function (color) {
                     cardsToAdd = createCards(specialCardValue, color, CARD_NUMBER_OF_EACH_COLOR);
                     cards = cards.concat(cardsToAdd);
                 });
@@ -64,7 +66,7 @@ function Deck(i_GameType) {
     function createCards(value, color, amount) {
         var newCards = [];
         for (var i = 0; i < amount; i++) {
-            newCards.push(Card(color, value));
+            newCards.push(new Card(color, value));
         }
         return newCards;
     }

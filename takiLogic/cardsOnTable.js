@@ -3,6 +3,9 @@
  * Or Mantzur - 204311997
  */
 
+// import Card from "./card";
+
+
 function CardsOnTable() {
     var cards = [];
 

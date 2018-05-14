@@ -3,6 +3,9 @@
  * Or Mantzur - 204311997
  */
 
+import Card from "./card";
+
+
 var COMPUTER_DELAY = 1.5 * 1000;
 var NUM_STARTING_CARDS = 8;
 var GameType = {
@@ -73,7 +76,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         var cardDrawnFromDeck;
         do {
             cardDrawnFromDeck = m_Deck.drawCards(1)[0];
-        } while (cardDrawnFromDeck.getValue() === SpecialCard.CHANGE_COLOR || cardDrawnFromDeck.getValue() === SpecialCard.SUPER_TAKI);
+        } while (cardDrawnFromDeck.getValue() === Card.SpecialCard.CHANGE_COLOR || cardDrawnFromDeck.getValue() === Card.SpecialCard.SUPER_TAKI);
 
         m_CardsOnTable.putCardOnTable(cardDrawnFromDeck);
         players[activePlayerIndex].startTurn();
@@ -92,9 +95,9 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         } else if (gameState.gameState === GameState.SUPER_TAKI) {
             // TODO (advanced game)
         } else if (gameState.gameState === GameState.OPEN_PLUS_2) {
-            isValid = cardPlaced.getValue() === SpecialCard.PLUS_2;
+            isValid = cardPlaced.getValue() === Card.SpecialCard.PLUS_2;
         } else {
-            isValid = topCardOnTable.getColor() === cardPlaced.getColor() || topCardOnTable.getValue() === cardPlaced.getValue() || cardPlaced.getValue() === SpecialCard.CHANGE_COLOR;
+            isValid = topCardOnTable.getColor() === cardPlaced.getColor() || topCardOnTable.getValue() === cardPlaced.getValue() || cardPlaced.getValue() === Card.SpecialCard.CHANGE_COLOR;
             // TODO (advanced game) - add any relevant special card
         }
 
@@ -108,35 +111,35 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
         var additionalData;
         var chooseCardToPlaceFunc = [function () {
             // anyColorPlus2card
-            cardToPlace = gameState.gameState === GameState.OPEN_PLUS_2 ? activePlayer.getCardOfValue(SpecialCard.PLUS_2) : undefined;
+            cardToPlace = gameState.gameState === GameState.OPEN_PLUS_2 ? activePlayer.getCardOfValue(Card.SpecialCard.PLUS_2) : undefined;
         }, function () {
             // sameColorPlus2card
-            cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), SpecialCard.PLUS_2);
+            cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), Card.SpecialCard.PLUS_2);
         }, function () {
             // changeColorCard
-            cardToPlace = activePlayer.getCardOfValue(SpecialCard.CHANGE_COLOR);
+            cardToPlace = activePlayer.getCardOfValue(Card.SpecialCard.CHANGE_COLOR);
             if (cardToPlace !== undefined) {
                 var i;
-                for (i = 0; Color.allColors[i] !== undefined; i++) {
-                    if (activePlayer.getCardOfColor(Color.allColors[i]) !== undefined) {
+                for (i = 0; Card.Color.allColors[i] !== undefined; i++) {
+                    if (activePlayer.getCardOfColor(Card.Color.allColors[i]) !== undefined) {
                         break;
                     }
                 }
-                additionalData = Color.allColors[i] !== undefined ? Color.allColors[i] : Color.getRandomColor();
+                additionalData = Card.Color.allColors[i] !== undefined ? Card.Color.allColors[i] : Card.Color.getRandomColor();
             }
         }, function () {
             // sameColorStopCard
-            cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), SpecialCard.STOP);
+            cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), Card.SpecialCard.STOP);
         }, function () {
             // sameColorPlusCard
-            cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), SpecialCard.PLUS);
+            cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), Card.SpecialCard.PLUS);
         }, function () {
             // superTakiCard
-            cardToPlace = activePlayer.getCardOfValue(SpecialCard.SUPER_TAKI);
+            cardToPlace = activePlayer.getCardOfValue(Card.SpecialCard.SUPER_TAKI);
             additionalData = topCard.getColor();
         }, function () {
             // sameColorTakiCard
-            cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), SpecialCard.TAKI);
+            cardToPlace = activePlayer.getCardOfColorAndValue(topCard.getColor(), Card.SpecialCard.TAKI);
         }, function () {
             cardToPlace = activePlayer.getCardOfColor(topCard.getColor());
         }, function () {
@@ -171,19 +174,19 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
      * @returns {boolean}
      */
     function needToTakeCardFromDeck() {
-        return m_CardsOnTable.viewTopCard().getValue() === SpecialCard.PLUS;
+        return m_CardsOnTable.viewTopCard().getValue() === Card.SpecialCard.PLUS;
     }
 
     function afterMoveOfSpecialCard(card, additionalData) {
         var cardValue = card.getValue();
         switch (cardValue) {
-            case SpecialCard.STOP:
+            case Card.SpecialCard.STOP:
                 // two calls to skip the next player
                 var skipOnePlayer = true;
                 moveToNextPlayer(skipOnePlayer);
                 console.log("in case - Stop");
                 break;
-            case SpecialCard.TAKI:
+            case Card.SpecialCard.TAKI:
                 // if the player put down a "taki" card and has more cards to put then set state to "openTaki"
                 if (players[activePlayerIndex].getCardOfColor(card.getColor()) !== undefined) {
                     gameState.gameState = GameState.OPEN_TAKI;
@@ -194,21 +197,21 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 }
                 console.log("in case - Taki");
                 break;
-            case SpecialCard.SUPER_TAKI:
+            case Card.SpecialCard.SUPER_TAKI:
                 card.setColor(additionalData);
                 gameState.gameState = GameState.OPEN_TAKI;
                 console.log("in case - Super Taki");
                 break;
-            case SpecialCard.CHANGE_COLOR:
+            case Card.SpecialCard.CHANGE_COLOR:
                 if (additionalData === undefined) {
-                    additionalData = Color.getRandomColor();
+                    additionalData = Card.Color.getRandomColor();
                 }
                 card.setColor(additionalData);
                 console.log("change color to " + additionalData);
                 moveToNextPlayer();
                 console.log("in case - Change Color");
                 break;
-            case SpecialCard.PLUS_2:
+            case Card.SpecialCard.PLUS_2:
                 if (gameState.gameState === GameState.OPEN_PLUS_2)
                     gameState.additionalInfo += 2;
                 else {
@@ -218,7 +221,7 @@ function Game(i_GameType, i_PlayerNum, i_GameCreator, i_GameName) {
                 moveToNextPlayer();
                 console.log("in case - PLUS_2");
                 break;
-            case SpecialCard.PLUS:
+            case Card.SpecialCard.PLUS:
                 // do nothing, the player gets another turn
                 console.log("in case - PLUS");
                 break;
