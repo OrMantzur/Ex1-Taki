@@ -3,39 +3,42 @@
  * Or Mantzur - 204311997
  */
 
-// import Card from "./card";
+import Card from "./card";
+import Deck from "./deck";
+import Game from "./game";
+import Player from "./player";
 
+export default class CardsOnTable {
 
-function CardsOnTable() {
-    var cards = [];
+    constructor(){
+        this.cards = [];
+    }
 
-    return {
-        getSize: function () {
-            return cards.length;
-        },
+    getSize() {
+        return cards.length;
+    }
 
-        putCardOnTable: function (card) {
-            cards.push(card);
-        },
+    putCardOnTable(card) {
+        cards.push(card);
+    }
 
-        viewTopCard: function () {
-            var topCard = null;
-            if (cards.length > 0) {
-                topCard = cards[cards.length - 1];
-            }
-            return topCard;
-        },
+    viewTopCard() {
+        var topCard = null;
+        if (cards.length > 0) {
+            topCard = cards[cards.length - 1];
+        }
+        return topCard;
+    }
 
-        /**
-         * used in case where cards need to be move from the table back to the deck
-         * @returns {*}
-         */
-        takeAllButTopCard: function () {
-            var pickedUpCards = null;
-            if (cards.length > 0) {
-                pickedUpCards = cards.splice(1, cards.length - 1);
-            }
-            return pickedUpCards;
-        },
+    /**
+     * used in case where cards need to be move from the table back to the deck
+     * @returns {*}
+     */
+    takeAllButTopCard() {
+        var pickedUpCards = null;
+        if (cards.length > 0) {
+            pickedUpCards = cards.splice(1, cards.length - 1);
+        }
+        return pickedUpCards;
     }
 }

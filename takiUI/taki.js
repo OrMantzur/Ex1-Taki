@@ -3,7 +3,16 @@
  * Or Mantzur - 204311997
  */
 
-var game = Game(GameType.BASIC, 2, "Taki Man", "ex1");
+
+
+import Card from "../takiLogic/card";
+import CardsOnTable from "../takiLogic/cardsOnTable";
+import Deck from "../takiLogic/deck";
+import Game from "../takiLogic/game";
+import Player from "../takiLogic/player";
+
+
+var game = Game(Game.GameType.BASIC, 2, "Taki Man", "ex1");
 var regularPlayer = Player("Human player", false);
 var computerPlayer = Player("Computer player", true);
 
@@ -40,7 +49,7 @@ function drawPlayerCardsOnScreen() {
             var cardElement = createCardElement(card, true);
             cardElement.addEventListener("click", function () {
                 // if a card is clicked and a successful move is made, remove the card from the deck
-                if (card.getValue() === SpecialCard.CHANGE_COLOR && game.getGameState().gameState !== GameState.OPEN_TAKI) {
+                if (card.getValue() === Card.SpecialCard.CHANGE_COLOR && game.getGameState().gameState !==  Game.GameState.OPEN_TAKI) {
                     document.getElementById("colorPicker").style.display = "flex";
                     document.getElementById("colorPicker").setAttribute("selectedCardId", card.getId());
                     document.getElementById("deck").classList.add("disabled-button");
@@ -118,7 +127,7 @@ function overlayToggle() {
             currentTopCard = game.viewTopCardOnTable();
             drawTopCardOnTable("topCard");
         }
-        if (game.getGameState().gameState === GameState.GAME_ENDED) {
+        if (game.getGameState().gameState ===  Game.GameState.GAME_ENDED) {
             document.getElementById("playerWonScreen").style.display = 'flex';
             document.getElementById("player-overlay").style.display = 'flex';
             document.getElementById('winningPlayerName').innerText = game.getGameState().additionalInfo.getName();

@@ -3,6 +3,11 @@
  * Or Mantzur - 204311997
  */
 
+import CardsOnTable from "./cardsOnTable";
+import Deck from "./deck";
+import Game from "./game";
+import Player from "./player";
+
 export default class Card {
 
     static NUMBER_CARD = ["1", "3", "4", "5", "6", "7", "8", "9"];
@@ -21,7 +26,7 @@ export default class Card {
     static Color = {
         allColors: ["red", "green", "blue", "yellow"],
 
-        getRandomColor: function () {
+        getRandomColor  () {
             const randomIndex = Math.floor((Math.random() * 10) % Object.keys(Card.Color.allColors).length);
             return Card.Color.allColors[randomIndex];
         }
